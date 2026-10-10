@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, useMotionValueEvent, type MotionValue } from "motion/react";
+import { AnimatePresence, useInView, useMotionValueEvent, type MotionValue } from "motion/react";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, Counter, RollText, ParallaxImg, motion, useScroll, useTransform, ease } from "./fx";
 
 // ponytail: Unsplash/Pexels placeholders, swap for real project media in /public
@@ -10,9 +10,9 @@ const SLIDE_MS = 7000;
 const links = [["Home", "#"], ["Services", "#services"], ["Works", "#projects"], ["Studio", "#about"], ["Process", "#process"]];
 
 const categories = [
-  { t: "Kitchen", h: "Kitchens built around how you cook", d: "Modular kitchens with precision shutters, smart storage and hardware that lasts.", i: "1556912173-3bb406ef7e77", v: "https://videos.pexels.com/video-files/38231065/16231771_1280_720_60fps.mp4" },
-  { t: "Wardrobe", h: "Wardrobes made for everything you own", d: "Sliding, hinged and walk-in storage, sized to the last shelf and drawer.", i: "1616486338812-3dadae4b4ace", v: "https://videos.pexels.com/video-files/15887130/15887130-hd_1280_720_30fps.mp4" },
-  { t: "Living", h: "Living spaces that feel like home", d: "TV units, panelling and furniture that bring calm and warmth to every room.", i: "1618221195710-dd6b41faaea6", v: "https://videos.pexels.com/video-files/7578540/7578540-hd_1280_720_30fps.mp4" },
+  { t: "Kitchen", h: ["Kitchens built", "around how you cook"], d: "Modular kitchens with precision shutters, smart storage and hardware that lasts.", i: "1556912173-3bb406ef7e77", v: "https://videos.pexels.com/video-files/38231065/16231771_1280_720_60fps.mp4" },
+  { t: "Wardrobe", h: ["Wardrobes made for", "everything you own"], d: "Sliding, hinged and walk-in storage, sized to the last shelf and drawer.", i: "1616486338812-3dadae4b4ace", v: "https://videos.pexels.com/video-files/15887130/15887130-hd_1280_720_30fps.mp4" },
+  { t: "Living", h: ["Living spaces that", "feel like home"], d: "TV units, panelling and furniture that bring calm and warmth to every room.", i: "1618221195710-dd6b41faaea6", v: "https://videos.pexels.com/video-files/7578540/7578540-hd_1280_720_30fps.mp4" },
 ];
 
 const services = [
@@ -23,17 +23,17 @@ const services = [
 ];
 
 const projects = [
-  { n: "Serene Art", c: "Modular Kitchen", l: "Ahmedabad", i: "1556912173-3bb406ef7e77" },
-  { n: "Island Axis", c: "Island Kitchen", l: "Surat", i: "1565538810643-b5bdb714032a" },
-  { n: "Aestra", c: "Wardrobe", l: "Vadodara", i: "1616486338812-3dadae4b4ace" },
-  { n: "Beige Bailey", c: "Complete Interior", l: "Rajkot", i: "1618221195710-dd6b41faaea6" },
+  { n: "Serene Art", c: "Modular Kitchen", l: "Ahmedabad", y: "2025", area: "180 sq ft", days: "35 days", d: "A calm L-shaped kitchen in matte sage and oak, with tall pantry units and a hidden appliance wall.", i: "1556912173-3bb406ef7e77" },
+  { n: "Island Axis", c: "Island Kitchen", l: "Surat", y: "2025", area: "260 sq ft", days: "42 days", d: "An open island kitchen built for family cooking, with marble tops and warm under-cabinet lighting.", i: "1565538810643-b5bdb714032a" },
+  { n: "Aestra", c: "Wardrobe", l: "Vadodara", y: "2026", area: "140 sq ft", days: "28 days", d: "A walk-in wardrobe with fluted glass shutters, lit display shelves and a central dresser island.", i: "1616486338812-3dadae4b4ace" },
+  { n: "Beige Bailey", c: "Complete Interior", l: "Rajkot", y: "2026", area: "2,400 sq ft", days: "90 days", d: "A full 3BHK interior in soft beige tones, from the living room panelling to every bedroom wardrobe.", i: "1618221195710-dd6b41faaea6" },
 ];
 
 const steps = [
-  { t: "Consult", d: "We visit, measure and listen to how the space is really used.", i: "1600210492486-724fe5c67fb0" },
-  { t: "Design", d: "3D layouts, material boards and a transparent, itemised quote.", i: "1618221195710-dd6b41faaea6" },
-  { t: "Craft", d: "Factory-made modules with precision edges and soft-close hardware.", i: "1556912173-3bb406ef7e77" },
-  { t: "Install", d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "1565538810643-b5bdb714032a" },
+  { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "1600210492486-724fe5c67fb0" },
+  { t: "Design", tags: ["3D layouts", "Material board", "Quote"], d: "3D layouts, material boards and a transparent, itemised quote.", i: "1618221195710-dd6b41faaea6" },
+  { t: "Craft", tags: ["In-house factory", "Edge banding", "Quality check"], d: "Factory-made modules with precision edges and soft-close hardware.", i: "1556912173-3bb406ef7e77" },
+  { t: "Install", tags: ["On-site fitting", "Cleanup", "Handover"], d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "1565538810643-b5bdb714032a" },
 ];
 
 function Label({ children, dark = false }: { children: string; dark?: boolean }) {
@@ -78,8 +78,8 @@ function Mark({ className = "" }: { className?: string }) {
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#" className={`flex items-center text-lg font-bold tracking-[0.25em] text-ivory transition-all duration-500 ${compact ? "gap-0" : "gap-3"}`}>
-      <Mark className="h-6 w-auto md:h-7" />
-      <span className={`overflow-hidden whitespace-nowrap transition-all duration-500 ${compact ? "max-w-0 opacity-0" : "max-w-40"}`}>THE FURN</span>
+      <Mark className={`w-auto transition-all duration-500 ${compact ? "h-6" : "h-7 md:h-9"}`} />
+      <span className="sr-only">The Furn</span>
     </a>
   );
 }
@@ -109,16 +109,21 @@ function Loader({ onDone }: { onDone: () => void }) {
 function Nav({ show }: { show: boolean }) {
   const [open, setOpen] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [atTop, setAtTop] = useState(true);
+  const anchor = useRef(0);
   const { scrollY } = useScroll();
+  // Direction is measured from where it last changed, so slow trackpad scrolls still count
   useMotionValueEvent(scrollY, "change", (y) => {
-    const prev = scrollY.getPrevious() ?? 0;
-    if (y <= 120) setCompact(false);
-    else if (Math.abs(y - prev) > 4) setCompact(y > prev);
+    setAtTop(y <= 120);
+    if (y <= 120) { setCompact(false); anchor.current = y; return; }
+    if (y - anchor.current > 12) { setCompact(true); anchor.current = y; }
+    else if (anchor.current - y > 12) { setCompact(false); anchor.current = y; }
+    else if ((compact && y > anchor.current) || (!compact && y < anchor.current)) anchor.current = y;
   });
   return (
     <motion.header initial={{ y: -100, opacity: 0 }} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
       className="fixed inset-x-0 top-0 z-50 px-5 pt-5 md:px-8 md:pt-6">
-      <nav className={`mx-auto flex items-center justify-between gap-10 rounded-full border px-2 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${compact ? "max-w-[620px] border-ivory/10 bg-ink/80 py-1.5 pl-3 backdrop-blur-xl" : "max-w-[1400px] border-transparent bg-transparent py-2"}`}>
+      <nav className={`mx-auto flex items-center justify-between gap-10 rounded-full border px-2 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${compact ? "max-w-[620px] border-ivory/10 bg-ink/80 py-1.5 pl-3 backdrop-blur-xl" : atTop ? "max-w-[1400px] border-transparent bg-transparent py-2" : "max-w-[1400px] border-ivory/10 bg-ink/70 py-2 pl-5 backdrop-blur-xl"}`}>
         <Logo compact={compact} />
         <ul className={`hidden items-center gap-1 transition-all duration-500 md:flex ${compact ? "text-[15px]" : "text-[17px]"}`}>
           {links.map(([t, h]) => (
@@ -180,30 +185,49 @@ function Services() {
   );
 }
 
-function ProjectCard({ p }: { p: (typeof projects)[number] }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
-  const frame = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+// Cards pin one after another; each one shrinks a little as the next slides over it
+function FeaturedProjects() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   return (
-    <motion.a ref={ref} href="#contact" initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 1, ease }} className="group relative grid h-[80svh] min-h-[520px] place-items-center overflow-hidden rounded-[28px] bg-ink">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(p.i, 1200)} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl" />
-      <motion.div style={{ scale: frame }} className="relative w-[78%] max-w-xl bg-ivory p-2 shadow-2xl md:p-3">
-        <div className="aspect-[4/3] overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img(p.i, 1200)} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
+    <div ref={ref} className="mt-16">
+      {projects.map((p, i) => <StackCard key={p.n} p={p} i={i} progress={scrollYProgress} />)}
+    </div>
+  );
+}
+function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number; progress: MotionValue<number> }) {
+  const n = projects.length;
+  const scale = useTransform(progress, [i / n, 1], [1, 1 - (n - 1 - i) * 0.05]);
+  const dim = useTransform(progress, [i / n, 1], [0, (n - 1 - i) * 0.15]);
+  return (
+    <div className="sticky top-0 flex h-svh items-center">
+      <motion.a href="#contact" style={{ scale }} className="group relative block h-[85svh] w-full origin-top overflow-hidden rounded-[28px] bg-ink text-ivory">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={img(p.i, 2000)} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
+        <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
+        <div className="relative flex h-full flex-col justify-between p-6 md:p-10">
+          <div className="max-w-xl">
+            <span className="text-xs font-semibold tracking-[0.2em] text-ivory/60 uppercase">0{i + 1} / 0{n} · {p.c}</span>
+            <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
+            <p className="mt-4 text-ivory/80 md:text-lg">{p.d}</p>
+            <p className="mt-5 text-sm font-semibold tracking-[0.15em] uppercase">{p.l}, India</p>
+            <p className="mt-1 text-sm text-ivory/70">{p.y}</p>
+          </div>
+          <div className="flex items-end justify-between gap-6">
+            <span className="grid h-12 w-12 place-items-center rounded-full border border-ivory/40 transition-all duration-500 group-hover:rotate-45 group-hover:bg-ivory group-hover:text-ink">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
+            </span>
+            <div className="text-right">
+              <p className="text-xs text-ivory/60">Area</p>
+              <p className="text-2xl font-semibold md:text-4xl">{p.area}</p>
+              <p className="mt-3 text-xs text-ivory/60">Delivered in</p>
+              <p className="text-lg font-semibold md:text-2xl">{p.days}</p>
+            </div>
+          </div>
         </div>
-        <div className="py-5 text-center">
-          <h3 className="text-xl font-semibold tracking-tight uppercase md:text-2xl">{p.n}</h3>
-          <p className="mt-1 text-sm text-ink/60">{p.l}, India</p>
-        </div>
-      </motion.div>
-      <span className="absolute bottom-5 left-5 rounded-full border border-ivory/40 bg-ivory/10 px-4 py-1.5 text-xs font-semibold tracking-wider text-ivory uppercase backdrop-blur-md">{p.c}</span>
-      <span className="absolute right-5 bottom-5 grid h-11 w-11 place-items-center rounded-full border border-ivory/40 text-ivory transition-all duration-500 group-hover:rotate-45 group-hover:bg-ivory group-hover:text-ink">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
-      </span>
-    </motion.a>
+      </motion.a>
+    </div>
   );
 }
 
@@ -243,6 +267,56 @@ function Floater({ f, p }: { f: (typeof floaters)[number]; p: MotionValue<number
   );
 }
 
+function Process() {
+  const [active, setActive] = useState(0);
+  return (
+    <div className="mt-16 grid gap-12 md:grid-cols-2 md:gap-16">
+      <div>
+        {steps.map((st, i) => <Step key={st.t} st={st} i={i} active={active === i} onActive={() => setActive(i)} />)}
+      </div>
+      {/* Pinned photo: each step's image wipes up over the last */}
+      <div className="hidden md:block">
+        <div className="sticky top-24 h-[72vh] overflow-hidden rounded-[28px] bg-ink">
+          {steps.map((st, i) => (
+            <motion.div key={st.t} className="absolute inset-0" initial={false}
+              animate={{ clipPath: i <= active ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }} transition={{ duration: 1, ease }}>
+              { }
+              <motion.img src={img(st.i)} alt={st.t} initial={false} animate={{ scale: i === active ? 1 : 1.15 }} transition={{ duration: 1.4, ease }}
+                className="h-full w-full object-cover" />
+            </motion.div>
+          ))}
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-ink/70 to-transparent p-8 text-ivory">
+            <AnimatePresence mode="wait">
+              <motion.span key={active} initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -40, opacity: 0 }} transition={{ duration: 0.5, ease }}
+                className="text-8xl leading-none font-bold tracking-tighter">0{active + 1}</motion.span>
+            </AnimatePresence>
+            <div className="flex gap-2 pb-3">
+              {steps.map((st, i) => <span key={st.t} className={`h-1 rounded-full transition-all duration-500 ${i === active ? "w-10 bg-brass" : "w-4 bg-ivory/40"}`} />)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: number; active: boolean; onActive: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
+  useEffect(() => { if (inView) onActive(); }, [inView, onActive]);
+  return (
+    <div ref={ref} className={`border-t border-ink/15 py-10 transition-opacity duration-500 md:flex md:min-h-[60vh] md:flex-col md:justify-center ${active ? "opacity-100" : "md:opacity-30"}`}>
+      <p className="flex items-center gap-3 text-sm font-semibold text-ink/60">Step <span className="h-px w-6 bg-brass" /> 0{i + 1}/0{steps.length}</p>
+      <h3 className="mt-4 text-4xl font-semibold tracking-tight md:text-6xl">{st.t}</h3>
+      <p className="mt-4 max-w-md text-lg text-ink/70">{st.d}</p>
+      <div className="mt-6 flex flex-wrap gap-2">
+        {st.tags.map((t) => <span key={t} className="rounded-full bg-sand px-4 py-2 text-sm font-medium">{t}</span>)}
+      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={img(st.i, 1000)} alt={st.t} className="mt-8 aspect-[4/3] w-full rounded-[22px] object-cover md:hidden" />
+    </div>
+  );
+}
+
 function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -276,14 +350,16 @@ function Hero({ ready }: { ready: boolean }) {
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
-          <div className="max-w-4xl">
+          <div>
             <motion.p {...fade(0.4)} className="mb-5 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] uppercase text-ivory/80">
               <span className="h-px w-10 bg-brass" />The Furn · Tailored Modular Furniture
             </motion.p>
             <AnimatePresence mode="wait">
               <motion.div key={active} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.5, ease }}>
-                <h1 className="text-[12vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[6.5vw]">
-                  <SplitText text={categories[active].h} play={ready} delay={0.1} />
+                <h1 className="text-[9vw] leading-[0.95] font-bold tracking-[-0.04em] md:text-[6vw]">
+                  {categories[active].h.map((line, j) => (
+                    <span key={line} className="block whitespace-nowrap"><SplitText text={line} play={ready} delay={0.1 + j * 0.15} /></span>
+                  ))}
                 </h1>
                 <motion.p initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease, delay: 0.5 }}
                   className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{categories[active].d}</motion.p>
@@ -341,36 +417,26 @@ export default function Home() {
 
       <Quote />
 
-      {/* Projects: blurred backdrop + framed photo cards */}
+      {/* Projects: stacked pinned cards (prismae style) */}
       <section id="projects" className="px-3 py-28 md:px-12">
         <div className="flex flex-wrap items-end justify-between gap-6 px-2 md:px-0">
-          <div><Label>Our Works</Label><Heading text="Selected" accent="projects" /></div>
-          <Reveal><a href="#contact" className="group flex items-center gap-3 rounded-full bg-ink py-1.5 pr-1.5 pl-5 text-sm font-semibold text-ivory"><RollText>All projects</RollText><Arrow /></a></Reveal>
+          <div><Label>Our Works</Label><Heading text="Featured" accent="projects" /></div>
         </div>
-        <div className="mt-16 space-y-4">
-          {projects.map((p) => <ProjectCard key={p.n} p={p} />)}
-        </div>
+        <FeaturedProjects />
+        <Reveal className="mt-12 flex justify-center">
+          <a href="#contact" className="group flex items-center gap-1 font-semibold text-ivory">
+            <span className="rounded-full bg-ink px-7 py-4"><RollText>View All Projects</RollText></span>
+            <span className="grid h-14 w-14 place-items-center rounded-full bg-brass transition-transform duration-500 group-hover:rotate-45">
+              <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
+            </span>
+          </a>
+        </Reveal>
       </section>
 
-      {/* Process: cards pin and stack while scrolling */}
-      <section id="process" className="px-3 pt-28 pb-16 md:px-12">
-        <div className="px-2 md:px-0"><Label>How it Works</Label><Heading text="From first sketch" accent="to final handover" /></div>
-        <div className="mt-16">
-          {steps.map((st, i) => (
-            <div key={st.t} className="sticky mb-6" style={{ top: 96 + i * 84 }}>
-              <div className="grid gap-4 overflow-hidden rounded-[28px] bg-ink p-4 text-ivory md:h-[56vh] md:grid-cols-[1fr_1.3fr]">
-                <div className="flex flex-col justify-between p-3 md:p-4">
-                  <span className="text-4xl leading-none font-semibold text-brass md:text-5xl">/0{i + 1}</span>
-                  <div className="mt-10">
-                    <h3 className="text-3xl font-semibold tracking-tight md:text-5xl">{st.t}</h3>
-                    <p className="mt-4 max-w-sm text-ivory/70">{st.d}</p>
-                  </div>
-                </div>
-                <ParallaxImg src={img(st.i)} alt={st.t} className="aspect-[4/3] rounded-[20px] md:aspect-auto" />
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Process: steps scroll on the left, pinned photo swaps on the right (prismae style) */}
+      <section id="process" className="px-5 pt-28 pb-16 md:px-12">
+        <Label>How it Works</Label><Heading text="From first sketch" accent="to final handover" />
+        <Process />
       </section>
 
       {/* Testimonial */}
