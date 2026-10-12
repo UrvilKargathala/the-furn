@@ -98,4 +98,21 @@ export function ParallaxImg({ src, alt, className = "" }: { src: string; alt: st
   );
 }
 
+// Photo starts inset and grows to full width as you scroll into it
+export function WideningImage({ src, alt }: { src: string; alt: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start start"] });
+  const width = useTransform(scrollYProgress, [0, 1], ["84%", "100%"]);
+  const radius = useTransform(scrollYProgress, [0, 1], [28, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1]);
+  return (
+    <div ref={ref} className="flex justify-center">
+      <motion.div style={{ width, borderRadius: radius }} className="h-[85svh] overflow-hidden">
+        { }
+        <motion.img src={src} alt={alt} style={{ scale }} className="h-full w-full object-cover" />
+      </motion.div>
+    </div>
+  );
+}
+
 export { motion, useScroll, useTransform, ease };

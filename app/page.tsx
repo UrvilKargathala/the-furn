@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, useInView, useMotionValueEvent, type MotionValue } from "motion/react";
+import { AnimatePresence, useInView, type MotionValue } from "motion/react";
+import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, Counter, RollText, ParallaxImg, motion, useScroll, useTransform, ease } from "./fx";
+import { img, services, projects as allProjects } from "./data";
 
-// ponytail: Unsplash/Pexels placeholders, swap for real project media in /public
-const img = (id: string, w = 1600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+const projects = allProjects.slice(0, 4);
+import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
+
 const SLIDE_MS = 7000;
-
-const links = [["Home", "#"], ["Services", "#services"], ["Works", "#projects"], ["Studio", "#about"], ["Process", "#process"]];
 
 const categories = [
   { t: "Kitchen", h: ["Kitchens built", "around how you cook"], d: "Modular kitchens with precision shutters, smart storage and hardware that lasts.", i: "1556912173-3bb406ef7e77", v: "https://videos.pexels.com/video-files/38231065/16231771_1280_720_60fps.mp4" },
@@ -15,19 +16,6 @@ const categories = [
   { t: "Living", h: ["Living spaces that", "feel like home"], d: "TV units, panelling and furniture that bring calm and warmth to every room.", i: "1618221195710-dd6b41faaea6", v: "https://videos.pexels.com/video-files/7578540/7578540-hd_1280_720_30fps.mp4" },
 ];
 
-const services = [
-  { t: "Modular Kitchens", d: "Parallel, L-shape, island and U-shape kitchens built around how you cook.", tags: ["Layout", "Shutters", "Hardware"], i: "1556911220-bff31c812dba" },
-  { t: "Wardrobes", d: "Sliding, hinged and walk-in storage with fittings sized to your wardrobe.", tags: ["Sliding", "Walk-in", "Lofts"], i: "1616486338812-3dadae4b4ace" },
-  { t: "Living & TV Units", d: "Panelling, consoles and display units that anchor the room.", tags: ["Panelling", "Consoles", "Display"], i: "1618221195710-dd6b41faaea6" },
-  { t: "Complete Interiors", d: "End-to-end homes, from layout and material palette to handover.", tags: ["Planning", "Materials", "Turnkey"], i: "1600210492486-724fe5c67fb0" },
-];
-
-const projects = [
-  { n: "Serene Art", c: "Modular Kitchen", l: "Ahmedabad", y: "2025", area: "180 sq ft", days: "35 days", d: "A calm L-shaped kitchen in matte sage and oak, with tall pantry units and a hidden appliance wall.", i: "1556912173-3bb406ef7e77" },
-  { n: "Island Axis", c: "Island Kitchen", l: "Surat", y: "2025", area: "260 sq ft", days: "42 days", d: "An open island kitchen built for family cooking, with marble tops and warm under-cabinet lighting.", i: "1565538810643-b5bdb714032a" },
-  { n: "Aestra", c: "Wardrobe", l: "Vadodara", y: "2026", area: "140 sq ft", days: "28 days", d: "A walk-in wardrobe with fluted glass shutters, lit display shelves and a central dresser island.", i: "1616486338812-3dadae4b4ace" },
-  { n: "Beige Bailey", c: "Complete Interior", l: "Rajkot", y: "2026", area: "2,400 sq ft", days: "90 days", d: "A full 3BHK interior in soft beige tones, from the living room panelling to every bedroom wardrobe.", i: "1618221195710-dd6b41faaea6" },
-];
 
 const steps = [
   { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "1600210492486-724fe5c67fb0" },
@@ -35,118 +23,6 @@ const steps = [
   { t: "Craft", tags: ["In-house factory", "Edge banding", "Quality check"], d: "Factory-made modules with precision edges and soft-close hardware.", i: "1556912173-3bb406ef7e77" },
   { t: "Install", tags: ["On-site fitting", "Cleanup", "Handover"], d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "1565538810643-b5bdb714032a" },
 ];
-
-function Label({ children, dark = false }: { children: string; dark?: boolean }) {
-  return (
-    <Reveal>
-      <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] ${dark ? "border-ivory/20 text-ivory/70" : "border-ink/15 text-ink/60"}`}>
-        <span className="h-1.5 w-1.5 rounded-full bg-brass" />{children}
-      </span>
-    </Reveal>
-  );
-}
-
-function Heading({ text, accent, dark = false }: { text: string; accent?: string; dark?: boolean }) {
-  return (
-    <h2 className={`mt-5 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-7xl ${dark ? "text-ivory" : ""}`}>
-      <SplitText text={text} />
-      {accent && <SplitText text={accent} className={dark ? "text-stone" : "text-ink/35"} delay={0.15} />}
-    </h2>
-  );
-}
-
-function Arrow({ className = "" }: { className?: string }) {
-  return (
-    <span className={`grid h-8 w-8 place-items-center rounded-full bg-ivory text-ink transition-transform duration-500 group-hover:rotate-45 ${className}`}>
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
-    </span>
-  );
-}
-
-// Brand mark (T···f bench), traced from the supplied logo
-function Mark({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="190 655 1552 620" fill="currentColor" aria-hidden className={className}>
-      <path d="M193 670h356v63H405v110h916v56H405v372h-63V733H193z" />
-      <path d="M1354 843h56v56h-56zM1443 843h56v56h-56z" />
-      <path d="M1532 843h206v56h-143v372h-63z" />
-      <path d="M1532 809l13-89q7-20 35-27l153-33v40q-2 12-21 17l-92 18q-25 7-25 35v39z" />
-    </svg>
-  );
-}
-
-function Logo({ compact = false }: { compact?: boolean }) {
-  return (
-    <a href="#" className={`flex items-center text-lg font-bold tracking-[0.25em] text-ivory transition-all duration-500 ${compact ? "gap-0" : "gap-3"}`}>
-      <Mark className={`w-auto transition-all duration-500 ${compact ? "h-6" : "h-7 md:h-9"}`} />
-      <span className="sr-only">The Furn</span>
-    </a>
-  );
-}
-
-// Black intro: brand letters fade in one by one, then the curtain lifts
-function Loader({ onDone }: { onDone: () => void }) {
-  const letters = "THE FURN".split("");
-  return (
-    <motion.div className="fixed inset-0 z-[100] grid place-items-center bg-black text-ivory"
-      initial={{ y: 0 }} animate={{ y: "-100%" }} transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 2 }}
-      onAnimationComplete={onDone}>
-      <div className="flex items-center gap-4">
-        <motion.div initial={{ opacity: 0, clipPath: "inset(0 100% 0 0)" }} animate={{ opacity: 1, clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1, ease }}>
-          <Mark className="h-10 w-auto md:h-12" />
-        </motion.div>
-        <div className="flex text-2xl font-semibold tracking-[0.35em] md:text-3xl">
-          {letters.map((l, i) => (
-            <motion.span key={i} initial={{ opacity: 0, filter: "blur(8px)" }} animate={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}>{l === " " ? " " : l}</motion.span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function Nav({ show }: { show: boolean }) {
-  const [open, setOpen] = useState(false);
-  const [compact, setCompact] = useState(false);
-  const [atTop, setAtTop] = useState(true);
-  const anchor = useRef(0);
-  const { scrollY } = useScroll();
-  // Direction is measured from where it last changed, so slow trackpad scrolls still count
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setAtTop(y <= 120);
-    if (y <= 120) { setCompact(false); anchor.current = y; return; }
-    if (y - anchor.current > 12) { setCompact(true); anchor.current = y; }
-    else if (anchor.current - y > 12) { setCompact(false); anchor.current = y; }
-    else if ((compact && y > anchor.current) || (!compact && y < anchor.current)) anchor.current = y;
-  });
-  return (
-    <motion.header initial={{ y: -100, opacity: 0 }} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
-      className="fixed inset-x-0 top-0 z-50 px-5 pt-5 md:px-8 md:pt-6">
-      <nav className={`mx-auto flex items-center justify-between gap-10 rounded-full border px-2 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${compact ? "max-w-[620px] border-ivory/10 bg-ink/80 py-1.5 pl-3 backdrop-blur-xl" : atTop ? "max-w-[1400px] border-transparent bg-transparent py-2" : "max-w-[1400px] border-ivory/10 bg-ink/70 py-2 pl-5 backdrop-blur-xl"}`}>
-        <Logo compact={compact} />
-        <ul className={`hidden items-center gap-1 transition-all duration-500 md:flex ${compact ? "text-[15px]" : "text-[17px]"}`}>
-          {links.map(([t, h]) => (
-            <li key={t}><a href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></a></li>
-          ))}
-        </ul>
-        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="ml-auto grid h-11 w-11 place-items-center md:hidden">
-          <span className="relative block h-3 w-6">
-            <span className={`absolute left-0 h-0.5 w-6 bg-current transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
-            <span className={`absolute left-0 h-0.5 bg-current transition-all duration-300 ${open ? "top-1.5 w-6 -rotate-45" : "top-3 w-4"}`} />
-          </span>
-        </button>
-      </nav>
-      <motion.div initial={false} animate={open ? { opacity: 1, y: 0, pointerEvents: "auto" } : { opacity: 0, y: -12, pointerEvents: "none" }}
-        transition={{ duration: 0.4, ease }}
-        className="mt-2 rounded-3xl border border-ivory/10 bg-ink/80 p-3 text-ivory backdrop-blur-xl md:hidden">
-        {links.map(([t, h]) => (
-          <a key={t} href={h} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-lg font-medium hover:bg-ivory/10">{t}</a>
-        ))}
-      </motion.div>
-    </motion.header>
-  );
-}
 
 function Services() {
   const [open, setOpen] = useState(0);
@@ -166,10 +42,13 @@ function Services() {
                 transition={{ duration: 0.7, ease }} className="overflow-hidden">
                 <div className="grid gap-6 pb-8 md:grid-cols-[1fr_2fr]">
                   <div>
-                    <p className="max-w-sm text-ink/70">{s.d}</p>
+                    <p className="max-w-sm text-ink/70">{s.short}</p>
                     <div className="mt-5 flex flex-wrap gap-2">
                       {s.tags.map((t) => <span key={t} className="rounded-full border border-ink/15 px-3 py-1 text-xs">{t}</span>)}
                     </div>
+                    <Link href={`/services/${s.slug}`} className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold">
+                      <RollText>View service</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+                    </Link>
                   </div>
                   <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 0.9, ease, delay: 0.1 }}
                     className="aspect-[16/8] overflow-hidden rounded-[22px]">
@@ -201,7 +80,7 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
   const dim = useTransform(progress, [i / n, 1], [0, (n - 1 - i) * 0.15]);
   return (
     <div className="sticky top-0 flex h-svh items-center">
-      <motion.a href="#contact" style={{ scale }} className="group relative block h-[85svh] w-full origin-top overflow-hidden rounded-[28px] bg-ink text-ivory">
+      <motion.a href={`/works/${p.slug}`} style={{ scale }} className="group relative block h-[85svh] w-full origin-top overflow-hidden rounded-[28px] bg-ink text-ivory">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={img(p.i, 2000)} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
@@ -424,12 +303,12 @@ export default function Home() {
         </div>
         <FeaturedProjects />
         <Reveal className="mt-12 flex justify-center">
-          <a href="#contact" className="group flex items-center gap-1 font-semibold text-ivory">
+          <Link href="/works" className="group flex items-center gap-1 font-semibold text-ivory">
             <span className="rounded-full bg-ink px-7 py-4"><RollText>View All Projects</RollText></span>
             <span className="grid h-14 w-14 place-items-center rounded-full bg-brass transition-transform duration-500 group-hover:rotate-45">
               <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
             </span>
-          </a>
+          </Link>
         </Reveal>
       </section>
 
@@ -450,53 +329,8 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* Start your project */}
-      <section id="contact" className="p-3">
-        <div className="relative overflow-hidden rounded-[28px] bg-ink px-6 py-24 text-center text-ivory md:py-36">
-          <ParallaxImg src={img("1565538810643-b5bdb714032a", 2400)} alt="" className="absolute inset-0 opacity-40" />
-          <div className="relative">
-            <Label dark>Start your project</Label>
-            <h2 className="mx-auto mt-6 max-w-4xl text-5xl leading-[1] font-bold tracking-tight md:text-8xl">
-              <SplitText text="Let's build your" /><SplitText text="dream space." className="text-stone" delay={0.2} />
-            </h2>
-            <Reveal delay={0.3}>
-              <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
-              <div className="mt-10 flex flex-wrap justify-center gap-3">
-                <a href="mailto:hello@thefurn.in" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></a>
-                <a href="https://wa.me/" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="overflow-hidden px-5 pt-20 pb-6 md:px-12">
-        <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <Reveal>
-            <p className="max-w-xs text-xl font-semibold tracking-tight">Tailored modular furniture, designed and built for the way you live.</p>
-          </Reveal>
-          {[
-            ["Explore", links],
-            ["Services", services.map((s) => [s.t, "#services"])],
-            ["Contact", [["hello@thefurn.in", "mailto:hello@thefurn.in"], ["+91 00000 00000", "tel:+910000000000"], ["Instagram", "#"], ["Pinterest", "#"]]],
-          ].map(([title, items], i) => (
-            <Reveal key={title as string} delay={0.1 * (i + 1)}>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-ink/40">{title as string}</p>
-              <ul className="space-y-2">
-                {(items as string[][]).map(([t, h]) => <li key={t}><a href={h} className="group text-ink/80 hover:text-ink"><RollText>{t}</RollText></a></li>)}
-              </ul>
-            </Reveal>
-          ))}
-        </div>
-        <p aria-hidden className="mt-20 text-center text-[19vw] leading-[0.8] font-bold tracking-[-0.05em] whitespace-nowrap">
-          <SplitText text="THE FURN" />
-        </p>
-        <div className="mt-6 flex flex-wrap justify-between gap-4 border-t border-ink/10 pt-6 text-sm text-ink/50">
-          <span>© 2026 The Furn. All rights reserved.</span>
-          <span>Tailored Modular Furniture</span>
-        </div>
-      </footer>
+      <Cta />
+      <Footer />
     </main>
   );
 }
