@@ -78,25 +78,27 @@ export function Loader({ onDone }: { onDone: () => void }) {
 // `light` = page starts on a light background, so the bar needs its dark fill even at the top
 export function Nav({ show = true, light = false }: { show?: boolean; light?: boolean }) {
   const [open, setOpen] = useState(false);
-  const [compact, setCompact] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const anchor = useRef(0);
   const { scrollY } = useScroll();
   // Direction is measured from where it last changed, so slow trackpad scrolls still count
   useMotionValueEvent(scrollY, "change", (y) => {
     setAtTop(y <= 120);
-    if (y <= 120) { setCompact(false); anchor.current = y; return; }
-    if (y - anchor.current > 12) { setCompact(true); anchor.current = y; }
-    else if (anchor.current - y > 12) { setCompact(false); anchor.current = y; }
-    else if ((compact && y > anchor.current) || (!compact && y < anchor.current)) anchor.current = y;
+    if (y <= 120) { setHidden(false); anchor.current = y; return; }
+    // Hide while scrolling down, bring it back as soon as the user scrolls up
+    if (y - anchor.current > 12) { setHidden(true); setOpen(false); anchor.current = y; }
+    else if (anchor.current - y > 12) { setHidden(false); anchor.current = y; }
+    else if ((hidden && y > anchor.current) || (!hidden && y < anchor.current)) anchor.current = y;
   });
   const clear = atTop && !light;
   return (
     <motion.header initial={{ y: -100, opacity: 0 }} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
       className="fixed inset-x-0 top-0 z-50 px-5 pt-5 md:px-8 md:pt-6">
-      <nav className={`mx-auto flex items-center justify-between gap-10 rounded-full border px-2 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${compact ? "max-w-[620px] border-ivory/10 bg-ink/80 py-1.5 pl-3 backdrop-blur-xl" : clear ? "max-w-[1400px] border-transparent bg-transparent py-2" : "max-w-[1400px] border-ivory/10 bg-ink/70 py-2 pl-5 backdrop-blur-xl"}`}>
-        <Logo compact={compact} />
-        <ul className={`hidden items-center gap-1 transition-all duration-500 md:flex ${compact ? "text-[15px]" : "text-[17px]"}`}>
+      <div className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${hidden ? "-translate-y-[150%]" : "translate-y-0"}`}>
+      <nav className={`mx-auto flex items-center justify-between gap-10 rounded-full border px-2 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${clear ? "max-w-[1400px] border-transparent bg-transparent py-2" : "max-w-[1400px] border-ivory/10 bg-ink/70 py-2 pl-5 backdrop-blur-xl"}`}>
+        <Logo />
+        <ul className={`hidden items-center gap-1 transition-all duration-500 md:flex text-[17px]`}>
           {links.map(([t, h]) => (
             <li key={t}><Link href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></Link></li>
           ))}
@@ -115,6 +117,7 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
           <Link key={t} href={h} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-lg font-medium hover:bg-ivory/10">{t}</Link>
         ))}
       </motion.div>
+      </div>
     </motion.header>
   );
 }

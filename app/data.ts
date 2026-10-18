@@ -171,17 +171,24 @@ export const getService = (slug: string) => services.find((s) => s.slug === slug
 type Project = {
   slug: string; n: string; c: string; cat: string; l: string; y: string; area: string; days: string; client: string;
   d: string; i: string; gallery: string[];
+  service: string; credits: { n: string; r: string }[]; video: string; insta: string;
   overview: string; challenge: string; solution: string; features: string[]; result: string;
   quote: { t: string; by: string };
 };
 
-export const workCats = ["All", "Kitchen", "Wardrobe", "Living", "Bedroom", "Dining", "Complete Interior"];
+export const workCats = ["All", "Kitchen", "Weekend Home", "Studio", "Bedroom"];
+
+// Project photos live in public/works/<slug>/. Videos still stream from the Framer CDN until we decide where to host them.
+const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
+const framerVideo = (id: string) => `https://framerusercontent.com/assets/${id}.mp4`;
 
 export const projects: Project[] = [
   {
-    slug: "serene-art", n: "Serene Art", c: "Modular Kitchen", cat: "Kitchen", l: "Ahmedabad", y: "2025", area: "180 sq ft", days: "35 days", client: "Private Residence",
+    slug: "serene-art", n: "Serene Art", c: "Modular Kitchen", cat: "Kitchen", l: "Ahmedabad", y: "2024", area: "180 sq ft", days: "35 days", client: "Private Residence",
     d: "A calm L-shaped kitchen in matte sage and oak, with tall pantry units and a hidden appliance wall.",
-    i: "1556912173-3bb406ef7e77", gallery: ["1556911220-bff31c812dba", "1556909114-f6e7ad7d3136", "1565538810643-b5bdb714032a", "1484101403633-562f891dc89a"],
+    i: work("serene-art", "cover"), gallery: [work("serene-art", "01"), work("serene-art", "02")],
+    service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
+    video: framerVideo("FWHAhyyOSgbKU9VI8Kr8t24Vjqs"), insta: "https://www.instagram.com/thefurn.co/p/DJbIoDIP_BB/",
     overview: "A young family wanted a kitchen that felt as calm as the rest of their apartment, without losing any storage.",
     challenge: "The old kitchen had open shelves that collected clutter, a fridge blocking the window and no space for a microwave or oven.",
     solution: "We moved the fridge into a tall unit run, added a concealed appliance wall and switched to handle-less sage shutters with oak accents.",
@@ -190,9 +197,11 @@ export const projects: Project[] = [
     quote: { t: "It finally feels like part of the living room, not a separate workroom.", by: "Homeowner, Serene Art" },
   },
   {
-    slug: "island-axis", n: "Island Axis", c: "Island Kitchen", cat: "Kitchen", l: "Surat", y: "2025", area: "260 sq ft", days: "42 days", client: "Private Villa",
+    slug: "island-axis", n: "Island Axis", c: "Modular Kitchen", cat: "Kitchen", l: "Surat", y: "2024", area: "260 sq ft", days: "42 days", client: "Private Villa",
     d: "An open island kitchen built for family cooking, with marble tops and warm under-cabinet lighting.",
-    i: "1565538810643-b5bdb714032a", gallery: ["1556912173-3bb406ef7e77", "1556909114-f6e7ad7d3136", "1556911220-bff31c812dba", "1617806118233-18e1de247200"],
+    i: work("island-axis", "cover"), gallery: [work("island-axis", "01"), work("island-axis", "02")],
+    service: "Furniture", credits: [{ n: "Ar. Smit Vaghasiya", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
+    video: framerVideo("XH2g3jqGiFE6GGwagMxmteLYVJI"), insta: "https://www.instagram.com/p/DGKlXmMPRR2/",
     overview: "A large family that cooks together every evening wanted a kitchen where four people could work at once.",
     challenge: "A closed kitchen layout separated the cooks from the dining area, and the single counter run caused constant crowding.",
     solution: "We opened the wall into an island layout with a prep sink on the island and a breakfast counter for the children.",
@@ -201,9 +210,11 @@ export const projects: Project[] = [
     quote: { t: "The island is where we all end up, every single evening.", by: "Homeowner, Island Axis" },
   },
   {
-    slug: "aestra", n: "Aestra", c: "Walk-in Wardrobe", cat: "Wardrobe", l: "Vadodara", y: "2026", area: "140 sq ft", days: "28 days", client: "Private Residence",
+    slug: "aestra", n: "Aestra", c: "Modular Kitchen", cat: "Kitchen", l: "Vadodara", y: "2025", area: "140 sq ft", days: "28 days", client: "Private Residence",
     d: "A walk-in wardrobe with fluted glass shutters, lit display shelves and a central dresser island.",
-    i: "1616486338812-3dadae4b4ace", gallery: ["1558997519-83ea9252edf8", "1595428774223-ef52624120d2", "1505693416388-ac5ce068fe85", "1513694203232-719a280e022f"],
+    i: work("aestra", "cover"), gallery: [work("aestra", "01"), work("aestra", "02")],
+    service: "Furniture", credits: [{ n: "Ar. Ajay Panchal", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
+    video: framerVideo("kxxGdJUdZVMrWWKU441tlDtlUk"), insta: "https://www.instagram.com/p/DU8IdlgjwGR/",
     overview: "A couple wanted to turn a spare room into a dressing room that felt like a boutique.",
     challenge: "Two people's clothes, shoes and accessories had to fit into one room without feeling crowded or dark.",
     solution: "We planned storage on three walls, added a central dresser island and used fluted glass shutters with warm strip lighting.",
@@ -212,9 +223,11 @@ export const projects: Project[] = [
     quote: { t: "It feels like walking into our own little store.", by: "Homeowner, Aestra" },
   },
   {
-    slug: "beige-bailey", n: "Beige Bailey", c: "Complete Interior", cat: "Complete Interior", l: "Rajkot", y: "2026", area: "2,400 sq ft", days: "90 days", client: "3BHK Apartment",
+    slug: "beige-bailey", n: "Beige Bailey", c: "Modular Kitchen", cat: "Kitchen", l: "Rajkot", y: "2024", area: "2,400 sq ft", days: "90 days", client: "3BHK Apartment",
     d: "A full 3BHK interior in soft beige tones, from the living room panelling to every bedroom wardrobe.",
-    i: "1618221195710-dd6b41faaea6", gallery: ["1600210492486-724fe5c67fb0", "1522708323590-d24dbb6b0267", "1493809842364-78817add7ffb", "1586023492125-27b2c045efd7"],
+    i: work("beige-bailey", "cover"), gallery: [work("beige-bailey", "01"), work("beige-bailey", "02")],
+    service: "Furniture", credits: [{ n: "Ar. Shushil Patel", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
+    video: framerVideo("wanXm9qlznHdZpjqYbmxt2tI"), insta: "https://www.instagram.com/thefurn.co/p/DHYM00sv46Q/",
     overview: "A new 3BHK handed over bare, with a family moving in from another city in three months.",
     challenge: "Every room needed furniture, ceilings and lighting on a fixed deadline, coordinated remotely.",
     solution: "We designed the whole home around one beige and walnut palette and ran civil, electrical and furniture work in parallel.",
@@ -223,9 +236,11 @@ export const projects: Project[] = [
     quote: { t: "We arrived with suitcases and found a complete home waiting.", by: "Homeowner, Beige Bailey" },
   },
   {
-    slug: "noir-arc", n: "Noir Arc", c: "Living & TV Wall", cat: "Living", l: "Ahmedabad", y: "2025", area: "320 sq ft", days: "30 days", client: "Private Residence",
+    slug: "noir-arc", n: "Noir Arc", c: "Modular Kitchen", cat: "Kitchen", l: "Ahmedabad", y: "2024", area: "320 sq ft", days: "30 days", client: "Private Residence",
     d: "A dramatic living room with an arched charcoal TV wall, floating console and lit display niches.",
-    i: "1600607687939-ce8a6c25118c", gallery: ["1586023492125-27b2c045efd7", "1600121848594-d8644e57abab", "1493809842364-78817add7ffb", "1522708323590-d24dbb6b0267"],
+    i: work("noir-arc", "cover"), gallery: [work("noir-arc", "01"), work("noir-arc", "02")],
+    service: "Furniture", credits: [{ n: "Pravaah Design Studio", r: "Architect" }, { n: "Rohan Patel", r: "Visual Team" }],
+    video: framerVideo("6AkmefHQcO6NCjNDnRzyoi1mw"), insta: "https://www.instagram.com/p/DV_DBmej_pv/",
     overview: "The owners wanted a living room with presence: somewhere to host friends and watch films.",
     challenge: "Wires, speakers and set-top boxes were everywhere, and the long wall felt empty.",
     solution: "We built a charcoal arched TV wall with hidden wiring, a floating console and backlit niches for their collection.",
@@ -236,7 +251,9 @@ export const projects: Project[] = [
   {
     slug: "ivory", n: "Ivory", c: "Master Bedroom", cat: "Bedroom", l: "Surat", y: "2026", area: "220 sq ft", days: "25 days", client: "Private Residence",
     d: "A soft ivory bedroom with an upholstered headboard wall, storage bed and hidden study desk.",
-    i: "1505693416388-ac5ce068fe85", gallery: ["1513694203232-719a280e022f", "1615874959474-d609969a20ed", "1571508601891-ca5e7a713859", "1524758631624-e2822e304c36"],
+    i: work("ivory", "cover"), gallery: [work("ivory", "01"), work("ivory", "02")],
+    service: "Furniture", credits: [],
+    video: framerVideo("oHbCncnjtjMSDSJ4J0gpjKmW4"), insta: "https://www.instagram.com/thefurn.co/p/DW_c986j038/",
     overview: "A master bedroom that needed to be restful, but also hold a work-from-home desk.",
     challenge: "The room was small, and a desk would have made it feel like an office.",
     solution: "We designed a fold-away study unit inside the wardrobe line and a hydraulic storage bed to free up floor space.",
@@ -245,9 +262,11 @@ export const projects: Project[] = [
     quote: { t: "I close the desk and the workday is gone.", by: "Homeowner, Ivory" },
   },
   {
-    slug: "concrete-canvas", n: "Concrete Canvas", c: "Villa Interior", cat: "Complete Interior", l: "Ahmedabad", y: "2026", area: "4,800 sq ft", days: "120 days", client: "Private Villa",
+    slug: "concrete-canvas", n: "Concrete Canvas", c: "Modular Kitchen", cat: "Kitchen", l: "Ahmedabad", y: "2025", area: "4,800 sq ft", days: "120 days", client: "Private Villa",
     d: "A two-storey villa mixing raw concrete finishes with warm oak furniture and custom joinery.",
-    i: "1600566753190-17f0baa2a6c3", gallery: ["1560448204-e02f11c3d0e2", "1600210492486-724fe5c67fb0", "1617806118233-18e1de247200", "1502005229762-cf1b2da7c5d6"],
+    i: work("concrete-canvas", "cover"), gallery: [work("concrete-canvas", "01"), work("concrete-canvas", "02")],
+    service: "Furniture", credits: [{ n: "Kardhavya Architect", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
+    video: framerVideo("PyPJ0XFSveLtmCZImSPRzNVYM0"), insta: "https://www.instagram.com/thefurn.co/p/DXRehk_D7tf/",
     overview: "An architect-designed villa whose owners wanted interiors that matched its bold concrete shell.",
     challenge: "Concrete can feel cold; the family wanted warmth without hiding the architecture.",
     solution: "We paired micro-concrete surfaces with oak joinery, soft textiles and layered lighting across both floors.",
@@ -256,15 +275,26 @@ export const projects: Project[] = [
     quote: { t: "It finally feels like a home, not a gallery.", by: "Owner, Concrete Canvas" },
   },
   {
-    slug: "avadh-ayuska", n: "Avadh Ayuska", c: "Dining & Crockery", cat: "Dining", l: "Vadodara", y: "2025", area: "200 sq ft", days: "21 days", client: "Private Residence",
+    slug: "avadh-ayuska", n: "Avadh Ayuska", c: "Weekend Home", cat: "Weekend Home", l: "Vadodara", y: "2026", area: "200 sq ft", days: "21 days", client: "Private Residence",
     d: "A family dining room with a solid wood table, glass-front crockery unit and a serene pooja corner.",
-    i: "1617806118233-18e1de247200", gallery: ["1600121848594-d8644e57abab", "1484101403633-562f891dc89a", "1556909114-f6e7ad7d3136", "1595428774223-ef52624120d2"],
+    i: work("avadh-ayuska", "cover"), gallery: [work("avadh-ayuska", "01"), work("avadh-ayuska", "02")],
+    service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
+    video: framerVideo("w6zOc6vxnQMK6ce3yOg4Xj2Xtf0"), insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
     overview: "A joint family needed a dining space for ten, plus a pooja corner close to the kitchen.",
     challenge: "One room had to handle daily meals, festivals and prayer without feeling cluttered.",
     solution: "We designed an extendable wood table, a lit crockery unit and a pooja unit with jaali shutters on the same wall.",
     features: ["Extendable solid wood table", "Lit glass crockery unit", "Pooja unit with jaali shutters", "Hidden storage for festival items"],
     result: "Ten people sit comfortably for festivals, and the room stays calm on ordinary days.",
     quote: { t: "Diwali dinner for twelve, and nobody felt squeezed.", by: "Homeowner, Avadh Ayuska" },
+  },
+  {
+    slug: "studio-furn", n: "Studio Furn", c: "Studio", cat: "Studio", l: "Surat", y: "2022", area: "", days: "", client: "The Furn",
+    d: "Our own studio in Surat, where every material, finish and module is on display.",
+    i: work("studio-furn", "cover"), gallery: [work("studio-furn", "01"), work("studio-furn", "02")],
+    service: "Furniture", credits: [{ n: "Id. Vipul Dodiya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
+    video: framerVideo("vjPulICJPvOgUwCvX8eI0OdMO0"), insta: "https://www.instagram.com/thefurn.co/reel/DTu4lVUjylt/",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
   },
 ];
 

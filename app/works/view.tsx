@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, type MotionValue } from "motion/react";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, motion, useScroll, useTransform, ease } from "../fx";
-import { img, projects, workCats } from "../data";
+import { projects, workCats } from "../data";
 import { Label, Heading, Arrow, Nav, Cta, Footer } from "../ui";
 
 type Project = (typeof projects)[number];
@@ -16,7 +16,7 @@ function WorkCard({ p, big }: { p: Project; big: boolean }) {
     <Link href={`/works/${p.slug}`} className="group block">
       <div className={`relative overflow-hidden rounded-[24px] bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={img(p.i, big ? 1800 : 1000)} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
+        <img src={p.i} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 bottom-0 translate-y-full bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0">
           <div className="flex w-max animate-marquee gap-8 text-sm font-semibold tracking-[0.15em] whitespace-nowrap uppercase">
             {Array.from({ length: 12 }, (_, k) => <span key={k}>See project details <span className="text-brass">↗</span></span>)}
@@ -42,7 +42,7 @@ function Spotlight({ p }: { p: Project }) {
   return (
     <Link ref={ref} href={`/works/${p.slug}`} className="group relative flex h-svh flex-col justify-between overflow-hidden bg-ink p-6 text-ivory md:p-12">
       { }
-      <motion.img src={img(p.i, 2400)} alt={p.n} style={{ y, scale: 1.25 }} className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
+      <motion.img src={p.i} alt={p.n} style={{ y, scale: 1.25 }} className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-transparent to-ink/70" />
       <Reveal className="relative max-w-2xl"><p className="text-2xl leading-snug font-medium md:text-4xl">{p.d}</p></Reveal>
       <div className="relative">
@@ -141,7 +141,7 @@ function Gallery({ p }: { p: Project }) {
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
         <div className="px-5 pb-10 md:px-12"><Label>Gallery</Label></div>
         <motion.div ref={track} style={{ x }} className="flex w-max gap-[4vw] px-5 md:px-12">
-          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={img(g, 1600)} i={i} p={scrollYProgress} n={n} />)}
+          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} i={i} p={scrollYProgress} n={n} />)}
         </motion.div>
       </div>
     </section>
@@ -157,30 +157,24 @@ function GalleryImg({ src, i, p, n }: { src: string; i: number; p: MotionValue<n
   );
 }
 
-// Drag the handle to compare (primedecor before/after)
-function BeforeAfter({ before, after }: { before: string; after: string }) {
-  const [pos, setPos] = useState(50);
+// Project film: plays muted on loop, sound and controls on demand
+function ProjectVideo({ p }: { p: Project }) {
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] select-none md:aspect-[16/8]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={after} alt="After" className="absolute inset-0 h-full w-full object-cover" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={before} alt="Before" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} className="absolute inset-0 h-full w-full object-cover grayscale sepia-[.3]" />
-      <span className="absolute top-5 left-5 rounded-full bg-ink/70 px-4 py-1.5 text-sm font-semibold text-ivory backdrop-blur">Before</span>
-      <span className="absolute top-5 right-5 rounded-full bg-ivory/90 px-4 py-1.5 text-sm font-semibold backdrop-blur">After</span>
-      <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-ivory" style={{ left: `${pos}%` }}>
-        <span className="absolute top-1/2 left-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-ivory text-ink shadow-xl">⇆</span>
-      </div>
-      <input type="range" min={0} max={100} value={pos} onChange={(e) => setPos(+e.target.value)} aria-label="Before and after comparison"
-        className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
-    </div>
+    <section className="px-3 pt-28 md:px-12 md:pt-40">
+      <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
+      <Reveal>
+        <video src={p.video} poster={p.gallery[0]} autoPlay muted loop playsInline controls preload="metadata"
+          className="aspect-video w-full rounded-[28px] bg-ink object-cover" />
+      </Reveal>
+    </section>
   );
 }
 
 export function WorkDetailView({ p }: { p: Project }) {
   const idx = projects.indexOf(p);
   const next = projects[(idx + 1) % projects.length];
-  const meta = [["Client", p.client], ["Location", `${p.l}, India`], ["Category", p.c], ["Area", p.area], ["Timeline", p.days], ["Year", p.y]];
+  const meta = [["Category", p.c], ["Service", p.service], ["Year", p.y], ["Location", `${p.l}, India`], ["Area", p.area], ["Timeline", p.days]].filter(([, v]) => v);
+  const story = [["Overview", p.overview], ["The challenge", p.challenge], ["Our solution", p.solution]].filter(([, v]) => v);
   return (
     <main>
       <SmoothScroll />
@@ -207,11 +201,13 @@ export function WorkDetailView({ p }: { p: Project }) {
         </dl>
       </section>
 
-      <WideningImage src={img(p.i, 2400)} alt={p.n} />
+      <WideningImage src={p.i} alt={p.n} />
+
+      <ProjectVideo p={p} />
 
       {/* Story: label pins on the left while the copy scrolls */}
-      <section className="px-5 py-28 md:px-12 md:py-40">
-        {[["Overview", p.overview], ["The challenge", p.challenge], ["Our solution", p.solution]].map(([k, v], i) => (
+      {story.length > 0 && <section className="px-5 py-28 md:px-12 md:py-40">
+        {story.map(([k, v], i) => (
           <div key={k} className="grid gap-6 border-t border-ink/15 py-12 md:grid-cols-[1fr_2fr] md:py-16">
             <div className="md:sticky md:top-32 md:self-start">
               <span className="text-sm font-semibold text-brass">0{i + 1}</span>
@@ -222,10 +218,10 @@ export function WorkDetailView({ p }: { p: Project }) {
               : <Reveal><p className="text-xl leading-relaxed text-ink/75 md:text-2xl">{v}</p></Reveal>}
           </div>
         ))}
-      </section>
+      </section>}
 
       {/* Key features */}
-      <section className="mx-3 rounded-[28px] bg-ink px-5 py-24 text-ivory md:px-12">
+      {p.features.length > 0 && <section className="mx-3 rounded-[28px] bg-ink px-5 py-24 text-ivory md:px-12">
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <div><Label dark>Key features</Label><Heading text="What makes" accent="it work" dark /></div>
           <ul className="grid gap-4 sm:grid-cols-2">
@@ -239,33 +235,43 @@ export function WorkDetailView({ p }: { p: Project }) {
             ))}
           </ul>
         </div>
-      </section>
+      </section>}
 
       <Gallery p={p} />
 
       <section className="px-5 pb-28 md:px-12">
-        <Label>Transformation</Label>
-        <Heading text="Before &" accent="after" />
-        <Reveal className="mt-12"><BeforeAfter before={img(p.gallery[0], 1800)} after={img(p.i, 1800)} /></Reveal>
-        <div className="mt-20 grid gap-12 md:grid-cols-2">
+        <div className="grid gap-12 md:grid-cols-2">
           <Reveal>
-            <p className="text-sm font-semibold tracking-[0.2em] text-ink/50 uppercase">The result</p>
-            <p className="mt-4 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{p.result}</p>
+            <Label>Credits</Label>
+            <dl className="mt-8">
+              {p.credits.map((c) => (
+                <div key={c.r} className="flex justify-between gap-6 border-t border-ink/15 py-5">
+                  <dt className="text-ink/50">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
+                </div>
+              ))}
+              <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
+                <dt className="text-ink/50">See more</dt>
+                <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText>{arrowSvg}</a></dd>
+              </div>
+            </dl>
           </Reveal>
-          <Reveal delay={0.15}>
-            <blockquote className="rounded-[24px] bg-sand p-8 md:p-10">
-              <span className="text-5xl leading-none text-brass">“</span>
-              <p className="mt-2 text-2xl leading-snug font-medium">{p.quote.t}</p>
-              <footer className="mt-6 text-sm text-ink/60">{p.quote.by}</footer>
-            </blockquote>
-          </Reveal>
+          {p.quote.t && (
+            <Reveal delay={0.15}>
+              {p.result && <p className="mb-8 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{p.result}</p>}
+              <blockquote className="rounded-[24px] bg-sand p-8 md:p-10">
+                <span className="text-5xl leading-none text-brass">“</span>
+                <p className="mt-2 text-2xl leading-snug font-medium">{p.quote.t}</p>
+                <footer className="mt-6 text-sm text-ink/60">{p.quote.by}</footer>
+              </blockquote>
+            </Reveal>
+          )}
         </div>
       </section>
 
       {/* Next project */}
       <Link href={`/works/${next.slug}`} className="group relative mx-3 flex h-[70svh] flex-col justify-end overflow-hidden rounded-[28px] bg-ink p-6 text-ivory md:p-12">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={img(next.i, 2400)} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
+        <img src={next.i} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
         <div className="relative flex items-end justify-between gap-6">
           <div>

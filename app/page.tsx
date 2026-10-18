@@ -82,7 +82,7 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
     <div className="sticky top-0 flex h-svh items-center">
       <motion.a href={`/works/${p.slug}`} style={{ scale }} className="group relative block h-[85svh] w-full origin-top overflow-hidden rounded-[28px] bg-ink text-ivory">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={img(p.i, 2000)} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
+        <img src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
         <div className="relative flex h-full flex-col justify-between p-6 md:p-10">
