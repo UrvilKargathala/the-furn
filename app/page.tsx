@@ -9,7 +9,7 @@ const projects = allProjects.slice(0, 4);
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 
-const HERO_VIDEO = "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/hero/brand-film.mp4";
+const HERO_VIDEO = "https://media.thefurn.co/hero/brand-film.mp4";
 // The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
 const HERO_LOOP_END = 38;
 // Headline changes with what the film is showing: [from second, copy]
