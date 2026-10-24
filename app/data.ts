@@ -306,6 +306,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "casa-rivera", n: "Casa Rivera", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A dark, refined modular kitchen with a timber-fronted island, glass display units and terrazzo flooring.",
+    i: workJpg("casa-rivera", "01"), gallery: [workJpg("casa-rivera", "02"), workJpg("casa-rivera", "03"), workJpg("casa-rivera", "04"), workJpg("casa-rivera", "05"), workJpg("casa-rivera", "06"), workJpg("casa-rivera", "07"), workJpg("casa-rivera", "08"), workJpg("casa-rivera", "09"), workJpg("casa-rivera", "10"), workJpg("casa-rivera", "11")],
+    service: "Furniture", credits: [{ n: "Studio Rohan Patel", r: "Photography" }],
+    video: "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/casa-rivera/srp7.mp4", moreVideos: ["https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/casa-rivera/srp8.mp4"], insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
