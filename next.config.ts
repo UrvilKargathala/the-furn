@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: { agentUpgrade: "security" },
   async redirects() {
     return [{ source: "/about", destination: "/studio", permanent: true }];
   },
