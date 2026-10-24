@@ -25,8 +25,8 @@ function WorkCard({ p, big }: { p: Project; big: boolean }) {
         <span className="absolute top-4 left-4 rounded-full bg-ivory/90 px-3 py-1 text-xs font-semibold tracking-wider uppercase backdrop-blur">{p.c}</span>
       </div>
       <h3 className="mt-5 text-2xl font-semibold tracking-tight md:text-3xl">{p.n}</h3>
-      <dl className="mt-3 grid grid-cols-3 border-t border-ink/15 pt-3 text-sm">
-        {[["Area", p.area], ["Year", p.y], ["City", p.l]].map(([k, v]) => (
+      <dl className="mt-3 flex gap-10 border-t border-ink/15 pt-3 text-sm">
+        {[["Area", p.area], ["Year", p.y], ["City", p.l]].filter(([, v]) => v).map(([k, v]) => (
           <div key={k}><dt className="text-ink/50">{k}</dt><dd className="mt-0.5 font-medium">{v}</dd></div>
         ))}
       </dl>
@@ -47,7 +47,7 @@ function Spotlight({ p }: { p: Project }) {
       <Reveal className="relative max-w-2xl"><p className="text-2xl leading-snug font-medium md:text-4xl">{p.d}</p></Reveal>
       <div className="relative">
         <div className="flex items-end justify-between border-b border-ivory/40 pb-4 text-sm">
-          <span>{p.client}</span><span>{p.l}, {p.y}</span>
+          <span>{p.client}</span><span>{[p.l, p.y].filter(Boolean).join(", ")}</span>
         </div>
         <div className="mt-4 flex items-end justify-between gap-6">
           <div>
@@ -162,10 +162,31 @@ function ProjectVideo({ p }: { p: Project }) {
   return (
     <section className="px-3 pt-28 md:px-12 md:pt-40">
       <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
-      <Reveal>
-        <video src={p.video} poster={p.gallery[0]} autoPlay muted loop playsInline controls preload="metadata"
-          className="aspect-video w-full rounded-[28px] bg-ink object-cover" />
-      </Reveal>
+      <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
+        {[p.video, ...(p.moreVideos ?? [])].map((src, i) => (
+          <Reveal key={src}>
+            <video src={src} poster={i === 0 ? p.gallery[0] : undefined} autoPlay muted loop playsInline controls preload="metadata"
+              className="mx-auto max-h-[85svh] w-full rounded-[28px] bg-ink object-contain" />
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// Big galleries (many photos): masonry columns that fade up as they scroll in
+function GalleryGrid({ p }: { p: Project }) {
+  return (
+    <section className="px-5 py-28 md:px-12">
+      <div className="pb-10"><Label>Gallery</Label></div>
+      <div className="columns-2 gap-3 md:columns-3 md:gap-5">
+        {p.gallery.map((g, i) => (
+          <Reveal key={g} delay={(i % 3) * 0.08} className="mb-3 md:mb-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" className="aspect-[2/3] w-full rounded-[20px] bg-sand object-cover" />
+          </Reveal>
+        ))}
+      </div>
     </section>
   );
 }
@@ -173,7 +194,7 @@ function ProjectVideo({ p }: { p: Project }) {
 export function WorkDetailView({ p }: { p: Project }) {
   const idx = projects.indexOf(p);
   const next = projects[(idx + 1) % projects.length];
-  const meta = [["Category", p.c], ["Service", p.service], ["Year", p.y], ["Location", `${p.l}, India`], ["Area", p.area], ["Timeline", p.days]].filter(([, v]) => v);
+  const meta = [["Category", p.c], ["Service", p.service], ["Year", p.y], ["Location", p.l && `${p.l}, India`], ["Area", p.area], ["Timeline", p.days]].filter(([, v]) => v);
   const story = [["Overview", p.overview], ["The challenge", p.challenge], ["Our solution", p.solution]].filter(([, v]) => v);
   return (
     <main>
@@ -203,7 +224,7 @@ export function WorkDetailView({ p }: { p: Project }) {
 
       <WideningImage src={p.i} alt={p.n} />
 
-      <ProjectVideo p={p} />
+      {p.video && <ProjectVideo p={p} />}
 
       {/* Story: label pins on the left while the copy scrolls */}
       {story.length > 0 && <section className="px-5 py-28 md:px-12 md:py-40">
@@ -237,7 +258,7 @@ export function WorkDetailView({ p }: { p: Project }) {
         </div>
       </section>}
 
-      <Gallery p={p} />
+      {p.gallery.length > 6 ? <GalleryGrid p={p} /> : <Gallery p={p} />}
 
       <section className="px-5 pb-28 md:px-12">
         <div className="grid gap-12 md:grid-cols-2">
@@ -249,10 +270,10 @@ export function WorkDetailView({ p }: { p: Project }) {
                   <dt className="text-ink/50">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
                 </div>
               ))}
-              <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
+              {p.insta && <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
                 <dt className="text-ink/50">See more</dt>
                 <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText>{arrowSvg}</a></dd>
-              </div>
+              </div>}
             </dl>
           </Reveal>
           {p.quote.t && (

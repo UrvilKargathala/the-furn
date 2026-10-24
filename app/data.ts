@@ -171,7 +171,7 @@ export const getService = (slug: string) => services.find((s) => s.slug === slug
 type Project = {
   slug: string; n: string; c: string; cat: string; l: string; y: string; area: string; days: string; client: string;
   d: string; i: string; gallery: string[];
-  service: string; credits: { n: string; r: string }[]; video: string; insta: string;
+  service: string; credits: { n: string; r: string }[]; video: string; moreVideos?: string[]; insta: string;
   overview: string; challenge: string; solution: string; features: string[]; result: string;
   quote: { t: string; by: string };
 };
@@ -180,6 +180,7 @@ export const workCats = ["All", "Kitchen", "Weekend Home", "Studio", "Bedroom"];
 
 // Project photos live in public/works/<slug>/. Videos still stream from the Framer CDN until we decide where to host them.
 const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
+const workJpg = (slug: string, f: string) => `/works/${slug}/${f}.jpg`;
 const framerVideo = (id: string) => `https://framerusercontent.com/assets/${id}.mp4`;
 
 export const projects: Project[] = [
@@ -293,6 +294,15 @@ export const projects: Project[] = [
     i: work("studio-furn", "cover"), gallery: [work("studio-furn", "01"), work("studio-furn", "02")],
     service: "Furniture", credits: [{ n: "Id. Vipul Dodiya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
     video: framerVideo("vjPulICJPvOgUwCvX8eI0OdMO0"), insta: "https://www.instagram.com/thefurn.co/reel/DTu4lVUjylt/",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
+  {
+    slug: "atmosphere", n: "Atmosphere", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "2026", area: "", days: "", client: "",
+    d: "A calm, light-toned modular kitchen with a stone breakfast counter, glass-front display units and a concealed shutter appliance wall.",
+    i: workJpg("atmosphere", "02"), gallery: [workJpg("atmosphere", "01"), workJpg("atmosphere", "03"), workJpg("atmosphere", "04"), workJpg("atmosphere", "05"), workJpg("atmosphere", "06"), workJpg("atmosphere", "07"), workJpg("atmosphere", "08"), workJpg("atmosphere", "09"), workJpg("atmosphere", "10"), workJpg("atmosphere", "11"), workJpg("atmosphere", "12"), workJpg("atmosphere", "13"), workJpg("atmosphere", "14"), workJpg("atmosphere", "15"), workJpg("atmosphere", "16"), workJpg("atmosphere", "17"), workJpg("atmosphere", "18"), workJpg("atmosphere", "19")],
+    service: "Furniture", credits: [],
+    video: "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/atmosphere/green.mp4", moreVideos: ["https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/atmosphere/features.mp4"], insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
