@@ -163,8 +163,8 @@ function ProjectVideo({ p }: { p: Project }) {
     <section className="px-3 pt-28 md:px-12 md:pt-40">
       <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
       <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
-        {[p.video, ...(p.moreVideos ?? [])].map((src, i) => (
-          <Reveal key={src}>
+        {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
+          <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
             <video src={src} poster={i === 0 ? p.gallery[0] : undefined} autoPlay muted loop playsInline controls preload="metadata"
               className="mx-auto max-h-[85svh] w-full rounded-[28px] bg-ink object-contain" />
           </Reveal>

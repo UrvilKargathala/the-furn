@@ -278,9 +278,9 @@ export const projects: Project[] = [
   {
     slug: "avadh-ayuska", n: "Avadh Ayuska", c: "Weekend Home", cat: "Weekend Home", l: "Vadodara", y: "2026", area: "200 sq ft", days: "21 days", client: "Private Residence",
     d: "A family dining room with a solid wood table, glass-front crockery unit and a serene pooja corner.",
-    i: work("avadh-ayuska", "cover"), gallery: [work("avadh-ayuska", "01"), work("avadh-ayuska", "02")],
+    i: workJpg("avadh-ayuska", "02"), gallery: [workJpg("avadh-ayuska", "01"), workJpg("avadh-ayuska", "03"), workJpg("avadh-ayuska", "04"), workJpg("avadh-ayuska", "05"), workJpg("avadh-ayuska", "06"), workJpg("avadh-ayuska", "07"), workJpg("avadh-ayuska", "08"), workJpg("avadh-ayuska", "09"), workJpg("avadh-ayuska", "10"), workJpg("avadh-ayuska", "11")],
     service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
-    video: framerVideo("w6zOc6vxnQMK6ce3yOg4Xj2Xtf0"), insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
+    video: "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/avadh-ayuska/villa-reel.mp4", moreVideos: ["https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/avadh-ayuska/priya-01.mp4", "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/avadh-ayuska/priyal.mp4"], insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
     overview: "A joint family needed a dining space for ten, plus a pooja corner close to the kitchen.",
     challenge: "One room had to handle daily meals, festivals and prayer without feeling cluttered.",
     solution: "We designed an extendable wood table, a lit crockery unit and a pooja unit with jaali shutters on the same wall.",
@@ -300,7 +300,7 @@ export const projects: Project[] = [
   {
     slug: "atmosphere", n: "Atmosphere", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "2026", area: "", days: "", client: "",
     d: "A calm, light-toned modular kitchen with a stone breakfast counter, glass-front display units and a concealed shutter appliance wall.",
-    i: workJpg("atmosphere", "02"), gallery: [workJpg("atmosphere", "01"), workJpg("atmosphere", "03"), workJpg("atmosphere", "04"), workJpg("atmosphere", "05"), workJpg("atmosphere", "06"), workJpg("atmosphere", "07"), workJpg("atmosphere", "08"), workJpg("atmosphere", "09"), workJpg("atmosphere", "10"), workJpg("atmosphere", "11"), workJpg("atmosphere", "12"), workJpg("atmosphere", "13"), workJpg("atmosphere", "14"), workJpg("atmosphere", "15"), workJpg("atmosphere", "16"), workJpg("atmosphere", "17"), workJpg("atmosphere", "18"), workJpg("atmosphere", "19")],
+    i: workJpg("atmosphere", "02"), gallery: [workJpg("atmosphere", "03"), workJpg("atmosphere", "05"), workJpg("atmosphere", "06"), workJpg("atmosphere", "08"), workJpg("atmosphere", "10"), workJpg("atmosphere", "12"), workJpg("atmosphere", "13"), workJpg("atmosphere", "15"), workJpg("atmosphere", "17"), workJpg("atmosphere", "19")],
     service: "Furniture", credits: [],
     video: "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/atmosphere/green.mp4", moreVideos: ["https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/atmosphere/features.mp4"], insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
