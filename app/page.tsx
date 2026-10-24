@@ -2,11 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, Counter, RollText, ParallaxImg, motion, useScroll, useTransform, ease } from "./fx";
+import { SmoothScroll, Reveal, SplitText, RollText, motion, useScroll, useTransform, ease } from "./fx";
 import { img, services, projects as allProjects } from "./data";
 
 const projects = allProjects.slice(0, 4);
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
+import { OurStory } from "./story";
 
 const SLIDE_MS = 7000;
 
@@ -260,30 +261,7 @@ export default function Home() {
       <Nav show={ready} />
       <Hero ready={ready} />
 
-      {/* About */}
-      <section id="about" className="px-5 py-28 md:px-12 md:py-40">
-        <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
-          <div>
-            <Label>Our Story</Label>
-            <Heading text="Furniture that" accent="fits your life." />
-          </div>
-          <ScrollWords className="text-2xl leading-snug font-medium tracking-tight md:text-4xl"
-            text="The Furn began with a simple belief: a home works best when its furniture is made for it. We design modular kitchens, wardrobes and interiors around your space, your routine and the way you live, then build every piece to the millimetre in our own workshop." />
-        </div>
-        <div className="mt-20 grid gap-4 md:grid-cols-3">
-          <ParallaxImg src={img("1600210492486-724fe5c67fb0")} alt="Living room interior" className="aspect-[4/3] rounded-3xl md:col-span-2 md:aspect-auto" />
-          <div className="grid gap-4">
-            {[[250, "+", "Homes delivered across the city"], [12, "+", "Years of design & build experience"], [98, "%", "Clients who refer us to friends"]].map(([n, s, t], i) => (
-              <Reveal key={t as string} delay={i * 0.1}>
-                <div className="rounded-3xl bg-sand p-7">
-                  <p className="text-5xl font-semibold tracking-tight md:text-6xl"><Counter to={n as number} suffix={s as string} /></p>
-                  <p className="mt-2 text-sm text-ink/60">{t}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <OurStory />
 
       {/* Services: click-to-open accordion */}
       <section id="services" className="rounded-t-[40px] bg-sand px-5 py-28 md:px-12">
