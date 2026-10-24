@@ -176,7 +176,7 @@ type Project = {
   quote: { t: string; by: string };
 };
 
-export const workCats = ["All", "Kitchen", "Weekend Home", "Studio", "Bedroom"];
+export const workCats = ["All", "Kitchen", "Weekend Home", "Studio", "Bedroom", "Complete Interior"];
 
 // Project photos live in public/works/<slug>/. Videos still stream from the Framer CDN until we decide where to host them.
 const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
@@ -328,6 +328,15 @@ export const projects: Project[] = [
     slug: "palladium", n: "Palladium", c: "Modular Kitchen & Dining", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A soft-toned modular kitchen with a marble feature wall and a round marble-top dining table beside it.",
     i: workJpg("palladium", "10"), gallery: [workJpg("palladium", "01"), workJpg("palladium", "02"), workJpg("palladium", "03"), workJpg("palladium", "04"), workJpg("palladium", "05"), workJpg("palladium", "06"), workJpg("palladium", "07"), workJpg("palladium", "08"), workJpg("palladium", "09"), workJpg("palladium", "11")],
+    service: "Furniture", credits: [],
+    video: "", insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
+  {
+    slug: "globcon", n: "Globcon", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
+    d: "A calm, grey-and-timber home interior with a panelled bedroom headboard and a black-topped modular kitchen.",
+    i: workJpg("globcon", "11"), gallery: [workJpg("globcon", "01"), workJpg("globcon", "02"), workJpg("globcon", "03"), workJpg("globcon", "04"), workJpg("globcon", "06"), workJpg("globcon", "07"), workJpg("globcon", "08"), workJpg("globcon", "09"), workJpg("globcon", "10")],
     service: "Furniture", credits: [],
     video: "", insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
