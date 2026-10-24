@@ -315,6 +315,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "snowera", n: "Snowera", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A quiet greige modular kitchen with a long run of handle-less units, a central island and a tall appliance wall.",
+    i: workJpg("snowera", "01"), gallery: [workJpg("snowera", "02"), workJpg("snowera", "03"), workJpg("snowera", "04"), workJpg("snowera", "05"), workJpg("snowera", "06"), workJpg("snowera", "07")],
+    service: "Furniture", credits: [],
+    video: "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/works/snowera/furn-k1.mp4", insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
