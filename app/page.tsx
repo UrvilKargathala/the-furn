@@ -9,14 +9,16 @@ const projects = allProjects.slice(0, 4);
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 
-const SLIDE_MS = 7000;
-
-const categories = [
-  { t: "Kitchen", h: ["Kitchens built", "around how you cook"], d: "Modular kitchens with precision shutters, smart storage and hardware that lasts.", i: "1556912173-3bb406ef7e77", v: "https://videos.pexels.com/video-files/38231065/16231771_1280_720_60fps.mp4" },
-  { t: "Wardrobe", h: ["Wardrobes made for", "everything you own"], d: "Sliding, hinged and walk-in storage, sized to the last shelf and drawer.", i: "1616486338812-3dadae4b4ace", v: "https://videos.pexels.com/video-files/15887130/15887130-hd_1280_720_30fps.mp4" },
-  { t: "Living", h: ["Living spaces that", "feel like home"], d: "TV units, panelling and furniture that bring calm and warmth to every room.", i: "1618221195710-dd6b41faaea6", v: "https://videos.pexels.com/video-files/7578540/7578540-hd_1280_720_30fps.mp4" },
+const HERO_VIDEO = "https://bvzjdmttaywmacff.public.blob.vercel-storage.com/hero/brand-film.mp4";
+// The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
+const HERO_LOOP_END = 38;
+// Headline changes with what the film is showing: [from second, copy]
+const heroScenes = [
+  { from: 0, h: ["Where every home", "begins with a feeling"], d: "Before the first sketch, we learn how you want to live, then build furniture that fits." },
+  { from: 6, h: ["Designed for the home", "you're building"], d: "Weekend villas, apartments and complete interiors, planned around your site and your family." },
+  { from: 12, h: ["Interiors made to", "the millimetre"], d: "Modular furniture cut and finished in our own workshop, installed by our own team." },
+  { from: 25, h: ["Details you feel", "every single day"], d: "Honest materials, quiet finishes and storage that disappears into the room." },
 ];
-
 
 const steps = [
   { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "1600210492486-724fe5c67fb0" },
@@ -199,50 +201,48 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
 
 function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const vids = useRef<(HTMLVideoElement | null)[]>([]);
   const [active, setActive] = useState(0);
-  // Auto-advance; clicking a tile changes `active`, which restarts the timer
+  // Start the film once the intro loader is done
   useEffect(() => {
-    if (!ready) return;
-    const t = setTimeout(() => setActive((a) => (a + 1) % categories.length), SLIDE_MS);
-    return () => clearTimeout(t);
-  }, [ready, active]);
-  // Only the visible video plays, from the start
-  useEffect(() => {
-    if (!ready) return;
-    vids.current.forEach((v, i) => {
-      if (!v) return;
-      if (i === active) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause();
-    });
-  }, [ready, active]);
-  const fade = (d: number) => ({ initial: { opacity: 0, y: 24 }, animate: ready ? { opacity: 1, y: 0 } : {}, transition: { duration: 1, ease, delay: d } });
+    if (ready) video.current?.play().catch(() => {});
+  }, [ready]);
+  // Keep the copy in step with the scene on screen, and loop before the end card
+  const onTime = () => {
+    const v = video.current;
+    if (!v) return;
+    if (v.currentTime >= HERO_LOOP_END) { v.currentTime = 0; return; }
+    let i = 0;
+    heroScenes.forEach((sc, k) => { if (v.currentTime >= sc.from) i = k; });
+    setActive((a) => (a === i ? a : i));
+  };
+  const scene = heroScenes[active];
 
   return (
     <section ref={ref} className="h-svh">
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
         <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease }}>
-          {categories.map((c, i) => (
-            <video key={c.t} ref={(el) => { vids.current[i] = el; }} src={c.v} poster={img(c.i, 1600)} muted loop playsInline preload={i === 0 ? "auto" : "metadata"}
-              className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1400ms] ease-out ${i === active ? "scale-100 opacity-100" : "scale-110 opacity-0"}`} />
-          ))}
+          <video ref={video} src={HERO_VIDEO} muted playsInline preload="auto" onTimeUpdate={onTime} onEnded={() => { if (video.current) { video.current.currentTime = 0; video.current.play().catch(() => {}); } }}
+            className="absolute inset-0 h-full w-full object-cover" />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
           <div>
-            <motion.p {...fade(0.4)} className="mb-5 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] uppercase text-ivory/80">
+            <motion.p initial={{ opacity: 0, y: 24 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 1, ease, delay: 0.4 }}
+              className="mb-5 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] uppercase text-ivory/80">
               <span className="h-px w-10 bg-brass" />The Furn · Tailored Modular Furniture
             </motion.p>
             <AnimatePresence mode="wait">
               <motion.div key={active} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.5, ease }}>
                 <h1 className="text-[9vw] leading-[0.95] font-bold tracking-[-0.04em] md:text-[6vw]">
-                  {categories[active].h.map((line, j) => (
+                  {scene.h.map((line, j) => (
                     <span key={line} className="block whitespace-nowrap"><SplitText text={line} play={ready} delay={0.1 + j * 0.15} /></span>
                   ))}
                 </h1>
                 <motion.p initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease, delay: 0.5 }}
-                  className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{categories[active].d}</motion.p>
+                  className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{scene.d}</motion.p>
               </motion.div>
             </AnimatePresence>
           </div>
