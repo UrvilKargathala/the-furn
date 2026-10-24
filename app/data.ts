@@ -324,6 +324,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "palladium", n: "Palladium", c: "Modular Kitchen & Dining", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A soft-toned modular kitchen with a marble feature wall and a round marble-top dining table beside it.",
+    i: workJpg("palladium", "10"), gallery: [workJpg("palladium", "01"), workJpg("palladium", "02"), workJpg("palladium", "03"), workJpg("palladium", "04"), workJpg("palladium", "05"), workJpg("palladium", "06"), workJpg("palladium", "07"), workJpg("palladium", "08"), workJpg("palladium", "09"), workJpg("palladium", "11")],
+    service: "Furniture", credits: [],
+    video: "", insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
