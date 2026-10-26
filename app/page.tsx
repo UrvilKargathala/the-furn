@@ -208,7 +208,7 @@ function Hero({ ready }: { ready: boolean }) {
     <section ref={ref} className="h-svh">
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
         <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease }}>
-          <video ref={video} src={HERO_VIDEO} muted playsInline preload="auto" onTimeUpdate={onTime} onEnded={() => { if (video.current) { video.current.currentTime = 0; video.current.play().catch(() => {}); } }}
+          <video ref={video} src={HERO_VIDEO} poster="/works/avadh-ayuska/02.jpg" muted playsInline preload="auto" onTimeUpdate={onTime} onEnded={() => { if (video.current) { video.current.currentTime = 0; video.current.play().catch(() => {}); } }}
             className="absolute inset-0 h-full w-full object-cover" />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
