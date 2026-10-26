@@ -362,7 +362,7 @@ export const budgets = [
 export const enquiryTypes = ["Modular kitchen", "Wardrobes", "Living room & TV unit", "Bedroom furniture", "Dining & crockery", "Complete interior", "Other"];
 
 // Client testimonials shown on the home page. Replace the sample entries with real quotes
-// (set `slug` to the project they belong to). Entries marked `sample` only appear in `next dev`.
+// (set `slug` to the project they belong to). Entries marked `sample` are placeholders (see SHOW_SAMPLES in testimonials.tsx).
 export const testimonials: { quote: string; name: string; role: string; slug: string; sample?: boolean }[] = [
   { quote: "From the first site visit to the last handle, everything arrived exactly as drawn. The kitchen finally works the way we cook.", name: "Sample client", role: "Modular kitchen", slug: "atmosphere", sample: true },
   { quote: "Every shutter and shelf was measured for our home. Nothing feels off-the-shelf, and the finish is spotless.", name: "Sample client", role: "Weekend home", slug: "avadh-ayuska", sample: true },

@@ -7,8 +7,10 @@ import { getProject, testimonials } from "./data";
 import { Label } from "./ui";
 
 const SLIDE_MS = 8000;
-// Real quotes only in production; samples appear in `next dev` so the design can be reviewed
-const list = process.env.NODE_ENV === "development" ? testimonials : testimonials.filter((t) => !t.sample);
+// TEMPORARY (owner request): sample quotes are shown on the live site too. Set to false once real quotes are in data.ts,
+// then production shows only entries without `sample`, and hides the section if there are none.
+const SHOW_SAMPLES = true;
+const list = SHOW_SAMPLES || process.env.NODE_ENV === "development" ? testimonials : testimonials.filter((t) => !t.sample);
 
 // Client film for the current story: plays only while on screen
 function ClientVideo({ src, poster }: { src: string; poster: string }) {
