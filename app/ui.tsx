@@ -145,33 +145,73 @@ export function Cta() {
   );
 }
 
+const social: { n: string; href: string; icon: React.ReactNode }[] = [
+  { n: "Instagram", href: "https://www.instagram.com/thefurn.co/", icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-6 w-6"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg> },
+  { n: "Pinterest", href: "https://in.pinterest.com/thefurnprojects/", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M12 2C6.5 2 3 5.7 3 9.8c0 2.5 1.4 4.6 3.4 5.2.3.1.5 0 .6-.3l.3-1.1c.1-.3 0-.4-.2-.6-.6-.7-.9-1.6-.9-2.8 0-3.1 2.3-5.3 5.5-5.3 3 0 4.7 1.8 4.7 4.3 0 3.2-1.4 5.9-3.6 5.9-1.2 0-2-1-1.7-2.2.3-1.4 1-3 1-4 0-.9-.5-1.7-1.5-1.7-1.2 0-2.1 1.2-2.1 2.9 0 1 .4 1.8.4 1.8l-1.4 5.9c-.3 1.3 0 3.1 0 3.3 0 .1.2.2.3.1.1-.1 1.4-1.8 1.9-3.5l.7-2.7c.4.7 1.4 1.3 2.5 1.3 3.3 0 5.5-3 5.5-7C21 5 17.5 2 12 2z" /></svg> },
+  { n: "LinkedIn", href: "https://www.linkedin.com/company/the-furn-projects/", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M4.98 3.5a2.5 2.5 0 11-.01 5 2.5 2.5 0 01.01-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11z" /></svg> },
+  { n: "WhatsApp", href: "https://wa.me/919925618895", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.4 12.3c-.2.5-1.1 1-1.6 1-.4.1-.9.1-2.9-.7-2.4-1-4-3.4-4.1-3.6-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z" /></svg> },
+];
+
+// Dark footer over one of our own kitchen photos (like a card, matching the CTA above it)
 export function Footer() {
-  const cols: [string, string[][]][] = [
-    ["Explore", links],
-    ["Services", services.map((s) => [s.t, `/services/${s.slug}`])],
-    ["Contact", [["info@thefurn.co", "mailto:info@thefurn.co"], ["+91 99256 18895", "tel:+919925618895"], ["Instagram", "https://www.instagram.com/thefurn.co/"], ["Contact form", "/contact"]]],
+  const contact: [string, string, string?][] = [
+    ["Phone", "+91 99256 18895", "tel:+919925618895"],
+    ["Email", "info@thefurn.co", "mailto:info@thefurn.co"],
+    ["Address", "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam, Surat, Gujarat 394510", "https://www.google.com/maps/search/?api=1&query=220%2C%20219%20Sumerru%20Business%20Corner%2C%20Pal%20Gam%2C%20Surat%20394510"],
   ];
   return (
-    <footer className="overflow-hidden px-5 pt-20 pb-6 md:px-12">
-      <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
-        <Reveal>
-          <p className="max-w-xs text-xl font-semibold tracking-tight">Tailored modular furniture, designed and built for the way you live.</p>
-        </Reveal>
-        {cols.map(([title, items], i) => (
-          <Reveal key={title} delay={0.1 * (i + 1)}>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-ink/40">{title}</p>
-            <ul className="space-y-2">
-              {items.map(([t, h]) => <li key={t}><Link href={h} className="group text-ink/80 hover:text-ink"><RollText>{t}</RollText></Link></li>)}
-            </ul>
-          </Reveal>
-        ))}
-      </div>
-      <p aria-hidden className="mt-20 text-center text-[19vw] leading-[0.8] font-bold tracking-[-0.05em] whitespace-nowrap">
-        <SplitText text="THE FURN" />
-      </p>
-      <div className="mt-6 flex flex-wrap justify-between gap-4 border-t border-ink/10 pt-6 text-sm text-ink/50">
-        <span>© 2026 The Furn. All rights reserved.</span>
-        <span>Tailored Modular Furniture</span>
+    <footer className="p-3">
+      <div className="relative overflow-hidden rounded-[28px] bg-ink px-6 pt-16 pb-6 text-ivory md:px-12 md:pt-20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/works/globcon/11.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink/35" />
+        <div className="relative">
+          <div className="grid gap-14 md:grid-cols-[1.3fr_2fr]">
+            <Reveal>
+              <p className="max-w-md text-2xl leading-snug font-medium tracking-tight md:text-3xl">Tailored modular furniture, designed and built for the way you live.</p>
+              <p className="mt-12 text-sm font-semibold tracking-[0.25em] uppercase">Follow us</p>
+              <ul className="mt-5 flex flex-wrap gap-3">
+                {social.map((s) => (
+                  <li key={s.n}>
+                    <a href={s.href} target="_blank" rel="noreferrer" aria-label={s.n} title={s.n}
+                      className="grid h-16 w-16 place-items-center rounded-2xl bg-ivory/10 backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:bg-brass hover:text-ink">{s.icon}</a>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+            <div className="grid gap-10 sm:grid-cols-3">
+              <Reveal delay={0.1}>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Menu</p>
+                <ul className="space-y-3 text-lg">
+                  {links.map(([t, h]) => <li key={t}><Link href={h} className="group text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
+                </ul>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Services</p>
+                <ul className="space-y-3 text-lg">
+                  {services.map((s) => <li key={s.slug}><Link href={`/services/${s.slug}`} className="group text-ivory/85 hover:text-ivory"><RollText>{s.t}</RollText></Link></li>)}
+                </ul>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Contact</p>
+                <ul className="space-y-5">
+                  {contact.map(([k, v, href]) => (
+                    <li key={k}>
+                      <p className="text-sm text-ivory/50">{k}</p>
+                      <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-1 block text-lg leading-snug text-ivory/90 hover:text-ivory">{v}</a>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </div>
+          </div>
+
+          <div className="mt-20 flex flex-wrap justify-between gap-4 border-t border-ivory/15 pt-6 text-sm text-ivory/60">
+            <span>© 2026 The Furn. All rights reserved.</span>
+            <span>Tailored Modular Furniture · Surat, India</span>
+          </div>
+          <p aria-hidden className="mt-8 bg-gradient-to-b from-ivory via-ivory/70 to-transparent bg-clip-text text-center text-[17vw] leading-[0.82] font-bold tracking-[-0.05em] whitespace-nowrap text-transparent select-none">THE FURN</p>
+        </div>
       </div>
     </footer>
   );
