@@ -9,6 +9,7 @@ import { MEDIA, services, getProject } from "./data";
 const projects = ["avadh-ayuska", "atmosphere", "casa-rivera", "snowera"].map((s) => getProject(s)!);
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
+import { Testimonials } from "./testimonials";
 
 const HERO_VIDEO = `${MEDIA}/hero/brand-film.mp4`;
 // The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
@@ -129,42 +130,6 @@ function Reel({ src, poster }: { src: string; poster: string }) {
     <div className="absolute right-6 bottom-28 hidden aspect-[9/16] h-[46%] overflow-hidden rounded-[20px] border border-ivory/25 shadow-2xl md:right-10 md:bottom-auto md:top-1/2 md:block md:-translate-y-1/2">
       <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" className="h-full w-full object-cover" />
     </div>
-  );
-}
-
-const floaters = [
-  { i: "/works/atmosphere/03.jpg", x: "4%", w: "w-36 md:w-56", from: 110, speed: 190 },
-  { i: "/works/avadh-ayuska/09.jpg", x: "72%", w: "w-40 md:w-64", from: 140, speed: 230 },
-  { i: "/works/casa-rivera/05.jpg", x: "18%", w: "w-32 md:w-48", from: 190, speed: 260 },
-  { i: "/works/avadh-ayuska/05.jpg", x: "60%", w: "w-36 md:w-52", from: 230, speed: 300 },
-  { i: "/works/casa-rivera/11.jpg", x: "84%", w: "w-28 md:w-44", from: 270, speed: 320 },
-  { i: "/works/avadh-ayuska/08.jpg", x: "36%", w: "w-32 md:w-48", from: 300, speed: 360 },
-];
-
-// Quote stays pinned while photos drift up past it at different speeds
-function Quote() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  return (
-    <section ref={ref} className="relative h-[300vh]">
-      <div className="sticky top-0 grid h-svh place-items-center overflow-hidden px-5">
-        {floaters.map((f) => <Floater key={f.i} f={f} p={scrollYProgress} />)}
-        <Reveal className="relative z-10 mx-auto max-w-4xl text-center">
-          <span className="mx-auto mb-8 grid h-14 w-14 place-items-center rounded-full bg-ink text-3xl leading-none text-ivory">“</span>
-          <p className="text-3xl leading-[1.1] font-bold tracking-tight uppercase md:text-6xl">Where precise craft meets the quiet comfort of a home made for you.</p>
-          <p className="mt-6 text-sm text-ink/60">Founder, The Furn</p>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-function Floater({ f, p }: { f: (typeof floaters)[number]; p: MotionValue<number> }) {
-  const y = useTransform(p, [0, 1], [`${f.from}vh`, `${f.from - f.speed}vh`]);
-  return (
-    <motion.div style={{ y, left: f.x }} className={`absolute top-0 aspect-[4/5] overflow-hidden rounded-2xl ${f.w}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={f.i} alt="" className="h-full w-full object-cover" />
-    </motion.div>
   );
 }
 
@@ -291,7 +256,7 @@ export default function Home() {
         <Services />
       </section>
 
-      <Quote />
+      <Testimonials />
 
       {/* Projects: stacked pinned cards (prismae style) */}
       <section id="projects" className="px-3 py-28 md:px-12">
