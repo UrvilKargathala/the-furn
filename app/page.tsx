@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, RollText, motion, useScroll, useTransform, ease } from "./fx";
-import { MEDIA, services, getProject } from "./data";
+import { services, getProject } from "./data";
 
 // Featured on the home page: projects that have our own photos and videos
 const projects = ["avadh-ayuska", "atmosphere", "casa-rivera", "snowera"].map((s) => getProject(s)!);
@@ -11,7 +11,8 @@ import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 import { Testimonials } from "./testimonials";
 
-const HERO_VIDEO = `${MEDIA}/hero/brand-film.mp4`;
+// 960x540 H.264 copy (about 21 MB) served by the site itself so it works without the media server; the full 1080p file is in ~/the-furn-media/hero
+const HERO_VIDEO = "/hero/brand-film.mp4";
 // The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
 const HERO_LOOP_END = 38;
 // Headline changes with what the film is showing: [from second, copy]
