@@ -1,5 +1,6 @@
 // ponytail: Unsplash/Pexels placeholders, swap for real project media in /public
-export const img = (id: string, w = 1600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+export const MEDIA = process.env.NEXT_PUBLIC_MEDIA_BASE ?? "https://media.thefurn.co";
+export const img = (id: string, w = 1600) => id.startsWith("/") ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/#process"]];
 
@@ -17,7 +18,7 @@ type Service = {
 };
 
 // Same five steps for every service unless a service overrides them
-const process = [
+const processSteps = [
   { t: "Site visit & brief", d: "We measure the space, check plumbing and electrical points, and note how you use the room every day." },
   { t: "Layout & 3D design", d: "You get a scaled layout and 3D views, with storage mapped to what you actually own." },
   { t: "Materials & quote", d: "Pick shutters, finishes and hardware from real samples, then sign off an itemised, fixed quote." },
@@ -30,7 +31,7 @@ export const services: Service[] = [
     slug: "modular-kitchens",
     t: "Modular Kitchens",
     short: "Parallel, L-shape, island and U-shape kitchens built around how you cook.",
-    i: "1556911220-bff31c812dba",
+    i: "/works/atmosphere/02.jpg",
     tags: ["Layout", "Shutters", "Hardware"],
     intro: [
       "A kitchen is the hardest-working room in the house. We design it around your cooking style, your appliances and the way your family moves through the space, so every drawer lands exactly where your hand reaches for it.",
@@ -47,13 +48,13 @@ export const services: Service[] = [
       { t: "Parallel", d: "Two facing counters that make the most of long, narrow apartment kitchens.", i: "1556911220-bff31c812dba" },
       { t: "Island", d: "A central island for prep, breakfast and conversation in open-plan homes.", i: "1565538810643-b5bdb714032a" },
     ],
-    process,
+    process: processSteps,
   },
   {
     slug: "wardrobes",
     t: "Wardrobes",
     short: "Sliding, hinged and walk-in storage with fittings sized to your wardrobe.",
-    i: "1616486338812-3dadae4b4ace",
+    i: "/works/avadh-ayuska/07.jpg",
     tags: ["Sliding", "Walk-in", "Lofts"],
     intro: [
       "A good wardrobe starts with what goes inside it. We count your hanging, folding and accessory needs first, then design the shutters around them.",
@@ -70,13 +71,13 @@ export const services: Service[] = [
       { t: "Walk-in", d: "An open dressing room with lit shelves, islands and full-length mirrors.", i: "1616486338812-3dadae4b4ace" },
       { t: "Lofts", d: "Overhead storage to the ceiling for luggage, bedding and seasonal items.", i: "1595428774223-ef52624120d2" },
     ],
-    process,
+    process: processSteps,
   },
   {
     slug: "living-tv-units",
     t: "Living & TV Units",
     short: "Panelling, consoles and display units that anchor the room.",
-    i: "1618221195710-dd6b41faaea6",
+    i: "/works/avadh-ayuska/10.jpg",
     tags: ["Panelling", "Consoles", "Display"],
     intro: [
       "The living room is where your home is seen. We design TV walls, consoles and display units that hide clutter and show off what matters.",
@@ -93,13 +94,13 @@ export const services: Service[] = [
       { t: "Display units", d: "Lit shelves and glass cabinets for books, art and collectibles.", i: "1600121848594-d8644e57abab" },
       { t: "Consoles", d: "Low, wide consoles that ground the room and hold everyday essentials.", i: "1493809842364-78817add7ffb" },
     ],
-    process,
+    process: processSteps,
   },
   {
     slug: "bedroom-furniture",
     t: "Bedroom Furniture",
     short: "Storage beds, side tables, dressers and study units for restful rooms.",
-    i: "1505693416388-ac5ce068fe85",
+    i: "/works/avadh-ayuska/06.jpg",
     tags: ["Beds", "Dressers", "Study"],
     intro: [
       "A bedroom should feel calm, not crowded. We design beds, dressers and study corners that fit together as one quiet, well-organised room.",
@@ -116,13 +117,13 @@ export const services: Service[] = [
       { t: "Study units", d: "Compact desks with shelves and cable management for work at home.", i: "1524758631624-e2822e304c36" },
       { t: "Kids' rooms", d: "Playful, durable furniture that adapts as children grow.", i: "1571508601891-ca5e7a713859" },
     ],
-    process,
+    process: processSteps,
   },
   {
     slug: "dining-crockery",
     t: "Dining & Crockery",
     short: "Dining tables, crockery units, bar and pooja units made to measure.",
-    i: "1617806118233-18e1de247200",
+    i: "/works/palladium/06.jpg",
     tags: ["Dining", "Crockery", "Pooja"],
     intro: [
       "Dining spaces bring the family together. We design tables, crockery units and pooja corners that fit the room and the occasion.",
@@ -139,13 +140,13 @@ export const services: Service[] = [
       { t: "Bar units", d: "Compact bars with wine racks, glass holders and hidden storage.", i: "1556909114-f6e7ad7d3136" },
       { t: "Pooja units", d: "Serene pooja corners with jaali shutters and dedicated storage.", i: "1595428774223-ef52624120d2" },
     ],
-    process,
+    process: processSteps,
   },
   {
     slug: "complete-interiors",
     t: "Complete Interiors",
     short: "End-to-end homes, from layout and material palette to handover.",
-    i: "1600210492486-724fe5c67fb0",
+    i: "/works/avadh-ayuska/02.jpg",
     tags: ["Planning", "Materials", "Turnkey"],
     intro: [
       "One team for the whole home. We plan every room together, so the kitchen, wardrobes, living and bedrooms share one consistent material palette.",
@@ -162,7 +163,7 @@ export const services: Service[] = [
       { t: "Villas", d: "Spacious, bespoke interiors across multiple floors.", i: "1600566753190-17f0baa2a6c3" },
       { t: "Offices", d: "Workspaces with modular desks, storage and meeting areas.", i: "1502005229762-cf1b2da7c5d6" },
     ],
-    process,
+    process: processSteps,
   },
 ];
 
@@ -280,7 +281,7 @@ export const projects: Project[] = [
     d: "A family dining room with a solid wood table, glass-front crockery unit and a serene pooja corner.",
     i: workJpg("avadh-ayuska", "02"), gallery: [workJpg("avadh-ayuska", "01"), workJpg("avadh-ayuska", "03"), workJpg("avadh-ayuska", "04"), workJpg("avadh-ayuska", "05"), workJpg("avadh-ayuska", "06"), workJpg("avadh-ayuska", "07"), workJpg("avadh-ayuska", "08"), workJpg("avadh-ayuska", "09"), workJpg("avadh-ayuska", "10"), workJpg("avadh-ayuska", "11")],
     service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
-    video: "https://media.thefurn.co/works/avadh-ayuska/villa-reel.mp4", moreVideos: ["https://media.thefurn.co/works/avadh-ayuska/priya-01.mp4", "https://media.thefurn.co/works/avadh-ayuska/priyal.mp4"], insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
+    video: `${MEDIA}/works/avadh-ayuska/villa-reel.mp4`, moreVideos: [`${MEDIA}/works/avadh-ayuska/priya-01.mp4`, `${MEDIA}/works/avadh-ayuska/priyal.mp4`], insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
     overview: "A joint family needed a dining space for ten, plus a pooja corner close to the kitchen.",
     challenge: "One room had to handle daily meals, festivals and prayer without feeling cluttered.",
     solution: "We designed an extendable wood table, a lit crockery unit and a pooja unit with jaali shutters on the same wall.",
@@ -302,7 +303,7 @@ export const projects: Project[] = [
     d: "A calm, light-toned modular kitchen with a stone breakfast counter, glass-front display units and a concealed shutter appliance wall.",
     i: workJpg("atmosphere", "02"), gallery: [workJpg("atmosphere", "03"), workJpg("atmosphere", "05"), workJpg("atmosphere", "06"), workJpg("atmosphere", "08"), workJpg("atmosphere", "10"), workJpg("atmosphere", "12"), workJpg("atmosphere", "13"), workJpg("atmosphere", "15"), workJpg("atmosphere", "17"), workJpg("atmosphere", "19")],
     service: "Furniture", credits: [],
-    video: "https://media.thefurn.co/works/atmosphere/green.mp4", moreVideos: ["https://media.thefurn.co/works/atmosphere/features.mp4"], insta: "",
+    video: `${MEDIA}/works/atmosphere/green.mp4`, moreVideos: [`${MEDIA}/works/atmosphere/features.mp4`], insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
@@ -311,7 +312,7 @@ export const projects: Project[] = [
     d: "A dark, refined modular kitchen with a timber-fronted island, glass display units and terrazzo flooring.",
     i: workJpg("casa-rivera", "01"), gallery: [workJpg("casa-rivera", "02"), workJpg("casa-rivera", "03"), workJpg("casa-rivera", "04"), workJpg("casa-rivera", "05"), workJpg("casa-rivera", "06"), workJpg("casa-rivera", "07"), workJpg("casa-rivera", "08"), workJpg("casa-rivera", "09"), workJpg("casa-rivera", "10"), workJpg("casa-rivera", "11")],
     service: "Furniture", credits: [{ n: "Studio Rohan Patel", r: "Photography" }],
-    video: "https://media.thefurn.co/works/casa-rivera/srp7.mp4", moreVideos: ["https://media.thefurn.co/works/casa-rivera/srp8.mp4"], insta: "",
+    video: `${MEDIA}/works/casa-rivera/srp7.mp4`, moreVideos: [`${MEDIA}/works/casa-rivera/srp8.mp4`], insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
@@ -320,7 +321,7 @@ export const projects: Project[] = [
     d: "A quiet greige modular kitchen with a long run of handle-less units, a central island and a tall appliance wall.",
     i: workJpg("snowera", "01"), gallery: [workJpg("snowera", "02"), workJpg("snowera", "03"), workJpg("snowera", "04"), workJpg("snowera", "05"), workJpg("snowera", "06"), workJpg("snowera", "07")],
     service: "Furniture", credits: [],
-    video: "https://media.thefurn.co/works/snowera/furn-k1.mp4", insta: "",
+    video: `${MEDIA}/works/snowera/furn-k1.mp4`, insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
@@ -336,7 +337,7 @@ export const projects: Project[] = [
   {
     slug: "globcon", n: "Globcon", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
     d: "A calm, grey-and-timber home interior with a panelled bedroom headboard and a black-topped modular kitchen.",
-    i: workJpg("globcon", "11"), gallery: [workJpg("globcon", "01"), workJpg("globcon", "02"), workJpg("globcon", "03"), workJpg("globcon", "04"), workJpg("globcon", "06"), workJpg("globcon", "07"), workJpg("globcon", "08"), workJpg("globcon", "09"), workJpg("globcon", "10")],
+    i: workJpg("globcon", "11"), gallery: [workJpg("globcon", "01"), workJpg("globcon", "07"), workJpg("globcon", "08"), workJpg("globcon", "09"), workJpg("globcon", "10")],
     service: "Furniture", credits: [],
     video: "", insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",

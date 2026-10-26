@@ -3,13 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, RollText, motion, useScroll, useTransform, ease } from "./fx";
-import { img, services, projects as allProjects } from "./data";
+import { MEDIA, services, getProject } from "./data";
 
-const projects = allProjects.slice(0, 4);
+// Featured on the home page: projects that have our own photos and videos
+const projects = ["avadh-ayuska", "atmosphere", "casa-rivera", "snowera"].map((s) => getProject(s)!);
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 
-const HERO_VIDEO = "https://media.thefurn.co/hero/brand-film.mp4";
+const HERO_VIDEO = `${MEDIA}/hero/brand-film.mp4`;
 // The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
 const HERO_LOOP_END = 38;
 // Headline changes with what the film is showing: [from second, copy]
@@ -21,10 +22,10 @@ const heroScenes = [
 ];
 
 const steps = [
-  { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "1600210492486-724fe5c67fb0" },
-  { t: "Design", tags: ["3D layouts", "Material board", "Quote"], d: "3D layouts, material boards and a transparent, itemised quote.", i: "1618221195710-dd6b41faaea6" },
-  { t: "Craft", tags: ["In-house factory", "Edge banding", "Quality check"], d: "Factory-made modules with precision edges and soft-close hardware.", i: "1556912173-3bb406ef7e77" },
-  { t: "Install", tags: ["On-site fitting", "Cleanup", "Handover"], d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "1565538810643-b5bdb714032a" },
+  { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "/works/avadh-ayuska/02.jpg" },
+  { t: "Design", tags: ["3D layouts", "Material board", "Quote"], d: "3D layouts, material boards and a transparent, itemised quote.", i: "/works/palladium/10.jpg" },
+  { t: "Craft", tags: ["In-house factory", "Edge banding", "Quality check"], d: "Factory-made modules with precision edges and soft-close hardware.", i: "/works/casa-rivera/05.jpg" },
+  { t: "Install", tags: ["On-site fitting", "Cleanup", "Handover"], d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "/works/globcon/11.jpg" },
 ];
 
 function Services() {
@@ -55,7 +56,7 @@ function Services() {
                   </div>
                   <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 0.9, ease, delay: 0.1 }}
                     className="aspect-[16/8] overflow-hidden rounded-[22px]">
-                    <motion.img src={img(s.i)} alt={s.t} initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
+                    <motion.img src={s.i} alt={s.t} initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
                   </motion.div>
                 </div>
               </motion.div>
@@ -88,24 +89,26 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
         <img src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
+        {p.video && <Reel src={p.video} poster={p.gallery[0]} />}
         <div className="relative flex h-full flex-col justify-between p-6 md:p-10">
           <div className="max-w-xl">
             <span className="text-xs font-semibold tracking-[0.2em] text-ivory/60 uppercase">0{i + 1} / 0{n} · {p.c}</span>
             <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
             <p className="mt-4 text-ivory/80 md:text-lg">{p.d}</p>
-            <p className="mt-5 text-sm font-semibold tracking-[0.15em] uppercase">{p.l}, India</p>
-            <p className="mt-1 text-sm text-ivory/70">{p.y}</p>
+            {p.l && <p className="mt-5 text-sm font-semibold tracking-[0.15em] uppercase">{p.l}, India</p>}
+            {p.y && <p className="mt-1 text-sm text-ivory/70">{p.y}</p>}
           </div>
           <div className="flex items-end justify-between gap-6">
             <span className="grid h-12 w-12 place-items-center rounded-full border border-ivory/40 transition-all duration-500 group-hover:rotate-45 group-hover:bg-ivory group-hover:text-ink">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
             </span>
-            <div className="text-right">
-              <p className="text-xs text-ivory/60">Area</p>
-              <p className="text-2xl font-semibold md:text-4xl">{p.area}</p>
-              <p className="mt-3 text-xs text-ivory/60">Delivered in</p>
-              <p className="text-lg font-semibold md:text-2xl">{p.days}</p>
-            </div>
+            {p.area && (
+              <div className="text-right">
+                <p className="text-xs text-ivory/60">Area</p>
+                <p className="text-2xl font-semibold md:text-4xl">{p.area}</p>
+                {p.days && <><p className="mt-3 text-xs text-ivory/60">Delivered in</p><p className="text-lg font-semibold md:text-2xl">{p.days}</p></>}
+              </div>
+            )}
           </div>
         </div>
       </motion.a>
@@ -113,13 +116,29 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
   );
 }
 
+// Small looping film of the project: plays only while its card is on screen
+function Reel({ src, poster }: { src: string; poster: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const inView = useInView(ref, { amount: 0.5 });
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (inView) v.play().catch(() => {}); else v.pause();
+  }, [inView]);
+  return (
+    <div className="absolute right-6 bottom-28 hidden aspect-[9/16] h-[46%] overflow-hidden rounded-[20px] border border-ivory/25 shadow-2xl md:right-10 md:bottom-auto md:top-1/2 md:block md:-translate-y-1/2">
+      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" className="h-full w-full object-cover" />
+    </div>
+  );
+}
+
 const floaters = [
-  { i: "1556912173-3bb406ef7e77", x: "4%", w: "w-36 md:w-56", from: 110, speed: 190 },
-  { i: "1616486338812-3dadae4b4ace", x: "72%", w: "w-40 md:w-64", from: 140, speed: 230 },
-  { i: "1600210492486-724fe5c67fb0", x: "18%", w: "w-32 md:w-48", from: 190, speed: 260 },
-  { i: "1565538810643-b5bdb714032a", x: "60%", w: "w-36 md:w-52", from: 230, speed: 300 },
-  { i: "1618221195710-dd6b41faaea6", x: "84%", w: "w-28 md:w-44", from: 270, speed: 320 },
-  { i: "1600585154340-be6161a56a0c", x: "36%", w: "w-32 md:w-48", from: 300, speed: 360 },
+  { i: "/works/atmosphere/03.jpg", x: "4%", w: "w-36 md:w-56", from: 110, speed: 190 },
+  { i: "/works/avadh-ayuska/09.jpg", x: "72%", w: "w-40 md:w-64", from: 140, speed: 230 },
+  { i: "/works/casa-rivera/05.jpg", x: "18%", w: "w-32 md:w-48", from: 190, speed: 260 },
+  { i: "/works/avadh-ayuska/05.jpg", x: "60%", w: "w-36 md:w-52", from: 230, speed: 300 },
+  { i: "/works/casa-rivera/11.jpg", x: "84%", w: "w-28 md:w-44", from: 270, speed: 320 },
+  { i: "/works/avadh-ayuska/08.jpg", x: "36%", w: "w-32 md:w-48", from: 300, speed: 360 },
 ];
 
 // Quote stays pinned while photos drift up past it at different speeds
@@ -144,7 +163,7 @@ function Floater({ f, p }: { f: (typeof floaters)[number]; p: MotionValue<number
   return (
     <motion.div style={{ y, left: f.x }} className={`absolute top-0 aspect-[4/5] overflow-hidden rounded-2xl ${f.w}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(f.i, 600)} alt="" className="h-full w-full object-cover" />
+      <img src={f.i} alt="" className="h-full w-full object-cover" />
     </motion.div>
   );
 }
@@ -163,7 +182,7 @@ function Process() {
             <motion.div key={st.t} className="absolute inset-0" initial={false}
               animate={{ clipPath: i <= active ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }} transition={{ duration: 1, ease }}>
               { }
-              <motion.img src={img(st.i)} alt={st.t} initial={false} animate={{ scale: i === active ? 1 : 1.15 }} transition={{ duration: 1.4, ease }}
+              <motion.img src={st.i} alt={st.t} initial={false} animate={{ scale: i === active ? 1 : 1.15 }} transition={{ duration: 1.4, ease }}
                 className="h-full w-full object-cover" />
             </motion.div>
           ))}
@@ -194,7 +213,7 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
         {st.tags.map((t) => <span key={t} className="rounded-full bg-sand px-4 py-2 text-sm font-medium">{t}</span>)}
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(st.i, 1000)} alt={st.t} className="mt-8 aspect-[4/3] w-full rounded-[22px] object-cover md:hidden" />
+      <img src={st.i} alt={st.t} className="mt-8 aspect-[4/3] w-full rounded-[22px] object-cover md:hidden" />
     </div>
   );
 }
