@@ -3,7 +3,7 @@
 export const MEDIA = process.env.NEXT_PUBLIC_MEDIA_BASE ?? (process.env.NODE_ENV === "development" ? "/media" : "https://media.thefurn.co");
 export const img = (id: string, w = 1600) => id.startsWith("/") ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/#process"]];
+export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/#process"], ["Contact us", "/contact"]];
 
 type Service = {
   slug: string;
@@ -347,3 +347,16 @@ export const projects: Project[] = [
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+
+// Contact form: budget ranges (from 1 lakh up to unlimited). The tier tells us what kind of customer is enquiring.
+export const budgets = [
+  { v: "1-3", t: "₹1 – 3 lakh", tier: "Starter" },
+  { v: "3-5", t: "₹3 – 5 lakh", tier: "Essential" },
+  { v: "5-10", t: "₹5 – 10 lakh", tier: "Standard" },
+  { v: "10-20", t: "₹10 – 20 lakh", tier: "Premium" },
+  { v: "20-50", t: "₹20 – 50 lakh", tier: "Signature" },
+  { v: "50-100", t: "₹50 lakh – 1 crore", tier: "Luxury" },
+  { v: "100+", t: "₹1 crore and above", tier: "Ultra" },
+  { v: "unlimited", t: "Unlimited / no fixed budget", tier: "Ultra" },
+];
+export const enquiryTypes = ["Modular kitchen", "Wardrobes", "Living room & TV unit", "Bedroom furniture", "Dining & crockery", "Complete interior", "Other"];
