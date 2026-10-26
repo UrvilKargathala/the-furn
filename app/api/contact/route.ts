@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   // Hidden field that real visitors never fill in: quietly accept and drop bot posts
   if (str(b.company, 100)) return Response.json({ ok: true });
 
-  const name = str(b.name, 120), phone = str(b.phone, 30), email = str(b.email, 160), city = str(b.city, 120);
+  const name = str(b.name, 120), phone = str(b.phone, 30), email = str(b.email, 160), city = str(b.city, 120), state = str(b.state, 80);
   const type = str(b.type, 60), message = str(b.message, 3000), budgetKey = str(b.budget, 20);
   const budget = budgets.find((x) => x.v === budgetKey);
 
@@ -19,7 +19,8 @@ export async function POST(req: Request) {
   if (name.length < 2) errors.name = "Please enter your name";
   if (!/^[+\d][\d\s()-]{8,}$/.test(phone)) errors.phone = "Please enter a valid phone number";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email";
-  if (city.length < 2) errors.city = "Please tell us your city";
+  if (state.length < 2) errors.state = "Please choose your state";
+  if (city.length < 2) errors.city = "Please choose your city";
   if (!budget) errors.budget = "Please choose a budget";
   if (type && !enquiryTypes.includes(type)) errors.type = "Please choose from the list";
   if (Object.keys(errors).length) return Response.json({ errors }, { status: 422 });
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
 
   const text = [
     `Customer category: ${budget!.tier} (${budget!.t})`,
-    `Name: ${name}`, `Phone: ${phone}`, `Email: ${email}`, `City: ${city}`,
+    `Name: ${name}`, `Phone: ${phone}`, `Email: ${email}`, `City: ${city}, ${state}`,
     `Looking for: ${type || "Not specified"}`, "", message || "(no message)",
   ].join("\n");
   const res = await fetch("https://api.resend.com/emails", {

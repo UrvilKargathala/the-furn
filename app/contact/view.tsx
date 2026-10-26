@@ -8,10 +8,11 @@ import { Label, Arrow, Nav, Footer } from "../ui";
 type Option = { v: string; t: string; hint?: string };
 
 // Styled dropdown that still submits a plain value (opens on click, closes on outside click or Escape)
-function Select({ label, value, onChange, options, placeholder, error, required }: {
-  label: string; value: string; onChange: (v: string) => void; options: Option[]; placeholder: string; error?: string; required?: boolean;
+function Select({ label, value, onChange, options, placeholder, error, required, search, disabled, loading }: {
+  label: string; value: string; onChange: (v: string) => void; options: Option[]; placeholder: string; error?: string; required?: boolean; search?: boolean; disabled?: boolean; loading?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
   useEffect(() => {
@@ -22,19 +23,28 @@ function Select({ label, value, onChange, options, placeholder, error, required 
     return () => { document.removeEventListener("mousedown", onDoc); document.removeEventListener("keydown", onKey); };
   }, [open]);
   const current = options.find((o) => o.v === value);
+  // Long lists (cities) are searchable; only the first matches are drawn to keep it fast
+  const shown = (q ? options.filter((o) => o.t.toLowerCase().includes(q.toLowerCase())) : options).slice(0, 150);
   return (
     <div ref={ref} className="relative">
       <label id={id} className="text-sm text-ink/55">{label}{required && <span className="text-brass"> *</span>}</label>
-      <button type="button" aria-haspopup="listbox" aria-expanded={open} aria-labelledby={id} onClick={() => setOpen(!open)}
-        className={`mt-2 flex w-full items-center justify-between gap-4 border-b py-3 text-left text-lg transition-colors ${error ? "border-red-600" : open ? "border-ink" : "border-ink/25 hover:border-ink/60"}`}>
-        <span className={current ? "" : "text-ink/35"}>{current ? current.t : placeholder}</span>
+      <button type="button" aria-haspopup="listbox" aria-expanded={open} aria-labelledby={id} onClick={() => { setOpen(!open); setQ(""); }} disabled={disabled}
+        className={`mt-2 flex w-full items-center justify-between gap-4 border-b py-3 text-left text-lg transition-colors ${error ? "border-red-600" : open ? "border-ink" : "border-ink/25 hover:border-ink/60"} ${disabled ? "cursor-not-allowed opacity-45" : ""}`}>
+        <span className={current ? "" : "text-ink/35"}>{loading ? "Loading..." : current ? current.t : placeholder}</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className={`shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}><path d="M2 5l5 5 5-5" stroke="currentColor" strokeWidth="1.6" /></svg>
       </button>
       <AnimatePresence>
         {open && (
           <motion.ul role="listbox" aria-labelledby={id} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25, ease }}
             className="absolute inset-x-0 z-20 mt-2 max-h-72 overflow-auto rounded-2xl border border-ink/10 bg-ivory p-2 shadow-2xl">
-            {options.map((o) => (
+            {search && (
+              <li className="px-2 pb-2">
+                <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Type to search" aria-label={`Search ${label}`}
+                  className="w-full rounded-xl border border-ink/15 bg-transparent px-4 py-2.5 text-base outline-none focus:border-ink" />
+              </li>
+            )}
+            {shown.length === 0 && <li className="px-4 py-3 text-sm text-ink/50">No match</li>}
+            {shown.map((o) => (
               <li key={o.v} role="option" aria-selected={o.v === value}>
                 <button type="button" onClick={() => { onChange(o.v); setOpen(false); }}
                   className={`flex w-full items-center justify-between gap-4 rounded-xl px-4 py-3 text-left transition-colors hover:bg-sand ${o.v === value ? "bg-sand font-semibold" : ""}`}>
@@ -65,12 +75,26 @@ function Field({ label, name, value, onChange, error, type = "text", required, a
   );
 }
 
-const empty = { name: "", phone: "", email: "", city: "", type: "", budget: "", message: "", company: "" };
+const OTHER = "__other__";
+const empty = { name: "", phone: "", email: "", state: "", city: "", cityOther: "", type: "", budget: "", message: "", company: "" };
 
 function Form() {
   const [f, setF] = useState(empty);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [state, setState] = useState<"idle" | "sending" | "done" | "fail">("idle");
+  const [states, setStates] = useState<Option[]>([]);
+  const [cities, setCities] = useState<Option[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+  useEffect(() => {
+    fetch("/api/geo").then((r) => r.json()).then((d: { states: { code: string; name: string }[] }) => setStates(d.states.map((s) => ({ v: s.code, t: s.name })))).catch(() => {});
+  }, []);
+  const pickState = (code: string) => {
+    setF((p) => ({ ...p, state: code, city: "", cityOther: "" }));
+    setErrors((e) => ({ ...e, state: "", city: "" }));
+    setCities([]); setLoadingCities(true);
+    fetch(`/api/geo?state=${code}`).then((r) => r.json()).then((d: { cities: string[] }) => setCities(d.cities.map((c) => ({ v: c, t: c }))))
+      .catch(() => {}).finally(() => setLoadingCities(false));
+  };
   const set = (k: keyof typeof empty) => (v: string) => { setF((p) => ({ ...p, [k]: v })); if (errors[k]) setErrors((e) => ({ ...e, [k]: "" })); };
 
   async function submit(e: React.FormEvent) {
@@ -78,7 +102,7 @@ function Form() {
     if (state === "sending") return;
     setState("sending");
     try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(f) });
+      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...f, state: states.find((s) => s.v === f.state)?.t ?? "", city: f.city === OTHER ? f.cityOther : f.city }) });
       const data = await res.json().catch(() => ({}));
       if (res.ok) { setState("done"); return; }
       if (res.status === 422 && data.errors) { setErrors(data.errors); setState("idle"); return; }
@@ -88,7 +112,7 @@ function Form() {
 
   const tier = budgets.find((b) => b.v === f.budget)?.tier;
   const mailto = `mailto:info@thefurn.co?subject=${encodeURIComponent(`New enquiry from ${f.name || "website"}`)}&body=${encodeURIComponent(
-    [`Name: ${f.name}`, `Phone: ${f.phone}`, `Email: ${f.email}`, `City: ${f.city}`, `Looking for: ${f.type}`, `Budget: ${budgets.find((b) => b.v === f.budget)?.t ?? ""}`, "", f.message].join("\n"))}`;
+    [`Name: ${f.name}`, `Phone: ${f.phone}`, `Email: ${f.email}`, `City: ${f.city === OTHER ? f.cityOther : f.city}, ${states.find((s) => s.v === f.state)?.t ?? ""}`, `Looking for: ${f.type}`, `Budget: ${budgets.find((b) => b.v === f.budget)?.t ?? ""}`, "", f.message].join("\n"))}`;
 
   if (state === "done") {
     return (
@@ -107,7 +131,10 @@ function Form() {
         <Field label="Full name" name="name" value={f.name} onChange={set("name")} error={errors.name} required autoComplete="name" />
         <Field label="Phone" name="phone" type="tel" value={f.phone} onChange={set("phone")} error={errors.phone} required autoComplete="tel" />
         <Field label="Email" name="email" type="email" value={f.email} onChange={set("email")} error={errors.email} required autoComplete="email" />
-        <Field label="City" name="city" value={f.city} onChange={set("city")} error={errors.city} required autoComplete="address-level2" />
+        <Select label="State" required search value={f.state} onChange={pickState} placeholder="Select your state" options={states} error={errors.state} loading={states.length === 0} />
+        <Select label="City" required search value={f.city} onChange={set("city")} placeholder={f.state ? "Select your city" : "Choose a state first"} error={errors.city}
+          disabled={!f.state || loadingCities} loading={loadingCities} options={[...cities, { v: OTHER, t: "My city isn't listed" }]} />
+        {f.city === OTHER && <Field label="Your city" name="cityOther" value={f.cityOther} onChange={set("cityOther")} required />}
         <Select label="What are you looking for?" value={f.type} onChange={set("type")} placeholder="Select a service" options={enquiryTypes.map((t) => ({ v: t, t }))} error={errors.type} />
         <Select label="Your budget" required value={f.budget} onChange={set("budget")} placeholder="Select a budget range" error={errors.budget}
           options={budgets.map((b) => ({ v: b.v, t: b.t, hint: b.tier }))} />
@@ -143,15 +170,23 @@ export function ContactView() {
       <SmoothScroll />
       <Nav light />
 
-      <section className="px-5 pt-40 pb-12 md:px-12 md:pt-48">
-        <Label>Contact us</Label>
-        <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
-          <span className="block"><SplitText text="Let's talk about" /></span>
-          <span className="block text-ink/35"><SplitText text="your space." delay={0.2} /></span>
-        </h1>
+      {/* Photo first: one of our own projects behind the heading */}
+      <section className="relative h-[80svh] overflow-hidden bg-ink text-ivory">
+        <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/works/avadh-ayuska/02.jpg" alt="Living room designed and built by The Furn" className="h-full w-full object-cover" />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-ink/45" />
+        <div className="relative z-10 flex h-full flex-col justify-end p-6 pb-12 md:p-12 md:pb-16">
+          <Label dark>Contact us</Label>
+          <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
+            <span className="block"><SplitText text="Let's talk about" /></span>
+            <span className="block text-stone"><SplitText text="your space." delay={0.2} /></span>
+          </h1>
+        </div>
       </section>
 
-      <section className="px-5 pb-28 md:px-12">
+      <section className="px-5 py-20 md:px-12 md:py-28">
         <div className="grid gap-16 md:grid-cols-[1fr_1.7fr] md:gap-20">
           <Reveal>
             <p className="max-w-sm text-lg text-ink/70">Tell us about your home and your budget. We&apos;ll call you to plan a free site visit, then measure, design and quote with no obligation.</p>
