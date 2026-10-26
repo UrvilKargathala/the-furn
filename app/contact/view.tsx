@@ -123,7 +123,7 @@ function Form() {
       </div>
       {state === "fail" && (
         <p role="alert" className="rounded-2xl bg-sand p-5 text-sm">
-          We couldn&apos;t send that just now. Please <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we or message us on WhatsApp and we&apos;ll reply the same day.apos;ll reply the same day.
+          We couldn&apos;t send that just now. Please <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.
         </p>
       )}
     </form>
