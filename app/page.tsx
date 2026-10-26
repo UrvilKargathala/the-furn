@@ -275,20 +275,9 @@ export default function Home() {
       </section>
 
       {/* Process: steps scroll on the left, pinned photo swaps on the right (prismae style) */}
-      <section id="process" className="px-5 pt-28 pb-16 md:px-12">
+      <section id="process" className="px-5 pt-28 pb-24 md:px-12">
         <Label>How it Works</Label><Heading text="From first sketch" accent="to final handover" />
         <Process />
-      </section>
-
-      {/* Testimonial */}
-      <section className="px-5 pb-28 text-center md:px-12">
-        <Label>Testimonials</Label>
-        <Reveal>
-          <blockquote className="mx-auto mt-8 max-w-4xl text-2xl leading-snug font-medium tracking-tight md:text-5xl">
-            “They turned a cramped corner into the kitchen we actually wanted to cook in. Every drawer is exactly where it should be.”
-          </blockquote>
-          <p className="mt-8 text-sm uppercase tracking-[0.2em] text-ink/50">Homeowner · Island Axis</p>
-        </Reveal>
       </section>
 
       <Cta />
