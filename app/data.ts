@@ -1,5 +1,6 @@
 // ponytail: Unsplash/Pexels placeholders, swap for real project media in /public
-export const MEDIA = process.env.NEXT_PUBLIC_MEDIA_BASE ?? "https://media.thefurn.co";
+// Production serves videos from media.thefurn.co; `next dev` plays the local copy in public/media (symlink to ~/the-furn-media)
+export const MEDIA = process.env.NEXT_PUBLIC_MEDIA_BASE ?? (process.env.NODE_ENV === "development" ? "/media" : "https://media.thefurn.co");
 export const img = (id: string, w = 1600) => id.startsWith("/") ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/#process"]];

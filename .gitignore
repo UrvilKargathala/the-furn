@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .claude/
+
+# local copy of the site videos (dev only; production uses media.thefurn.co)
+/public/media
