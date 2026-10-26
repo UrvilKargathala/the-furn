@@ -157,9 +157,11 @@ function Form() {
   );
 }
 
+const ADDRESS = "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam, Surat, Gujarat 394510";
 const info: [string, string, string?][] = [
+  ["Phone", "+91 99256 18895", "tel:+919925618895"],
   ["Email", "info@thefurn.co", "mailto:info@thefurn.co"],
-  ["Studio", "Surat, Gujarat, India"],
+  ["Studio", ADDRESS, `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`],
   ["Instagram", "@thefurn.co", "https://www.instagram.com/thefurn.co/"],
   ["Hours", "Monday to Saturday, 10 am to 7 pm"],
 ];
@@ -194,7 +196,7 @@ export function ContactView() {
               {info.map(([k, v, href]) => (
                 <div key={k} className="flex justify-between gap-6 border-t border-ink/15 py-5">
                   <dt className="text-ink/50">{k}</dt>
-                  <dd className="text-right font-semibold">{href ? <a href={href} className="group underline-offset-4 hover:underline"><RollText>{v}</RollText></a> : v}</dd>
+                  <dd className="max-w-[16rem] text-right font-semibold">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="underline-offset-4 hover:underline">{v}</a> : v}</dd>
                 </div>
               ))}
             </dl>

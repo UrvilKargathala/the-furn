@@ -136,7 +136,7 @@ export function Cta() {
             <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
-              <a href="https://wa.me/" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
+              <a href="https://wa.me/919925618895" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
             </div>
           </Reveal>
         </div>
@@ -149,7 +149,7 @@ export function Footer() {
   const cols: [string, string[][]][] = [
     ["Explore", links],
     ["Services", services.map((s) => [s.t, `/services/${s.slug}`])],
-    ["Contact", [["info@thefurn.co", "mailto:info@thefurn.co"], ["+91 00000 00000", "tel:+910000000000"], ["Instagram", "https://www.instagram.com/thefurn.co/"], ["Contact form", "/contact"]]],
+    ["Contact", [["info@thefurn.co", "mailto:info@thefurn.co"], ["+91 99256 18895", "tel:+919925618895"], ["Instagram", "https://www.instagram.com/thefurn.co/"], ["Contact form", "/contact"]]],
   ];
   return (
     <footer className="overflow-hidden px-5 pt-20 pb-6 md:px-12">
