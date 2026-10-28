@@ -214,7 +214,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       </section>
 
       {/* Deliverables */}
-      <section className="mx-3 rounded-[28px] bg-ink px-5 py-24 text-ivory md:px-12">
+      <section className="bg-ink px-5 py-24 text-ivory md:px-12 md:py-32">
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <div><Label dark>Deliverables</Label><Heading text="What you" accent="get" dark /></div>
           <ul className="grid gap-x-10 sm:grid-cols-2">

@@ -242,7 +242,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       </section>}
 
       {/* Key features */}
-      {p.features.length > 0 && <section className="mx-3 rounded-[28px] bg-ink px-5 py-24 text-ivory md:px-12">
+      {p.features.length > 0 && <section className="bg-ink px-5 py-24 text-ivory md:px-12 md:py-32">
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <div><Label dark>Key features</Label><Heading text="What makes" accent="it work" dark /></div>
           <ul className="grid gap-4 sm:grid-cols-2">
@@ -290,7 +290,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       </section>
 
       {/* Next project */}
-      <Link href={`/works/${next.slug}`} className="group relative mx-3 flex h-[70svh] flex-col justify-end overflow-hidden rounded-[28px] bg-ink p-6 text-ivory md:p-12">
+      <Link href={`/works/${next.slug}`} className="group relative flex h-[80svh] flex-col justify-end overflow-hidden bg-ink px-5 py-10 text-ivory md:px-12 md:py-12">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={next.i} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
@@ -303,7 +303,7 @@ export function WorkDetailView({ p }: { p: Project }) {
         </div>
       </Link>
 
-      <div className="pt-3"><Cta /></div>
+      <Cta />
       <Footer />
     </main>
   );

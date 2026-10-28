@@ -124,8 +124,8 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
 
 export function Cta() {
   return (
-    <section id="contact" className="p-3">
-      <div className="relative overflow-hidden rounded-[28px] bg-ink px-6 py-24 text-center text-ivory md:py-36">
+    <section id="contact">
+      <div className="relative overflow-hidden bg-ink px-6 py-24 text-center text-ivory md:py-36">
         <ParallaxImg src={img("1565538810643-b5bdb714032a", 2400)} alt="" className="absolute inset-0 opacity-40" />
         <div className="relative">
           <Label dark>Start your project</Label>
@@ -160,8 +160,8 @@ export function Footer() {
     ["Address", "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam, Surat, Gujarat 394510", "https://www.google.com/maps/search/?api=1&query=220%2C%20219%20Sumerru%20Business%20Corner%2C%20Pal%20Gam%2C%20Surat%20394510"],
   ];
   return (
-    <footer className="p-3">
-      <div className="relative overflow-hidden rounded-[28px] bg-ink px-6 pt-16 pb-6 text-ivory md:px-12 md:pt-20">
+    <footer>
+      <div className="relative overflow-hidden bg-ink px-5 pt-16 pb-6 text-ivory md:px-12 md:pt-20">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/works/globcon/11.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink/35" />

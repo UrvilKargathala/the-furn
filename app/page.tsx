@@ -96,13 +96,13 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
   const dim = useTransform(progress, [i / n, 1], [0, (n - 1 - i) * 0.15]);
   return (
     <div className="sticky top-0 flex h-svh items-center">
-      <motion.a href={`/works/${p.slug}`} style={{ scale }} className="group relative block h-[85svh] w-full origin-top overflow-hidden rounded-[28px] bg-ink text-ivory">
+      <motion.a href={`/works/${p.slug}`} style={{ scale }} className="group relative block h-svh w-full origin-top overflow-hidden bg-ink text-ivory">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
         {p.video && <Reel src={p.video} poster={p.gallery[0]} />}
-        <div className="relative flex h-full flex-col justify-between p-6 md:p-10">
+        <div className="relative flex h-full flex-col justify-between px-5 pt-28 pb-10 md:px-12 md:pt-32 md:pb-12">
           <div className="max-w-xl">
             <span className="text-xs font-semibold tracking-[0.2em] text-ivory/60 uppercase">0{i + 1} / 0{n} · {p.c}</span>
             <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
@@ -279,8 +279,8 @@ export default function Home() {
       <Testimonials />
 
       {/* Projects: stacked pinned cards (prismae style) */}
-      <section id="projects" className="px-3 py-28 md:px-12">
-        <div className="flex flex-wrap items-end justify-between gap-6 px-2 md:px-0">
+      <section id="projects" className="py-28">
+        <div className="flex flex-wrap items-end justify-between gap-6 px-5 md:px-12">
           <div><Label>Our Works</Label><Heading text="Featured" accent="projects" /></div>
         </div>
         <FeaturedProjects />

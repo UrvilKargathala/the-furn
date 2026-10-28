@@ -220,7 +220,7 @@ export function StudioView() {
       </section>
 
       {/* Principles (prismae) */}
-      <section className="mx-3 rounded-[28px] bg-ink px-5 py-24 text-ivory md:px-12">
+      <section className="bg-ink px-5 py-24 text-ivory md:px-12 md:py-32">
         <Label dark>Principles</Label>
         <Heading text="The ideas that shape" accent="every space" dark />
         <div className="mt-16 grid gap-px overflow-hidden rounded-[24px] bg-ivory/10 sm:grid-cols-2 lg:grid-cols-4">
@@ -287,7 +287,7 @@ export function StudioView() {
       </section>
 
       {/* Careers (homespaceid) */}
-      <section className="mx-3 rounded-[40px] bg-sand px-5 py-24 md:px-12">
+      <section className="bg-sand px-5 py-24 md:px-12 md:py-32">
         <div className="grid gap-12 md:grid-cols-[1fr_1.6fr]">
           <div>
             <Label>Careers</Label>
