@@ -11,20 +11,19 @@ import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 import { Testimonials } from "./testimonials";
 
-// Full 1080p film from our media server (media.thefurn.co via Cloudflare Tunnel)
-const HERO_VIDEO = `${MEDIA}/hero/brand-film.mp4`;
-// Hero background: our projects one after another, in the same order as the old site,
-// each playing a few seconds of its own film (start/dur in seconds). The photo shows while a clip loads.
+// Hero background: one remix film of our projects in the old site's order, cut from the original
+// HD/4K videos and cropped to 1920x1080 (37 s, on the media server). `at` = second each project starts.
+const HERO_REMIX = `${MEDIA}/hero/remix.mp4`;
 const heroReel = [
-  { slug: "serene-art", src: `${MEDIA}/works/serene-art/framer.mp4`, start: 1, dur: 4 },
-  { slug: "island-axis", src: `${MEDIA}/works/island-axis/framer.mp4`, start: 1, dur: 4 },
-  { slug: "aestra", src: `${MEDIA}/works/aestra/framer.mp4`, start: 1, dur: 4 },
-  { slug: "noir-arc", src: `${MEDIA}/works/noir-arc/framer.mp4`, start: 1, dur: 4 },
-  { slug: "beige-bailey", src: `${MEDIA}/works/beige-bailey/framer.mp4`, start: 1, dur: 4 },
-  { slug: "ivory", src: `${MEDIA}/works/ivory/framer.mp4`, start: 1, dur: 4 },
-  { slug: "concrete-canvas", src: `${MEDIA}/works/concrete-canvas/framer.mp4`, start: 1, dur: 4 },
-  { slug: "avadh-ayuska", src: HERO_VIDEO, start: 6, dur: 8 },
-  { slug: "studio-furn", src: `${MEDIA}/works/studio-furn/framer.mp4`, start: 2, dur: 5 },
+  { slug: "serene-art", at: 0 },
+  { slug: "island-axis", at: 3.5 },
+  { slug: "aestra", at: 7 },
+  { slug: "noir-arc", at: 10.5 },
+  { slug: "beige-bailey", at: 14 },
+  { slug: "ivory", at: 17.5 },
+  { slug: "concrete-canvas", at: 21 },
+  { slug: "avadh-ayuska", at: 24.5 },
+  { slug: "studio-furn", at: 32 },
 ].map((c) => ({ ...c, p: getProject(c.slug)! }));
 // The four headlines rotate through the reel
 const heroScenes = [
@@ -197,21 +196,22 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
 
 function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null);
-  const vids = useRef<(HTMLVideoElement | null)[]>([]);
+  const video = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
   const [clip, setClip] = useState(0);
   const n = heroReel.length;
-  // Play the current clip from its start point, then move to the next one
+  // Start the remix once the intro loader is done
   useEffect(() => {
-    if (!ready) return;
-    const c = heroReel[clip];
-    vids.current.forEach((v, i) => { if (v && i !== clip) v.pause(); });
-    const v = vids.current[clip];
-    if (v) { v.currentTime = c.start; v.play().catch(() => {}); }
-    const t = setTimeout(() => setClip((k) => (k + 1) % n), c.dur * 1000);
-    return () => clearTimeout(t);
-  }, [ready, clip, n]);
+    if (ready) video.current?.play().catch(() => {});
+  }, [ready]);
+  // Follow the project on screen as the remix plays
+  const onTime = () => {
+    const t = video.current?.currentTime ?? 0;
+    let i = 0;
+    heroReel.forEach((c, k) => { if (t >= c.at) i = k; });
+    setClip((k) => (k === i ? k : i));
+  };
   const active = Math.min(heroScenes.length - 1, Math.floor((clip * heroScenes.length) / n));
   const scene = heroScenes[active];
   const now = heroReel[clip].p;
@@ -220,13 +220,8 @@ function Hero({ ready }: { ready: boolean }) {
     <section ref={ref} className="h-svh">
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
         <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease }}>
-          {heroReel.map((c, i) => {
-            const near = i === clip || i === (clip + 1) % n;
-            return (
-              <video key={c.slug} ref={(el) => { vids.current[i] = el; }} src={c.src} poster={c.p.i} muted playsInline preload={near ? "auto" : "none"}
-                className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1200ms] ease-out ${i === clip ? "scale-100 opacity-100" : "scale-105 opacity-0"}`} />
-            );
-          })}
+          <video ref={video} src={HERO_REMIX} poster={heroReel[0].p.i} muted loop playsInline preload="auto" onTimeUpdate={onTime}
+            className="absolute inset-0 h-full w-full object-cover" />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
