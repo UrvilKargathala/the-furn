@@ -2,8 +2,8 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, useMotionValueEvent, type MotionValue } from "motion/react";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, ParallaxImg, motion, useScroll, useTransform, ease } from "../fx";
-import { img } from "../data";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, motion, useScroll, useTransform, ease } from "../fx";
+import { img, MEDIA } from "../data";
 import { Label, Heading, Arrow, Nav, Footer } from "../ui";
 
 // ponytail: placeholder studio content, replace with real team, awards and history
@@ -158,22 +158,30 @@ export function StudioView() {
   return (
     <main>
       <SmoothScroll />
-      <Nav light />
+      <Nav />
 
-      {/* Split hero (raumora) */}
-      <section className="grid gap-10 px-5 pt-36 pb-20 md:grid-cols-[1.1fr_1fr] md:items-end md:px-12 md:pt-44">
-        <div>
-          <Label>Our Studio</Label>
+      {/* Full-screen hero: a film of our own studio behind the same heading and copy */}
+      <section className="relative h-svh overflow-hidden bg-ink text-ivory">
+        <motion.div className="absolute inset-0" initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease }}>
+          <video src={`${MEDIA}/hero/studio.mp4`} poster="/works/studio-furn/cover.webp" autoPlay muted loop playsInline preload="auto"
+            className="absolute inset-0 h-full w-full object-cover" />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
+        <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-12 md:px-12 md:pb-16">
+          <Label dark>Our Studio</Label>
           <h1 className="mt-6 text-[12vw] leading-[0.92] font-bold tracking-[-0.04em] md:text-[6.5vw]">
             <span className="block"><SplitText text="Crafting homes" /></span>
-            <span className="block text-ink/35"><SplitText text="that fit your life" delay={0.2} /></span>
+            <span className="block text-stone"><SplitText text="that fit your life" delay={0.2} /></span>
           </h1>
-          <Reveal delay={0.4}>
-            <p className="mt-8 max-w-md text-lg text-ink/70">The Furn is a design-and-build studio for modular kitchens, wardrobes and complete interiors, with our own workshop and our own install teams.</p>
-            <Link href="/works" className="group mt-8 inline-flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>View our work</RollText><Arrow /></Link>
-          </Reveal>
+          <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.4 }}>
+              <p className="max-w-md text-lg text-ivory/80">The Furn is a design-and-build studio for modular kitchens, wardrobes and complete interiors, with our own workshop and our own install teams.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.55 }}>
+              <Link href="/works" className="group inline-flex items-center gap-3 rounded-full bg-ivory py-2 pr-2 pl-6 font-semibold text-ink"><RollText>View our work</RollText><Arrow /></Link>
+            </motion.div>
+          </div>
         </div>
-        <ParallaxImg src={img("1600210492486-724fe5c67fb0", 1600)} alt="Living room designed by The Furn" className="aspect-[4/5] md:aspect-[4/4.6]" />
       </section>
 
       {/* Who we are (primedecor) */}
