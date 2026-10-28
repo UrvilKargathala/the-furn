@@ -13,9 +13,20 @@ import { Testimonials } from "./testimonials";
 
 // Full 1080p film from our media server (media.thefurn.co via Cloudflare Tunnel)
 const HERO_VIDEO = `${MEDIA}/hero/brand-film.mp4`;
-// The film is 41 s: the last ~3 s is a logo end card, so the loop restarts before it.
-const HERO_LOOP_END = 38;
-// Headline changes with what the film is showing: [from second, copy]
+// Hero background: our projects one after another, in the same order as the old site,
+// each playing a few seconds of its own film (start/dur in seconds). The photo shows while a clip loads.
+const heroReel = [
+  { slug: "serene-art", src: `${MEDIA}/works/serene-art/framer.mp4`, start: 1, dur: 4 },
+  { slug: "island-axis", src: `${MEDIA}/works/island-axis/framer.mp4`, start: 1, dur: 4 },
+  { slug: "aestra", src: `${MEDIA}/works/aestra/framer.mp4`, start: 1, dur: 4 },
+  { slug: "noir-arc", src: `${MEDIA}/works/noir-arc/framer.mp4`, start: 1, dur: 4 },
+  { slug: "beige-bailey", src: `${MEDIA}/works/beige-bailey/framer.mp4`, start: 1, dur: 4 },
+  { slug: "ivory", src: `${MEDIA}/works/ivory/framer.mp4`, start: 1, dur: 4 },
+  { slug: "concrete-canvas", src: `${MEDIA}/works/concrete-canvas/framer.mp4`, start: 1, dur: 4 },
+  { slug: "avadh-ayuska", src: HERO_VIDEO, start: 6, dur: 8 },
+  { slug: "studio-furn", src: `${MEDIA}/works/studio-furn/framer.mp4`, start: 2, dur: 5 },
+].map((c) => ({ ...c, p: getProject(c.slug)! }));
+// The four headlines rotate through the reel
 const heroScenes = [
   { from: 0, h: ["Where every home", "begins with a feeling"], d: "Before the first sketch, we learn how you want to live, then build furniture that fits." },
   { from: 6, h: ["Designed for the home", "you're building"], d: "Weekend villas, apartments and complete interiors, planned around your site and your family." },
@@ -186,31 +197,36 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
 
 function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null);
-  const video = useRef<HTMLVideoElement>(null);
+  const vids = useRef<(HTMLVideoElement | null)[]>([]);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const [active, setActive] = useState(0);
-  // Start the film once the intro loader is done
+  const [clip, setClip] = useState(0);
+  const n = heroReel.length;
+  // Play the current clip from its start point, then move to the next one
   useEffect(() => {
-    if (ready) video.current?.play().catch(() => {});
-  }, [ready]);
-  // Keep the copy in step with the scene on screen, and loop before the end card
-  const onTime = () => {
-    const v = video.current;
-    if (!v) return;
-    if (v.currentTime >= HERO_LOOP_END) { v.currentTime = 0; return; }
-    let i = 0;
-    heroScenes.forEach((sc, k) => { if (v.currentTime >= sc.from) i = k; });
-    setActive((a) => (a === i ? a : i));
-  };
+    if (!ready) return;
+    const c = heroReel[clip];
+    vids.current.forEach((v, i) => { if (v && i !== clip) v.pause(); });
+    const v = vids.current[clip];
+    if (v) { v.currentTime = c.start; v.play().catch(() => {}); }
+    const t = setTimeout(() => setClip((k) => (k + 1) % n), c.dur * 1000);
+    return () => clearTimeout(t);
+  }, [ready, clip, n]);
+  const active = Math.min(heroScenes.length - 1, Math.floor((clip * heroScenes.length) / n));
   const scene = heroScenes[active];
+  const now = heroReel[clip].p;
 
   return (
     <section ref={ref} className="h-svh">
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
         <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease }}>
-          <video ref={video} src={HERO_VIDEO} poster="/works/avadh-ayuska/02.jpg" muted playsInline preload="auto" onTimeUpdate={onTime} onEnded={() => { if (video.current) { video.current.currentTime = 0; video.current.play().catch(() => {}); } }}
-            className="absolute inset-0 h-full w-full object-cover" />
+          {heroReel.map((c, i) => {
+            const near = i === clip || i === (clip + 1) % n;
+            return (
+              <video key={c.slug} ref={(el) => { vids.current[i] = el; }} src={c.src} poster={c.p.i} muted playsInline preload={near ? "auto" : "none"}
+                className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[1200ms] ease-out ${i === clip ? "scale-100 opacity-100" : "scale-105 opacity-0"}`} />
+            );
+          })}
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
@@ -231,6 +247,14 @@ function Hero({ ready }: { ready: boolean }) {
               </motion.div>
             </AnimatePresence>
           </div>
+          {/* Which project is on screen right now */}
+          <Link href={`/works/${now.slug}`} className="group flex items-center gap-3 self-start text-sm text-ivory/80 hover:text-ivory md:self-end">
+            <span className="font-mono tracking-[0.2em]">{String(clip + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+            <span className="h-px w-8 bg-ivory/40" />
+            <AnimatePresence mode="wait">
+              <motion.span key={now.slug} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.4, ease }} className="font-semibold">{now.n}</motion.span>
+            </AnimatePresence>
+          </Link>
         </motion.div>
       </div>
     </section>
