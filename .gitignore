@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local copy of the site videos (dev only; production uses media.thefurn.co)
 /public/media
+
+# private operations notes (not in git)
+/docs/The-Furn-Notes.pdf
