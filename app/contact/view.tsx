@@ -116,7 +116,7 @@ function Form() {
 
   if (state === "done") {
     return (
-      <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }} className="rounded-[28px] bg-ink p-8 text-ivory md:p-12">
+      <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }} className=" bg-ink p-8 text-ivory md:p-12">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-brass text-2xl text-ink">✓</span>
         <h2 className="mt-8 text-4xl font-semibold tracking-tight md:text-5xl">Thank you, {f.name.split(" ")[0]}.</h2>
         <p className="mt-4 max-w-md text-ivory/75">We&apos;ve received your details and will call you within one working day to plan your free site visit.</p>
@@ -149,7 +149,7 @@ function Form() {
         </button>
       </div>
       {state === "fail" && (
-        <p role="alert" className="rounded-2xl bg-sand p-5 text-sm">
+        <p role="alert" className="bg-sand p-5 text-sm">
           We couldn&apos;t send that just now. Please <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.
         </p>
       )}

@@ -14,7 +14,7 @@ const arrowSvg = <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><pa
 function WorkCard({ p, big }: { p: Project; big: boolean }) {
   return (
     <Link href={`/works/${p.slug}`} className="group block">
-      <div className={`relative overflow-hidden rounded-[24px] bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
+      <div className={`relative overflow-hidden bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.i} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 bottom-0 translate-y-full bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0">
@@ -150,7 +150,7 @@ function Gallery({ p }: { p: Project }) {
 function GalleryImg({ src, i, p, n }: { src: string; i: number; p: MotionValue<number>; n: number }) {
   const scale = useTransform(p, [Math.max(0, (i - 1) / n), i / n, (i + 1) / n], [0.9, 1, 0.9]);
   return (
-    <motion.div style={{ scale }} className="h-[62svh] w-[80vw] shrink-0 overflow-hidden rounded-[24px] md:w-[60vw]">
+    <motion.div style={{ scale }} className="h-[62svh] w-[80vw] shrink-0 overflow-hidden md:w-[60vw]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt="" className="h-full w-full object-cover" />
     </motion.div>
@@ -166,7 +166,7 @@ function ProjectVideo({ p }: { p: Project }) {
         {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
           <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
             <video src={src} poster={i === 0 ? p.gallery[0] : undefined} autoPlay muted loop playsInline controls preload="metadata"
-              className="mx-auto max-h-[85svh] w-full rounded-[28px] bg-ink object-contain" />
+              className="mx-auto max-h-[85svh] w-full bg-ink object-contain" />
           </Reveal>
         ))}
       </div>
@@ -183,7 +183,7 @@ function GalleryGrid({ p }: { p: Project }) {
         {p.gallery.map((g, i) => (
           <Reveal key={g} delay={(i % 3) * 0.08} className="mb-3 md:mb-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" className="aspect-[2/3] w-full rounded-[20px] bg-sand object-cover" />
+            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" className="aspect-[2/3] w-full bg-sand object-cover" />
           </Reveal>
         ))}
       </div>
@@ -248,7 +248,7 @@ export function WorkDetailView({ p }: { p: Project }) {
           <ul className="grid gap-4 sm:grid-cols-2">
             {p.features.map((f, i) => (
               <Reveal key={f} delay={i * 0.08}>
-                <li className="flex h-full flex-col justify-between gap-10 rounded-[20px] border border-ivory/15 p-6">
+                <li className="flex h-full flex-col justify-between gap-10 border border-ivory/15 p-6">
                   <span className="text-sm text-brass">0{i + 1}</span>
                   <span className="text-xl font-medium">{f}</span>
                 </li>
@@ -279,7 +279,7 @@ export function WorkDetailView({ p }: { p: Project }) {
           {p.quote.t && (
             <Reveal delay={0.15}>
               {p.result && <p className="mb-8 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{p.result}</p>}
-              <blockquote className="rounded-[24px] bg-sand p-8 md:p-10">
+              <blockquote className=" bg-sand p-8 md:p-10">
                 <span className="text-5xl leading-none text-brass">“</span>
                 <p className="mt-2 text-2xl leading-snug font-medium">{p.quote.t}</p>
                 <footer className="mt-6 text-sm text-ink/60">{p.quote.by}</footer>

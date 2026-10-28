@@ -81,7 +81,7 @@ export function Testimonials() {
 
         {/* The project behind the quote: photo wipes in, with the client's film when we have one */}
         <Reveal delay={0.1}>
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden rounded-[28px] bg-ink md:max-h-[78svh] md:max-w-none md:justify-self-end">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden bg-ink md:max-h-[78svh] md:max-w-none md:justify-self-end">
             <AnimatePresence initial={false}>
               {p && (
                 <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">

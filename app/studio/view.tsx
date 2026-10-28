@@ -147,7 +147,7 @@ function Riser({ r, k, p }: { r: (typeof risers)[number]; k: number; p: MotionVa
   const y = useTransform(p, [start, start + 0.55], ["70vh", "-90vh"]);
   const rotate = useTransform(p, [start, start + 0.55], [0, r.r]);
   return (
-    <motion.div style={{ y, rotate, left: r.x }} className="absolute top-1/2 aspect-[4/5] w-36 overflow-hidden rounded-2xl shadow-2xl md:w-56">
+    <motion.div style={{ y, rotate, left: r.x }} className="absolute top-1/2 aspect-[4/5] w-36 overflow-hidden shadow-2xl md:w-56">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={img(r.i, 600)} alt="" className="h-full w-full object-cover" />
     </motion.div>
@@ -173,7 +173,7 @@ export function StudioView() {
             <Link href="/works" className="group mt-8 inline-flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>View our work</RollText><Arrow /></Link>
           </Reveal>
         </div>
-        <ParallaxImg src={img("1600210492486-724fe5c67fb0", 1600)} alt="Living room designed by The Furn" className="aspect-[4/5] rounded-[28px] md:aspect-[4/4.6]" />
+        <ParallaxImg src={img("1600210492486-724fe5c67fb0", 1600)} alt="Living room designed by The Furn" className="aspect-[4/5] md:aspect-[4/4.6]" />
       </section>
 
       {/* Who we are (primedecor) */}
@@ -204,7 +204,7 @@ export function StudioView() {
             { h: "Our vision", p: "To make made-to-measure interiors the norm, not a luxury, so every family can live in a home designed around them.", i: "1618221195710-dd6b41faaea6" },
           ].map((c, k) => (
             <Reveal key={c.h} delay={k * 0.15}>
-              <article className="group overflow-hidden rounded-[28px] bg-sand">
+              <article className="group overflow-hidden bg-sand">
                 <div className="aspect-[16/10] overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={img(c.i, 1400)} alt="" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
@@ -223,7 +223,7 @@ export function StudioView() {
       <section className="bg-ink px-5 py-24 text-ivory md:px-12 md:py-32">
         <Label dark>Principles</Label>
         <Heading text="The ideas that shape" accent="every space" dark />
-        <div className="mt-16 grid gap-px overflow-hidden rounded-[24px] bg-ivory/10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-px overflow-hidden bg-ivory/10 sm:grid-cols-2 lg:grid-cols-4">
           {principles.map((p, i) => (
             <Reveal key={p.t} delay={i * 0.1} className="group bg-ink p-8 transition-colors duration-500 hover:bg-walnut md:p-10">
               <span className="text-sm font-semibold text-brass">0{i + 1}</span>
@@ -255,7 +255,7 @@ export function StudioView() {
           {team.map((m, i) => (
             <Reveal key={m.n} delay={i * 0.1} className={i % 2 ? "md:mt-16" : ""}>
               <div className="group">
-                <div className="aspect-[3/4] overflow-hidden rounded-[22px] bg-sand">
+                <div className="aspect-[3/4] overflow-hidden bg-sand">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={img(m.i, 800)} alt={m.n} className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
                 </div>
@@ -298,7 +298,7 @@ export function StudioView() {
             {roles.map((r, i) => (
               <Reveal key={r.t} delay={i * 0.08}>
                 <li>
-                  <a href={`mailto:careers@thefurn.in?subject=${encodeURIComponent(r.t)}`} className="group flex flex-wrap items-center justify-between gap-4 rounded-[20px] bg-ivory p-6 transition-shadow duration-500 hover:shadow-xl md:p-8">
+                  <a href={`mailto:careers@thefurn.in?subject=${encodeURIComponent(r.t)}`} className="group flex flex-wrap items-center justify-between gap-4 bg-ivory p-6 transition-shadow duration-500 hover:shadow-xl md:p-8">
                     <div>
                       <h3 className="text-xl font-semibold tracking-tight md:text-2xl">{r.t}</h3>
                       <div className="mt-2 flex flex-wrap gap-2">

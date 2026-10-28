@@ -67,7 +67,7 @@ function Services() {
                     </Link>
                   </div>
                   <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 0.9, ease, delay: 0.1 }}
-                    className="aspect-[16/8] overflow-hidden rounded-[22px]">
+                    className="aspect-[16/8] overflow-hidden">
                     <motion.img src={s.i} alt={s.t} initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
                   </motion.div>
                 </div>
@@ -138,7 +138,7 @@ function Reel({ src, poster }: { src: string; poster: string }) {
     if (inView) v.play().catch(() => {}); else v.pause();
   }, [inView]);
   return (
-    <div className="absolute right-6 bottom-28 hidden aspect-[9/16] h-[46%] overflow-hidden rounded-[20px] border border-ivory/25 shadow-2xl md:right-10 md:bottom-auto md:top-1/2 md:block md:-translate-y-1/2">
+    <div className="absolute right-6 bottom-28 hidden aspect-[9/16] h-[46%] overflow-hidden border border-ivory/25 shadow-2xl md:right-10 md:bottom-auto md:top-1/2 md:block md:-translate-y-1/2">
       <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" className="h-full w-full object-cover" />
     </div>
   );
@@ -153,7 +153,7 @@ function Process() {
       </div>
       {/* Pinned photo: each step's image wipes up over the last */}
       <div className="hidden md:block">
-        <div className="sticky top-24 h-[72vh] overflow-hidden rounded-[28px] bg-ink">
+        <div className="sticky top-24 h-[72vh] overflow-hidden bg-ink">
           {steps.map((st, i) => (
             <motion.div key={st.t} className="absolute inset-0" initial={false}
               animate={{ clipPath: i <= active ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }} transition={{ duration: 1, ease }}>
@@ -189,7 +189,7 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
         {st.tags.map((t) => <span key={t} className="rounded-full bg-sand px-4 py-2 text-sm font-medium">{t}</span>)}
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={st.i} alt={st.t} className="mt-8 aspect-[4/3] w-full rounded-[22px] object-cover md:hidden" />
+      <img src={st.i} alt={st.t} className="mt-8 aspect-[4/3] w-full object-cover md:hidden" />
     </div>
   );
 }
@@ -268,7 +268,7 @@ export default function Home() {
       <OurStory />
 
       {/* Services: click-to-open accordion */}
-      <section id="services" className="rounded-t-[40px] bg-sand px-5 py-28 md:px-12">
+      <section id="services" className=" bg-sand px-5 py-28 md:px-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div><Label>Services</Label><Heading text="Complete solutions" accent="for every room" /></div>
           <Reveal><p className="max-w-xs text-ink/70">Every module is designed in-house and built to your exact measurements.</p></Reveal>

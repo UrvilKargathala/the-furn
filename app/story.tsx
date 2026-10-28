@@ -51,7 +51,7 @@ function Chapters() {
   return (
     <div ref={ref} style={{ height: `${n * 95}vh` }} className="relative">
       <div className="sticky top-0 flex h-svh flex-col justify-center gap-6 px-5 pt-20 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-16 md:px-12 md:pt-0">
-        <div className="relative h-[40svh] overflow-hidden rounded-[28px] bg-ink md:h-[78svh]">
+        <div className="relative h-[40svh] overflow-hidden bg-ink md:h-[78svh]">
           {chapters.map((c, i) => <ChapterImg key={c.n} src={c.img} i={i} n={n} p={p} />)}
         </div>
         <div className="flex flex-col gap-6 md:gap-10">

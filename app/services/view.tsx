@@ -12,7 +12,7 @@ type Service = (typeof services)[number];
 function ServiceCard({ s, i }: { s: Service; i: number }) {
   return (
     <Link href={`/services/${s.slug}`} className="group block">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-[24px] bg-ink">
+      <div className="relative aspect-[4/3] overflow-hidden bg-ink">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={img(s.i, 1400)} alt={s.t} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 top-1/2 -translate-y-1/2 scale-y-0 overflow-hidden bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100">
@@ -65,7 +65,7 @@ function ReasonCard({ r, i, p }: { r: (typeof reasons)[number]; i: number; p: Mo
   const y = useTransform(p, [start, end], ["110vh", "0vh"]);
   const rotate = useTransform(p, [start, end], [r.r * 3, r.r]);
   return (
-    <motion.div style={{ y, rotate }} className={`absolute inset-0 flex flex-col justify-between rounded-[28px] p-8 shadow-2xl md:p-10 ${r.c}`}>
+    <motion.div style={{ y, rotate }} className={`absolute inset-0 flex flex-col justify-between p-8 shadow-2xl md:p-10 ${r.c}`}>
       <span className="text-sm font-semibold opacity-60">0{i + 1} / 0{n}</span>
       <div>
         <h3 className="text-3xl font-semibold tracking-tight md:text-5xl">{r.t}</h3>
@@ -131,7 +131,7 @@ function Options({ s }: { s: Service }) {
   return (
     <div className="mt-16 grid gap-10 md:grid-cols-2 md:gap-16">
       <div className="hidden md:block">
-        <div className="sticky top-28 h-[70vh] overflow-hidden rounded-[28px] bg-ink">
+        <div className="sticky top-28 h-[70vh] overflow-hidden bg-ink">
           {s.options.map((o, i) => (
             <motion.div key={o.t} className="absolute inset-0" initial={false}
               animate={{ opacity: i === active ? 1 : 0, scale: i === active ? 1 : 1.08 }} transition={{ duration: 0.9, ease }}>
@@ -153,12 +153,12 @@ function OptionCard({ o, i, active, onActive }: { o: Service["options"][number];
   const inView = useInView(ref, { margin: "-45% 0px -45% 0px" });
   useEffect(() => { if (inView) onActive(i); }, [inView, onActive, i]);
   return (
-    <div ref={ref} className={`rounded-[24px] p-8 transition-all duration-500 md:flex md:min-h-[42vh] md:flex-col md:justify-center md:p-10 ${active ? "bg-ivory shadow-xl" : "md:opacity-40"}`}>
+    <div ref={ref} className={` p-8 transition-all duration-500 md:flex md:min-h-[42vh] md:flex-col md:justify-center md:p-10 ${active ? "bg-ivory shadow-xl" : "md:opacity-40"}`}>
       <span className="text-sm font-semibold text-brass">0{i + 1}</span>
       <h3 className="mt-3 text-3xl font-semibold tracking-tight md:text-5xl">{o.t}</h3>
       <p className="mt-4 max-w-md text-ink/70">{o.d}</p>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(o.i, 1000)} alt={o.t} className="mt-6 aspect-[4/3] w-full rounded-[18px] object-cover md:hidden" />
+      <img src={img(o.i, 1000)} alt={o.t} className="mt-6 aspect-[4/3] w-full object-cover md:hidden" />
     </div>
   );
 }
@@ -231,7 +231,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       </section>
 
       {/* Options */}
-      <section className="mt-3 rounded-[40px] bg-sand px-5 py-28 md:px-12">
+      <section className="mt-3 bg-sand px-5 py-28 md:px-12">
         <Label>Styles & options</Label>
         <Heading text="Choose what" accent="fits your space" />
         <Options s={s} />
@@ -241,7 +241,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       <section className="px-5 py-28 md:px-12">
         <Label>Our process</Label>
         <Heading text="A clear path from" accent="idea to install" />
-        <div className="mt-16 grid gap-px overflow-hidden rounded-[28px] bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-px overflow-hidden bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
           {s.process.map((p, i) => (
             <Reveal key={p.t} delay={(i % 3) * 0.1} className="bg-ivory p-8 md:p-10">
               <span className="grid h-12 w-12 place-items-center rounded-full border border-brass text-sm font-semibold text-brass">0{i + 1}</span>
