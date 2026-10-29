@@ -178,7 +178,7 @@ type Project = {
   quote: { t: string; by: string };
 };
 
-export const workCats = ["All", "Kitchen", "Weekend Home", "Studio", "Bedroom", "Complete Interior"];
+export const workCats = ["All", "Kitchen", "Wardrobe", "Weekend Home", "Studio", "Bedroom", "Complete Interior"];
 
 // Project photos live in public/works/<slug>/. Videos still stream from the Framer CDN until we decide where to host them.
 const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
@@ -402,6 +402,15 @@ export const projects: Project[] = [
     slug: "shreepad", n: "Shreepad", c: "Kitchen & Living", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A bright all-white open kitchen and living space on marble floors, with shaker-style units, a lit glass display tower, a mobile glass trolley and a slim TV wall.",
     i: workJpg("shreepad", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08"].map((n) => workJpg("shreepad", n)),
+    service: "Furniture", credits: [],
+    video: "", insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
+  {
+    slug: "serene-wardrobe", n: "Serene Wardrobe", c: "Wardrobe", cat: "Wardrobe", l: "", y: "", area: "", days: "", client: "",
+    d: "A walk-in wardrobe in warm oak and smoked glass, with lit shelves, slim black frames, pull-out trays and hanging drawer units.",
+    i: workJpg("serene-wardrobe", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08", "09"].map((n) => workJpg("serene-wardrobe", n)),
     service: "Furniture", credits: [],
     video: "", insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
