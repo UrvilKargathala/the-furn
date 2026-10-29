@@ -416,6 +416,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "sage-granite", n: "Sage Granite", c: "Kitchen & Dining", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A sage-green and mocha kitchen with a speckled granite backsplash, cove-lit units and a black-fluted island, opening onto a long marble-top dining table.",
+    i: workJpg("sage-granite", "01"), gallery: ["02", "03", "04", "05", "06"].map((n) => workJpg("sage-granite", n)),
+    service: "Furniture", credits: [],
+    video: `${MEDIA}/works/sage-granite/furn3-4.mp4`, insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
