@@ -398,6 +398,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "shreepad", n: "Shreepad", c: "Kitchen & Living", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A bright all-white open kitchen and living space on marble floors, with shaker-style units, a lit glass display tower, a mobile glass trolley and a slim TV wall.",
+    i: workJpg("shreepad", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08"].map((n) => workJpg("shreepad", n)),
+    service: "Furniture", credits: [],
+    video: "", insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
