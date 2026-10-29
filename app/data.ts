@@ -389,6 +389,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "timber-arch", n: "Timber Arch", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A warm greige kitchen framed by a rounded walnut arch, with black granite tops, reeded-glass uppers, pendant lights and a breakfast counter.",
+    i: workJpg("timber-arch", "01"), gallery: ["02", "03", "04"].map((n) => workJpg("timber-arch", n)),
+    service: "Furniture", credits: [],
+    video: `${MEDIA}/works/timber-arch/furn-k2.mp4`, insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
