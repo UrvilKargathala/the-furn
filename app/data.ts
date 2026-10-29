@@ -353,6 +353,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "gokuldham", n: "Gokuldham", c: "Kitchen & Wardrobes", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A dark-stone island kitchen with a floating hood and tall handle-less units, paired with a walk-in wardrobe of fluted glass, slate-blue panels and brass trims.",
+    i: workJpg("gokuldham", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08", "09", "10", "11"].map((n) => workJpg("gokuldham", n)),
+    service: "Furniture", credits: [],
+    video: `${MEDIA}/works/gokuldham/kitchen.mp4`, insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
