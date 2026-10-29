@@ -344,6 +344,15 @@ export const projects: Project[] = [
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
+  {
+    slug: "globcon-oasis", n: "Globcon Oasis", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    d: "A grey modular kitchen with black granite tops, reeded-glass wall cabinets in black frames and a breakfast counter under a timber ceiling.",
+    i: workJpg("globcon-oasis", "01"), gallery: [workJpg("globcon-oasis", "02"), workJpg("globcon-oasis", "03"), workJpg("globcon-oasis", "04"), workJpg("globcon-oasis", "05"), workJpg("globcon-oasis", "06"), workJpg("globcon-oasis", "07")],
+    service: "Furniture", credits: [],
+    video: `${MEDIA}/works/globcon-oasis/furn3-1.mp4`, insta: "",
+    overview: "", challenge: "", solution: "", features: [], result: "",
+    quote: { t: "", by: "" },
+  },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
