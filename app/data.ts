@@ -431,7 +431,6 @@ export const getProject = (slug: string) => projects.find((p) => p.slug === slug
 
 // Contact form: budget ranges (from 1 lakh up to unlimited). The tier tells us what kind of customer is enquiring.
 export const budgets = [
-  { v: "1-3", t: "₹1 – 3 lakh", tier: "Starter" },
   { v: "3-5", t: "₹3 – 5 lakh", tier: "Essential" },
   { v: "5-10", t: "₹5 – 10 lakh", tier: "Standard" },
   { v: "10-20", t: "₹10 – 20 lakh", tier: "Premium" },

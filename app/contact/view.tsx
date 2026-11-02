@@ -35,8 +35,8 @@ function Select({ label, value, onChange, options, placeholder, error, required,
       </button>
       <AnimatePresence>
         {open && (
-          <motion.ul role="listbox" aria-labelledby={id} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25, ease }}
-            className="absolute inset-x-0 z-20 mt-2 max-h-72 overflow-auto rounded-2xl border border-ink/10 bg-ivory p-2 shadow-2xl">
+          <motion.ul role="listbox" aria-labelledby={id} data-lenis-prevent initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25, ease }}
+            className="absolute inset-x-0 z-20 mt-2 max-h-72 overflow-y-auto overscroll-contain rounded-2xl border border-ink/10 bg-ivory p-2 shadow-2xl">
             {search && (
               <li className="px-2 pb-2">
                 <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Type to search" aria-label={`Search ${label}`}
