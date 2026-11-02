@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
-import { motion, useScroll, useTransform, useInView, animate } from "motion/react";
+import { motion, useScroll, useTransform, useInView, animate, useMotionValue, useSpring } from "motion/react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -109,6 +109,34 @@ export function WideningImage({ src, alt }: { src: string; alt: string }) {
     <div ref={ref} className="h-[85svh] w-full overflow-hidden">
       <motion.img src={src} alt={alt} style={{ scale, y }} className="h-full w-full object-cover" />
     </div>
+  );
+}
+
+// Cursor label: hovering anything marked data-cursor="View" shows a small round label that follows the mouse (mouse only)
+export function HoverCursor() {
+  const [label, setLabel] = useState("");
+  const x = useMotionValue(-100), y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 500, damping: 40 }), sy = useSpring(y, { stiffness: 500, damping: 40 });
+  useEffect(() => {
+    if (!matchMedia("(pointer: fine)").matches) return;
+    const move = (e: PointerEvent) => {
+      x.set(e.clientX); y.set(e.clientY);
+      const el = (e.target as Element | null)?.closest?.("[data-cursor]");
+      setLabel(el?.getAttribute("data-cursor") ?? "");
+    };
+    const leave = () => setLabel("");
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerdown", leave); // a click opens or leaves something: hide until the mouse moves again
+    document.addEventListener("pointerleave", leave);
+    return () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerdown", leave); document.removeEventListener("pointerleave", leave); };
+  }, [x, y]);
+  return (
+    <motion.div aria-hidden style={{ x: sx, y: sy }} className="pointer-events-none fixed top-0 left-0 z-[100]">
+      <motion.div initial={false} animate={{ scale: label ? 1 : 0, opacity: label ? 1 : 0 }} transition={{ duration: 0.35, ease }}
+        className="-translate-x-1/2 -translate-y-1/2 grid h-20 w-20 place-items-center rounded-full bg-ivory/90 text-xs font-semibold tracking-[0.15em] text-ink uppercase shadow-lg backdrop-blur">
+        {label}
+      </motion.div>
+    </motion.div>
   );
 }
 

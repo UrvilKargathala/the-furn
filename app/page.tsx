@@ -96,7 +96,7 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
   const dim = useTransform(progress, [i / n, 1], [0, (n - 1 - i) * 0.15]);
   return (
     <div className="sticky top-0 flex h-svh items-center">
-      <motion.a href={`/works/${p.slug}`} style={{ scale }} className="group relative block h-svh w-full origin-top overflow-hidden bg-ink text-ivory">
+      <motion.a href={`/works/${p.slug}`} data-cursor="View" style={{ scale }} className="group relative block h-svh w-full origin-top overflow-hidden bg-ink text-ivory">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />

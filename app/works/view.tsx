@@ -13,7 +13,7 @@ const arrowSvg = <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><pa
 // Card: hover zoom + "See project details" strip (primedecor), spec table underneath (resonance)
 function WorkCard({ p, big }: { p: Project; big: boolean }) {
   return (
-    <Link href={`/works/${p.slug}`} className="group block">
+    <Link href={`/works/${p.slug}`} data-cursor="View" className="group block">
       <div className={`relative overflow-hidden bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={p.i} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
@@ -40,7 +40,7 @@ function Spotlight({ p }: { p: Project }) {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
   return (
-    <Link ref={ref} href={`/works/${p.slug}`} className="group relative flex h-svh flex-col justify-between overflow-hidden bg-ink p-6 text-ivory md:p-12">
+    <Link ref={ref} href={`/works/${p.slug}`} data-cursor="View" className="group relative flex h-svh flex-col justify-between overflow-hidden bg-ink p-6 text-ivory md:p-12">
       { }
       <motion.img src={p.i} alt={p.n} style={{ y, scale: 1.25 }} className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-transparent to-ink/70" />
@@ -122,7 +122,7 @@ export function WorksView() {
 // Detail page pieces ------------------------------------------------------
 
 // Pinned row of photos that slides sideways as you scroll down
-function Gallery({ p }: { p: Project }) {
+function Gallery({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const n = p.gallery.length;
@@ -141,18 +141,18 @@ function Gallery({ p }: { p: Project }) {
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
         <div className="px-5 pb-10 md:px-12"><Label>Gallery</Label></div>
         <motion.div ref={track} style={{ x }} className="flex w-max gap-[4vw] px-5 md:px-12">
-          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} i={i} p={scrollYProgress} n={n} />)}
+          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} i={i} p={scrollYProgress} n={n} onOpen={onOpen} />)}
         </motion.div>
       </div>
     </section>
   );
 }
-function GalleryImg({ src, i, p, n }: { src: string; i: number; p: MotionValue<number>; n: number }) {
+function GalleryImg({ src, i, p, n, onOpen }: { src: string; i: number; p: MotionValue<number>; n: number; onOpen: (i: number) => void }) {
   const scale = useTransform(p, [Math.max(0, (i - 1) / n), i / n, (i + 1) / n], [0.9, 1, 0.9]);
   return (
     <motion.div style={{ scale }} className="h-[62svh] w-[80vw] shrink-0 overflow-hidden md:w-[60vw]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" className="h-full w-full object-cover" />
+      <img src={src} alt="" data-cursor="Expand" onClick={() => onOpen(i)} className="h-full w-full cursor-zoom-in object-cover" />
     </motion.div>
   );
 }
@@ -186,8 +186,50 @@ function Film({ src }: { src: string }) {
   );
 }
 
+// Full-screen photo viewer: arrows or keys to move, Esc or a click outside to close
+function Lightbox({ images, name, index, onIndex }: { images: string[]; name: string; index: number | null; onIndex: (i: number | null) => void }) {
+  const n = images.length;
+  useEffect(() => {
+    if (index === null) return;
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onIndex(null);
+      if (e.key === "ArrowRight") onIndex((index + 1) % n);
+      if (e.key === "ArrowLeft") onIndex((index - 1 + n) % n);
+    };
+    document.documentElement.style.overflow = "hidden";
+    window.addEventListener("keydown", key);
+    return () => { document.documentElement.style.overflow = ""; window.removeEventListener("keydown", key); };
+  }, [index, n, onIndex]);
+  const btn = "grid h-12 w-12 place-items-center rounded-full border border-ivory/30 text-ivory transition-colors hover:bg-ivory hover:text-ink";
+  return (
+    <AnimatePresence>
+      {index !== null && (
+        <motion.div role="dialog" aria-modal aria-label={`${name} photo ${index + 1} of ${n}`} data-lenis-prevent data-cursor=""
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease }}
+          onClick={() => onIndex(null)} className="fixed inset-0 z-[90] flex flex-col bg-ink/95 text-ivory backdrop-blur">
+          <div className="flex items-center justify-between px-5 py-5 text-sm md:px-12">
+            <span className="tracking-[0.2em] uppercase">{name} · {String(index + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+            <button type="button" aria-label="Close" onClick={() => onIndex(null)} className={btn}>✕</button>
+          </div>
+          <div className="relative flex min-h-0 flex-1 items-center justify-center px-5 pb-8 md:px-24">
+            <AnimatePresence mode="wait">
+              <motion.img key={images[index]} src={images[index]} alt={`${name} ${index + 1}`} onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35, ease }}
+                className="max-h-full max-w-full object-contain" />
+            </AnimatePresence>
+            {n > 1 && <>
+              <button type="button" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); onIndex((index - 1 + n) % n); }} className={`${btn} absolute left-3 md:left-8`}>←</button>
+              <button type="button" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); onIndex((index + 1) % n); }} className={`${btn} absolute right-3 md:right-8`}>→</button>
+            </>}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 // Big galleries (many photos): masonry columns that fade up as they scroll in
-function GalleryGrid({ p }: { p: Project }) {
+function GalleryGrid({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
   return (
     <section className="px-5 py-28 md:px-12">
       <div className="pb-10"><Label>Gallery</Label></div>
@@ -195,7 +237,7 @@ function GalleryGrid({ p }: { p: Project }) {
         {p.gallery.map((g, i) => (
           <Reveal key={g} delay={(i % 3) * 0.08} className="mb-3 md:mb-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" className="aspect-[2/3] w-full bg-sand object-cover" />
+            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" data-cursor="Expand" onClick={() => onOpen(i)} className="aspect-[2/3] w-full cursor-zoom-in bg-sand object-cover" />
           </Reveal>
         ))}
       </div>
@@ -204,6 +246,7 @@ function GalleryGrid({ p }: { p: Project }) {
 }
 
 export function WorkDetailView({ p }: { p: Project }) {
+  const [open, setOpen] = useState<number | null>(null);
   const idx = projects.indexOf(p);
   const next = projects[(idx + 1) % projects.length];
   const meta = [["Category", p.c], ["Service", p.service], ["Year", p.y], ["Location", p.l && `${p.l}, India`], ["Area", p.area], ["Timeline", p.days]].filter(([, v]) => v);
@@ -270,7 +313,8 @@ export function WorkDetailView({ p }: { p: Project }) {
         </div>
       </section>}
 
-      {p.gallery.length > 6 ? <GalleryGrid p={p} /> : <Gallery p={p} />}
+      {p.gallery.length > 6 ? <GalleryGrid p={p} onOpen={setOpen} /> : <Gallery p={p} onOpen={setOpen} />}
+      <Lightbox images={p.gallery} name={p.n} index={open} onIndex={setOpen} />
 
       <section className="px-5 pb-28 md:px-12">
         <div className="grid gap-12 md:grid-cols-2">
@@ -302,7 +346,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       </section>
 
       {/* Next project */}
-      <Link href={`/works/${next.slug}`} className="group relative flex h-[80svh] flex-col justify-end overflow-hidden bg-ink px-5 py-10 text-ivory md:px-12 md:py-12">
+      <Link href={`/works/${next.slug}`} data-cursor="Next" className="group relative flex h-[80svh] flex-col justify-end overflow-hidden bg-ink px-5 py-10 text-ivory md:px-12 md:py-12">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={next.i} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
