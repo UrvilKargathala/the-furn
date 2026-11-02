@@ -162,10 +162,10 @@ function ProjectVideo({ p }: { p: Project }) {
   return (
     <section className="px-3 pt-28 md:px-12 md:pt-40">
       <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
-      {/* Each film keeps its own shape (no black bars): portrait clips sit side by side, landscape ones fill the row */}
-      <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-        {[p.video, ...(p.moreVideos ?? [])].map((src) => (
-          <Reveal key={src} className="max-w-full">
+      {/* Films fill the full width with no black bars: one film spans the row, two or more share it */}
+      <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
+        {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
+          <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
             <Film src={src} />
           </Reveal>
         ))}
@@ -174,7 +174,7 @@ function ProjectVideo({ p }: { p: Project }) {
   );
 }
 
-// One film: tall clips get a fixed height (width follows), wide clips take the full width (height follows)
+// One film: fills its cell edge to edge; tall clips are trimmed to a screen-high frame on desktop, wide clips show whole
 function Film({ src }: { src: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [wide, setWide] = useState(false);
@@ -182,7 +182,7 @@ function Film({ src }: { src: string }) {
   useEffect(check, []); // metadata may load before hydration, when onLoadedMetadata isn't attached yet
   return (
     <video ref={ref} src={src} autoPlay muted loop playsInline controls preload="metadata" onLoadedMetadata={check}
-      className={`block max-w-full ${wide ? "h-auto w-[calc(100vw-1.5rem)] md:w-[calc(100vw-6rem)]" : "h-[70svh] w-auto md:h-[85svh]"}`} />
+      className={`block w-full ${wide ? "h-auto" : "h-auto object-cover md:h-[85svh]"}`} />
   );
 }
 
