@@ -5,9 +5,15 @@ import { motion, useScroll, useTransform, useInView, animate, useMotionValue, us
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+// Back/forward should keep the old scroll position; every other page change starts at the top
+let backForward = false;
+if (typeof window !== "undefined") window.addEventListener("popstate", () => { backForward = true; });
+
 export function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.09 });
+    if (!backForward && !location.hash) { window.scrollTo(0, 0); lenis.scrollTo(0, { immediate: true, force: true }); }
+    backForward = false;
     let id = requestAnimationFrame(function raf(t) {
       lenis.raf(t);
       id = requestAnimationFrame(raf);
