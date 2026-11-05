@@ -2,9 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, type MotionValue } from "motion/react";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, motion, useScroll, useTransform, ease } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, motion, useScroll, useTransform, ease, MotionPic } from "../fx";
 import { projects, workCats } from "../data";
 import { Label, Heading, Arrow, Nav, Cta, Footer } from "../ui";
+import { Pic } from "../pic";
 
 type Project = (typeof projects)[number];
 
@@ -15,8 +16,7 @@ function WorkCard({ p, big }: { p: Project; big: boolean }) {
   return (
     <Link href={`/works/${p.slug}`} data-cursor="View" className="group block">
       <div className={`relative overflow-hidden bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.i} alt={p.n} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
+        <Pic src={p.i} alt={p.n} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 bottom-0 translate-y-full bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0">
           <div className="flex w-max animate-marquee gap-8 text-sm font-semibold tracking-[0.15em] whitespace-nowrap uppercase">
             {Array.from({ length: 12 }, (_, k) => <span key={k}>See project details <span className="text-brass">↗</span></span>)}
@@ -42,7 +42,7 @@ function Spotlight({ p }: { p: Project }) {
   return (
     <Link ref={ref} href={`/works/${p.slug}`} data-cursor="View" className="group relative flex h-svh flex-col justify-between overflow-hidden bg-ink p-6 text-ivory md:p-12">
       { }
-      <motion.img src={p.i} alt={p.n} style={{ y, scale: 1.25 }} className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
+      <MotionPic src={p.i} alt={p.n} style={{ y, scale: 1.25 }} className="absolute inset-0 h-full w-full object-cover opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-transparent to-ink/70" />
       <Reveal className="relative max-w-2xl"><p className="text-2xl leading-snug font-medium md:text-4xl">{p.d}</p></Reveal>
       <div className="relative">
@@ -70,6 +70,7 @@ export function WorksView() {
       <Nav light />
 
       <section className="px-5 pt-40 pb-14 md:px-12 md:pt-48">
+        
         <Label>Our Works</Label>
         <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
           <span className="block"><SplitText text="Homes we've" /></span>
@@ -84,12 +85,12 @@ export function WorksView() {
       {/* Filter tabs (homespaceid / resonance): active pill slides between tabs */}
       <section className="px-5 pb-28 md:px-12">
         <Reveal>
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter projects">
-            {workCats.map((c) => (
+          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0" role="tablist" aria-label="Filter projects" data-lenis-prevent>
+            {workCats.map(({ c, n }) => (
               <button key={c} role="tab" aria-selected={cat === c} onClick={() => setCat(c)}
-                className={`relative rounded-full border px-5 py-2 text-sm font-medium transition-colors ${cat === c ? "border-ink text-ivory" : "border-ink/15 hover:border-ink/40"}`}>
+                className={`relative shrink-0 rounded-full border px-5 py-2 text-sm font-medium transition-colors ${cat === c ? "border-ink text-ivory" : "border-ink/15 hover:border-ink/40"}`}>
                 {cat === c && <motion.span layoutId="work-tab" className="absolute inset-0 rounded-full bg-ink" transition={{ duration: 0.5, ease }} />}
-                <span className="relative">{c}</span>
+                <span className="relative">{c} <span className={cat === c ? "text-ivory/60" : "text-ink/40"}>{n}</span></span>
               </button>
             ))}
           </div>
@@ -141,18 +142,17 @@ function Gallery({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
         <div className="px-5 pb-10 md:px-12"><Label>Gallery</Label></div>
         <motion.div ref={track} style={{ x }} className="flex w-max gap-[4vw] px-5 md:px-12">
-          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} i={i} p={scrollYProgress} n={n} onOpen={onOpen} />)}
+          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} name={p.n} i={i} p={scrollYProgress} n={n} onOpen={onOpen} />)}
         </motion.div>
       </div>
     </section>
   );
 }
-function GalleryImg({ src, i, p, n, onOpen }: { src: string; i: number; p: MotionValue<number>; n: number; onOpen: (i: number) => void }) {
+function GalleryImg({ src, name, i, p, n, onOpen }: { src: string; name: string; i: number; p: MotionValue<number>; n: number; onOpen: (i: number) => void }) {
   const scale = useTransform(p, [Math.max(0, (i - 1) / n), i / n, (i + 1) / n], [0.9, 1, 0.9]);
   return (
     <motion.div style={{ scale }} className="h-[62svh] w-[80vw] shrink-0 overflow-hidden md:w-[60vw]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" data-cursor="Expand" onClick={() => onOpen(i)} className="h-full w-full cursor-zoom-in object-cover" />
+      <Pic src={src} alt={`${name}, photo ${i + 1}`} sizes="(min-width: 768px) 60vw, 80vw" data-cursor="Expand" onClick={() => onOpen(i)} className="h-full w-full cursor-zoom-in object-cover" />
     </motion.div>
   );
 }
@@ -213,7 +213,7 @@ function Lightbox({ images, name, index, onIndex }: { images: string[]; name: st
           </div>
           <div className="relative flex min-h-0 flex-1 items-center justify-center px-5 pb-8 md:px-24">
             <AnimatePresence mode="wait">
-              <motion.img key={images[index]} src={images[index]} alt={`${name} ${index + 1}`} onClick={(e) => e.stopPropagation()}
+              <motion.img key={images[index]} src={images[index]} alt={`${name}, photo ${index + 1} of ${n}`} onClick={(e) => e.stopPropagation()}
                 initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35, ease }}
                 className="max-h-full max-w-full object-contain" />
             </AnimatePresence>
@@ -236,8 +236,7 @@ function GalleryGrid({ p, onOpen }: { p: Project; onOpen: (i: number) => void })
       <div className="columns-2 gap-3 md:columns-3 md:gap-5">
         {p.gallery.map((g, i) => (
           <Reveal key={g} delay={(i % 3) * 0.08} className="mb-3 md:mb-5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={g} alt={`${p.n} ${i + 1}`} loading="lazy" data-cursor="Expand" onClick={() => onOpen(i)} className="aspect-[2/3] w-full cursor-zoom-in bg-sand object-cover" />
+            <Pic src={g} alt={`${p.n}, photo ${i + 1}`} width={800} height={1200} sizes="(min-width: 768px) 33vw, 50vw" data-cursor="Expand" onClick={() => onOpen(i)} className="aspect-[2/3] w-full cursor-zoom-in bg-sand object-cover" />
           </Reveal>
         ))}
       </div>
@@ -319,6 +318,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       <section className="px-5 pb-28 md:px-12">
         <div className="grid gap-12 md:grid-cols-2">
           <Reveal>
+            
             <Label>Credits</Label>
             <dl className="mt-8">
               {p.credits.map((c) => (
@@ -347,8 +347,7 @@ export function WorkDetailView({ p }: { p: Project }) {
 
       {/* Next project */}
       <Link href={`/works/${next.slug}`} data-cursor="Next" className="group relative flex h-[80svh] flex-col justify-end overflow-hidden bg-ink px-5 py-10 text-ivory md:px-12 md:py-12">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={next.i} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
+        <Pic src={next.i} alt={next.n} className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 group-hover:opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
         <div className="relative flex items-end justify-between gap-6">
           <div>

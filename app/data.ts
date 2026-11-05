@@ -3,7 +3,7 @@
 export const MEDIA = process.env.NEXT_PUBLIC_MEDIA_BASE ?? (process.env.NODE_ENV === "development" ? "/media" : "https://media.thefurn.co");
 export const img = (id: string, w = 1600) => id.startsWith("/") ? id : `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/#process"], ["Contact us", "/contact"]];
+export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/process"], ["Contact us", "/contact"]];
 
 type Service = {
   slug: string;
@@ -26,6 +26,15 @@ const processSteps = [
   { t: "Factory production", d: "Every module is cut, edge-banded and assembled in our workshop for a precise, durable finish." },
   { t: "Installation & handover", d: "Our own team installs, aligns and cleans up, then walks you through care and warranty." },
 ];
+
+// The /process page: the same five steps, with what happens at each and what you leave with
+export const processDetail = processSteps.map((st, i) => ({ ...st, ...[
+  { i: "/works/avadh-ayuska/02.jpg", tags: ["Measurements", "Plumbing & electrical points", "How you use the room"], out: "A clear brief and exact site measurements" },
+  { i: "/works/palladium/10.jpg", tags: ["Scaled layout", "3D views", "Storage planning"], out: "A layout and 3D views you can walk through" },
+  { i: "/works/atmosphere/02.jpg", tags: ["Real samples", "Shutters & finishes", "Hardware"], out: "An itemised, fixed quote you sign off" },
+  { i: "/works/casa-rivera/05.jpg", tags: ["Precision cutting", "Edge banding", "Workshop assembly"], out: "Modules built to the millimetre in our workshop" },
+  { i: "/works/globcon/11.jpg", tags: ["Installation", "Alignment & clean-up", "Care walkthrough"], out: "A finished room, handed over with warranty" },
+][i] }));
 
 export const services: Service[] = [
   {
@@ -178,12 +187,13 @@ type Project = {
   quote: { t: string; by: string };
 };
 
-export const workCats = ["All", "Kitchen", "Wardrobe", "Weekend Home", "Studio", "Bedroom", "Complete Interior"];
 
-// Project photos live in public/works/<slug>/. Videos still stream from the Framer CDN until we decide where to host them.
+// Project photos live in public/works/<slug>/. Films stream from media.thefurn.co.
 const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
 const workJpg = (slug: string, f: string) => `/works/${slug}/${f}.jpg`;
-const framerVideo = (id: string) => `https://framerusercontent.com/assets/${id}.mp4`;
+// Project films: full-quality originals from the client Drive, served from our media server
+// ?v=2: new cache key, so Cloudflare never serves an old cached 404 from before the HD upload
+const film = (path: string) => `${MEDIA}/works/${path}.mp4?v=2`;
 
 export const projects: Project[] = [
   {
@@ -191,7 +201,7 @@ export const projects: Project[] = [
     d: "A calm L-shaped kitchen in matte sage and oak, with tall pantry units and a hidden appliance wall.",
     i: work("serene-art", "cover"), gallery: [work("serene-art", "01"), work("serene-art", "02")],
     service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
-    video: framerVideo("FWHAhyyOSgbKU9VI8Kr8t24Vjqs"), insta: "https://www.instagram.com/thefurn.co/p/DJbIoDIP_BB/",
+    video: film("serene-art/hd"), insta: "https://www.instagram.com/thefurn.co/p/DJbIoDIP_BB/",
     overview: "A young family wanted a kitchen that felt as calm as the rest of their apartment, without losing any storage.",
     challenge: "The old kitchen had open shelves that collected clutter, a fridge blocking the window and no space for a microwave or oven.",
     solution: "We moved the fridge into a tall unit run, added a concealed appliance wall and switched to handle-less sage shutters with oak accents.",
@@ -204,7 +214,7 @@ export const projects: Project[] = [
     d: "An open island kitchen built for family cooking, with marble tops and warm under-cabinet lighting.",
     i: work("island-axis", "cover"), gallery: [work("island-axis", "01"), work("island-axis", "02")],
     service: "Furniture", credits: [{ n: "Ar. Smit Vaghasiya", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
-    video: framerVideo("XH2g3jqGiFE6GGwagMxmteLYVJI"), insta: "https://www.instagram.com/p/DGKlXmMPRR2/",
+    video: film("island-axis/hd"), insta: "https://www.instagram.com/p/DGKlXmMPRR2/",
     overview: "A large family that cooks together every evening wanted a kitchen where four people could work at once.",
     challenge: "A closed kitchen layout separated the cooks from the dining area, and the single counter run caused constant crowding.",
     solution: "We opened the wall into an island layout with a prep sink on the island and a breakfast counter for the children.",
@@ -217,7 +227,7 @@ export const projects: Project[] = [
     d: "A walk-in wardrobe with fluted glass shutters, lit display shelves and a central dresser island.",
     i: work("aestra", "cover"), gallery: [work("aestra", "01"), work("aestra", "02")],
     service: "Furniture", credits: [{ n: "Ar. Ajay Panchal", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
-    video: framerVideo("kxxGdJUdZVMrWWKU441tlDtlUk"), insta: "https://www.instagram.com/p/DU8IdlgjwGR/",
+    video: film("snowera/furn-k1"), insta: "https://www.instagram.com/p/DU8IdlgjwGR/",
     overview: "A couple wanted to turn a spare room into a dressing room that felt like a boutique.",
     challenge: "Two people's clothes, shoes and accessories had to fit into one room without feeling crowded or dark.",
     solution: "We planned storage on three walls, added a central dresser island and used fluted glass shutters with warm strip lighting.",
@@ -230,7 +240,7 @@ export const projects: Project[] = [
     d: "A full 3BHK interior in soft beige tones, from the living room panelling to every bedroom wardrobe.",
     i: work("beige-bailey", "cover"), gallery: [work("beige-bailey", "01"), work("beige-bailey", "02")],
     service: "Furniture", credits: [{ n: "Ar. Shushil Patel", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
-    video: framerVideo("wanXm9qlznHdZpjqYbmxt2tI"), insta: "https://www.instagram.com/thefurn.co/p/DHYM00sv46Q/",
+    video: film("beige-bailey/hd"), insta: "https://www.instagram.com/thefurn.co/p/DHYM00sv46Q/",
     overview: "A new 3BHK handed over bare, with a family moving in from another city in three months.",
     challenge: "Every room needed furniture, ceilings and lighting on a fixed deadline, coordinated remotely.",
     solution: "We designed the whole home around one beige and walnut palette and ran civil, electrical and furniture work in parallel.",
@@ -243,7 +253,7 @@ export const projects: Project[] = [
     d: "A dramatic living room with an arched charcoal TV wall, floating console and lit display niches.",
     i: work("noir-arc", "cover"), gallery: [work("noir-arc", "01"), work("noir-arc", "02")],
     service: "Furniture", credits: [{ n: "Pravaah Design Studio", r: "Architect" }, { n: "Rohan Patel", r: "Visual Team" }],
-    video: framerVideo("6AkmefHQcO6NCjNDnRzyoi1mw"), insta: "https://www.instagram.com/p/DV_DBmej_pv/",
+    video: film("casa-rivera/srp8"), insta: "https://www.instagram.com/p/DV_DBmej_pv/",
     overview: "The owners wanted a living room with presence: somewhere to host friends and watch films.",
     challenge: "Wires, speakers and set-top boxes were everywhere, and the long wall felt empty.",
     solution: "We built a charcoal arched TV wall with hidden wiring, a floating console and backlit niches for their collection.",
@@ -256,7 +266,7 @@ export const projects: Project[] = [
     d: "A soft ivory bedroom with an upholstered headboard wall, storage bed and hidden study desk.",
     i: work("ivory", "cover"), gallery: [work("ivory", "01"), work("ivory", "02")],
     service: "Furniture", credits: [],
-    video: framerVideo("oHbCncnjtjMSDSJ4J0gpjKmW4"), insta: "https://www.instagram.com/thefurn.co/p/DW_c986j038/",
+    video: film("atmosphere/green"), insta: "https://www.instagram.com/thefurn.co/p/DW_c986j038/",
     overview: "A master bedroom that needed to be restful, but also hold a work-from-home desk.",
     challenge: "The room was small, and a desk would have made it feel like an office.",
     solution: "We designed a fold-away study unit inside the wardrobe line and a hydraulic storage bed to free up floor space.",
@@ -269,7 +279,7 @@ export const projects: Project[] = [
     d: "A two-storey villa mixing raw concrete finishes with warm oak furniture and custom joinery.",
     i: work("concrete-canvas", "cover"), gallery: [work("concrete-canvas", "01"), work("concrete-canvas", "02")],
     service: "Furniture", credits: [{ n: "Kardhavya Architect", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
-    video: framerVideo("PyPJ0XFSveLtmCZImSPRzNVYM0"), insta: "https://www.instagram.com/thefurn.co/p/DXRehk_D7tf/",
+    video: film("concrete-canvas/hd"), insta: "https://www.instagram.com/thefurn.co/p/DXRehk_D7tf/",
     overview: "An architect-designed villa whose owners wanted interiors that matched its bold concrete shell.",
     challenge: "Concrete can feel cold; the family wanted warmth without hiding the architecture.",
     solution: "We paired micro-concrete surfaces with oak joinery, soft textiles and layered lighting across both floors.",
@@ -295,7 +305,7 @@ export const projects: Project[] = [
     d: "Our own studio in Surat, where every material, finish and module is on display.",
     i: work("studio-furn", "cover"), gallery: [work("studio-furn", "01"), work("studio-furn", "02")],
     service: "Furniture", credits: [{ n: "Id. Vipul Dodiya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
-    video: framerVideo("vjPulICJPvOgUwCvX8eI0OdMO0"), insta: "https://www.instagram.com/thefurn.co/reel/DTu4lVUjylt/",
+    video: film("studio-furn/hd"), insta: "https://www.instagram.com/thefurn.co/reel/DTu4lVUjylt/",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
@@ -447,4 +457,11 @@ export const testimonials: { quote: string; name: string; role: string; slug: st
   { quote: "From the first site visit to the last handle, everything arrived exactly as drawn. The kitchen finally works the way we cook.", name: "Sample client", role: "Modular kitchen", slug: "atmosphere", sample: true },
   { quote: "Every shutter and shelf was measured for our home. Nothing feels off-the-shelf, and the finish is spotless.", name: "Sample client", role: "Weekend home", slug: "avadh-ayuska", sample: true },
   { quote: "They finished on the date they promised and cleaned up as if they had never been there.", name: "Sample client", role: "Modular kitchen", slug: "casa-rivera", sample: true },
+];
+
+// Works filter: every category that has at least one project, biggest first, so new categories appear on their own
+export const workCats: { c: string; n: number }[] = [
+  { c: "All", n: projects.length },
+  ...Object.entries(projects.reduce<Record<string, number>>((m, p) => ({ ...m, [p.cat]: (m[p.cat] ?? 0) + 1 }), {}))
+    .sort((a, b) => b[1] - a[1]).map(([c, n]) => ({ c, n })),
 ];

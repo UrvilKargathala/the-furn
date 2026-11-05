@@ -2,9 +2,10 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, useMotionValueEvent, type MotionValue } from "motion/react";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, motion, useScroll, useTransform, ease } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, motion, useScroll, useTransform, ease, MotionPic } from "../fx";
 import { img, MEDIA } from "../data";
 import { Label, Heading, Arrow, Nav, Footer } from "../ui";
+import { Pic } from "../pic";
 
 // ponytail: placeholder studio content, replace with real team, awards and history
 const numbers = [
@@ -43,13 +44,6 @@ const awards = [
   { y: "2023", t: "Craftsmanship Award", o: "Indian Furniture Council" },
 ];
 
-const roles = [
-  { t: "Interior Designer", m: ["Full-time", "Ahmedabad", "2–4 yrs"] },
-  { t: "3D Visualiser", m: ["Full-time", "Ahmedabad", "1–3 yrs"] },
-  { t: "Site Supervisor", m: ["Full-time", "Surat", "3+ yrs"] },
-  { t: "Sales Consultant", m: ["Full-time", "Vadodara", "1–3 yrs"] },
-];
-
 // Full-screen pinned photo; the big number swaps as you scroll through (primedecor)
 function Numbers() {
   const ref = useRef<HTMLElement>(null);
@@ -61,8 +55,9 @@ function Numbers() {
     <section ref={ref} className="relative" style={{ height: `${numbers.length * 90}vh` }}>
       <div className="sticky top-0 h-svh overflow-hidden bg-ink text-ivory">
         { }
-        <motion.img src={img("1600566753190-17f0baa2a6c3", 2400)} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <MotionPic preload src={img("1600566753190-17f0baa2a6c3", 2400)} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
         <div className="relative flex h-full flex-col justify-between p-6 pt-28 md:p-12 md:pt-32">
+          
           <Label dark>In numbers</Label>
           <div className="grid items-end gap-8 md:grid-cols-[1.4fr_1fr]">
             <AnimatePresence mode="wait">
@@ -148,8 +143,7 @@ function Riser({ r, k, p }: { r: (typeof risers)[number]; k: number; p: MotionVa
   const rotate = useTransform(p, [start, start + 0.55], [0, r.r]);
   return (
     <motion.div style={{ y, rotate, left: r.x }} className="absolute top-1/2 aspect-[4/5] w-36 overflow-hidden shadow-2xl md:w-56">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(r.i, 600)} alt="" className="h-full w-full object-cover" />
+      <Pic src={img(r.i, 600)} alt="" sizes="20vw" className="h-full w-full object-cover" />
     </motion.div>
   );
 }
@@ -168,6 +162,7 @@ export function StudioView() {
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
         <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-12 md:px-12 md:pb-16">
+          
           <Label dark>Our Studio</Label>
           <h1 className="mt-6 text-[12vw] leading-[0.92] font-bold tracking-[-0.04em] md:text-[6.5vw]">
             <span className="block"><SplitText text="Crafting homes" /></span>
@@ -188,6 +183,7 @@ export function StudioView() {
       <section className="px-5 py-24 md:px-12 md:py-36">
         <div className="grid gap-10 md:grid-cols-[1fr_2.4fr]">
           <div className="space-y-6 text-sm">
+            
             <Label>Who we are</Label>
             <Reveal><p className="text-ink/50">Based in</p><p className="font-semibold">Ahmedabad, India</p></Reveal>
             <Reveal delay={0.1}><p className="text-ink/50">Since</p><p className="font-semibold">2014 – Present</p></Reveal>
@@ -204,6 +200,7 @@ export function StudioView() {
 
       {/* Mission & vision (lunarch / raumora) */}
       <section className="px-5 py-28 md:px-12">
+        
         <Label>Our foundation</Label>
         <Heading text="What drives" accent="every project" />
         <div className="mt-16 grid gap-6 md:grid-cols-2">
@@ -214,8 +211,7 @@ export function StudioView() {
             <Reveal key={c.h} delay={k * 0.15}>
               <article className="group overflow-hidden bg-sand">
                 <div className="aspect-[16/10] overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img(c.i, 1400)} alt="" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
+                  <Pic src={img(c.i, 1400)} alt="" sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
                 </div>
                 <div className="p-8 md:p-10">
                   <h3 className="text-3xl font-semibold tracking-tight md:text-4xl">{c.h}</h3>
@@ -229,6 +225,7 @@ export function StudioView() {
 
       {/* Principles (prismae) */}
       <section className="bg-ink px-5 py-24 text-ivory md:px-12 md:py-32">
+        
         <Label dark>Principles</Label>
         <Heading text="The ideas that shape" accent="every space" dark />
         <div className="mt-16 grid gap-px overflow-hidden bg-ivory/10 sm:grid-cols-2 lg:grid-cols-4">
@@ -246,6 +243,7 @@ export function StudioView() {
       <section className="px-5 py-28 md:px-12">
         <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
           <div className="md:sticky md:top-32 md:self-start">
+            
             <Label>Our journey</Label>
             <Heading text="Moments that" accent="shaped us" />
           </div>
@@ -264,8 +262,7 @@ export function StudioView() {
             <Reveal key={m.n} delay={i * 0.1} className={i % 2 ? "md:mt-16" : ""}>
               <div className="group">
                 <div className="aspect-[3/4] overflow-hidden bg-sand">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img(m.i, 800)} alt={m.n} className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                  <Pic src={img(m.i, 800)} alt={m.n} sizes="(min-width: 768px) 25vw, 50vw" className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold md:text-xl">{m.n}</h3>
                 <p className="text-sm text-ink/60">{m.r}</p>
@@ -277,6 +274,7 @@ export function StudioView() {
 
       {/* Awards (stux): rows fill with colour on hover */}
       <section className="px-5 pb-28 md:px-12">
+        
         <Label>Recognition</Label>
         <Heading text="Honoured for" accent="our craft" />
         <ul className="mt-14 border-t border-ink/15">
@@ -292,34 +290,6 @@ export function StudioView() {
             </Reveal>
           ))}
         </ul>
-      </section>
-
-      {/* Careers (homespaceid) */}
-      <section className="bg-sand px-5 py-24 md:px-12 md:py-32">
-        <div className="grid gap-12 md:grid-cols-[1fr_1.6fr]">
-          <div>
-            <Label>Careers</Label>
-            <Heading text="Join the" accent="studio team" />
-            <Reveal><p className="mt-6 max-w-sm text-ink/70">We&apos;re always looking for people who love good design and better craftsmanship.</p></Reveal>
-          </div>
-          <ul className="space-y-3">
-            {roles.map((r, i) => (
-              <Reveal key={r.t} delay={i * 0.08}>
-                <li>
-                  <a href={`mailto:careers@thefurn.in?subject=${encodeURIComponent(r.t)}`} className="group flex flex-wrap items-center justify-between gap-4 bg-ivory p-6 transition-shadow duration-500 hover:shadow-xl md:p-8">
-                    <div>
-                      <h3 className="text-xl font-semibold tracking-tight md:text-2xl">{r.t}</h3>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {r.m.map((m) => <span key={m} className="rounded-full border border-ink/15 px-3 py-1 text-xs">{m}</span>)}
-                      </div>
-                    </div>
-                    <span className="flex items-center gap-3 text-sm font-semibold"><RollText>Apply now</RollText><Arrow className="bg-ink text-ivory" /></span>
-                  </a>
-                </li>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
       </section>
 
       <FinalCta />

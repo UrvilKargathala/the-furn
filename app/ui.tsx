@@ -5,11 +5,33 @@ import { useMotionValueEvent } from "motion/react";
 import { Reveal, SplitText, RollText, ParallaxImg, motion, useScroll, ease } from "./fx";
 import { img, links, services } from "./data";
 
+export const PHONE = { label: "+91 99256 18895", tel: "tel:+919925618895" };
+export const WHATSAPP = "https://wa.me/919925618895?text=" + encodeURIComponent("Hi The Furn, I'd like to talk about my home.");
+
+const phoneIcon = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" /></svg>;
+const waIcon = (c = "h-6 w-6") => <svg viewBox="0 0 24 24" fill="currentColor" className={c} aria-hidden><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.4 12.3c-.2.5-1.1 1-1.6 1-.4.1-.9.1-2.9-.7-2.4-1-4-3.4-4.1-3.6-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z" /></svg>;
+
+// Floating WhatsApp button, phones only (desktop visitors have the nav and CTA)
+export function WhatsAppFab() {
+  return (
+    <a href={WHATSAPP} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"
+      className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition-transform active:scale-95 md:hidden">
+      {waIcon("h-7 w-7")}
+    </a>
+  );
+}
+import { Pic } from "./pic";
+
+// Section tag: a tiny brass bench mark (from the logo), the label in spaced small caps,
+// and a hairline that draws itself out when the section scrolls into view
 export function Label({ children, dark = false }: { children: string; dark?: boolean }) {
   return (
     <Reveal>
-      <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] ${dark ? "border-ivory/20 text-ivory/70" : "border-ink/15 text-ink/60"}`}>
-        <span className="h-1.5 w-1.5 rounded-full bg-brass" />{children}
+      <span className={`inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] ${dark ? "text-ivory/75" : "text-ink/60"}`}>
+        <Mark className="h-3 w-auto shrink-0 text-brass" />
+        <span>{children}</span>
+        <motion.span aria-hidden className="h-px w-14 origin-left bg-brass/70"
+          initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 1.1, ease, delay: 0.25 }} />
       </span>
     </Reveal>
   );
@@ -103,7 +125,8 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
             <li key={t}><Link href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></Link></li>
           ))}
         </ul>
-        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="ml-auto grid h-11 w-11 place-items-center md:hidden">
+        <a href={PHONE.tel} aria-label={`Call us on ${PHONE.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 md:hidden">{phoneIcon}</a>
+        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid h-11 w-11 place-items-center md:hidden">
           <span className="relative block h-3 w-6">
             <span className={`absolute left-0 h-0.5 w-6 bg-current transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
             <span className={`absolute left-0 h-0.5 bg-current transition-all duration-300 ${open ? "top-1.5 w-6 -rotate-45" : "top-3 w-4"}`} />
@@ -116,6 +139,10 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
         {links.map(([t, h]) => (
           <Link key={t} href={h} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-lg font-medium hover:bg-ivory/10">{t}</Link>
         ))}
+        <div className="mt-2 grid grid-cols-2 gap-2 border-t border-ivory/10 pt-3">
+          <a href={PHONE.tel} className="flex items-center justify-center gap-2 rounded-full bg-brass px-4 py-3 font-semibold text-ink">{phoneIcon}Call us</a>
+          <a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-full border border-ivory/30 px-4 py-3 font-semibold">{waIcon("h-5 w-5")}WhatsApp</a>
+        </div>
       </motion.div>
       </div>
     </motion.header>
@@ -128,6 +155,7 @@ export function Cta() {
       <div className="relative overflow-hidden bg-ink px-6 py-24 text-center text-ivory md:py-36">
         <ParallaxImg src={img("1565538810643-b5bdb714032a", 2400)} alt="" className="absolute inset-0 opacity-40" />
         <div className="relative">
+          
           <Label dark>Start your project</Label>
           <h2 className="mx-auto mt-6 max-w-4xl text-5xl leading-[1] font-bold tracking-tight md:text-8xl">
             <SplitText text="Let's build your" /><SplitText text="dream space." className="text-stone" delay={0.2} />
@@ -136,7 +164,7 @@ export function Cta() {
             <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
-              <a href="https://wa.me/919925618895" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
+              <a href={WHATSAPP} target="_blank" rel="noreferrer" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
             </div>
           </Reveal>
         </div>
@@ -161,44 +189,43 @@ export function Footer() {
   ];
   return (
     <footer>
-      <div className="relative overflow-hidden bg-ink px-5 pt-16 pb-6 text-ivory md:px-12 md:pt-20">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/works/globcon/11.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <div className="relative overflow-hidden bg-ink px-5 pt-16 pb-24 text-ivory md:px-12 md:pt-20 md:pb-6">
+        <Pic src="/works/globcon/11.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink/35" />
         <div className="relative">
-          <div className="grid gap-14 md:grid-cols-[1.3fr_2fr]">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_2fr] lg:gap-14">
             <Reveal>
-              <p className="max-w-md text-2xl leading-snug font-medium tracking-tight md:text-3xl">Tailored modular furniture, designed and built for the way you live.</p>
-              <p className="mt-12 text-sm font-semibold tracking-[0.25em] uppercase">Follow us</p>
+              <p className="max-w-md text-2xl leading-snug font-medium tracking-tight md:text-3xl lg:max-w-sm">Tailored modular furniture, designed and built for the way you live.</p>
+              <p className="mt-10 text-sm font-semibold tracking-[0.25em] uppercase lg:mt-12">Follow us</p>
               <ul className="mt-5 flex flex-wrap gap-3">
                 {social.map((s) => (
                   <li key={s.n}>
                     <a href={s.href} target="_blank" rel="noreferrer" aria-label={s.n} title={s.n}
-                      className="grid h-16 w-16 place-items-center rounded-2xl bg-ivory/10 backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:bg-brass hover:text-ink">{s.icon}</a>
+                      className="grid h-12 w-12 place-items-center rounded-2xl md:h-14 md:w-14 bg-ivory/10 backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:bg-brass hover:text-ink">{s.icon}</a>
                   </li>
                 ))}
               </ul>
             </Reveal>
-            <div className="grid gap-10 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-[0.8fr_1.1fr_1.5fr] md:gap-10">
               <Reveal delay={0.1}>
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Menu</p>
-                <ul className="space-y-3 text-lg">
+                <ul className="space-y-3 text-base md:text-lg">
                   {links.map(([t, h]) => <li key={t}><Link href={h} className="group text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Services</p>
-                <ul className="space-y-3 text-lg">
+                <ul className="space-y-3 text-base md:text-lg">
                   {services.map((s) => <li key={s.slug}><Link href={`/services/${s.slug}`} className="group text-ivory/85 hover:text-ivory"><RollText>{s.t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
-              <Reveal delay={0.3}>
+              <Reveal delay={0.3} className="col-span-2 md:col-span-1">
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Contact</p>
                 <ul className="space-y-5">
                   {contact.map(([k, v, href]) => (
                     <li key={k}>
                       <p className="text-sm text-ivory/50">{k}</p>
-                      <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-1 block text-lg leading-snug text-ivory/90 hover:text-ivory">{v}</a>
+                      <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-1 block text-base leading-snug break-words text-ivory/90 hover:text-ivory md:text-lg">{v}</a>
                     </li>
                   ))}
                 </ul>
@@ -206,7 +233,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-20 flex flex-wrap justify-between gap-4 border-t border-ivory/15 pt-6 text-sm text-ivory/60">
+          <div className="mt-16 flex flex-col gap-2 border-t sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 md:mt-20 border-ivory/15 pt-6 text-sm text-ivory/60">
             <span>© 2026 The Furn. All rights reserved.</span>
             <span>Tailored Modular Furniture · Surat, India</span>
           </div>

@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import { SmoothScroll, Reveal, SplitText, RollText, motion, ease } from "../fx";
 import { budgets, enquiryTypes } from "../data";
 import { Label, Arrow, Nav, Footer } from "../ui";
+import { Pic } from "../pic";
 
 type Option = { v: string; t: string; hint?: string };
 
@@ -166,6 +167,26 @@ const info: [string, string, string?][] = [
   ["Hours", "Monday to Saturday, 10 am to 7 pm"],
 ];
 
+// Reassurance right above the form. TODO: put the real warranty length here once confirmed (e.g. "10-year warranty").
+const trust: [string, string][] = [
+  ["We reply within 24 hours", "A real person calls you back, Monday to Saturday."],
+  ["Written warranty", "Every module is covered, with care guidance at handover."],
+  ["Surat and across Gujarat", "Free site visit and measurement in our service area."],
+];
+
+function Trust() {
+  return (
+    <ul className="mb-10 grid gap-2 sm:mb-12 sm:grid-cols-3 sm:gap-3">
+      {trust.map(([t, d]) => (
+        <li key={t} className="sm:bg-sand/60 sm:p-4">
+          <span className="flex items-center gap-2 text-sm font-semibold sm:text-base"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brass text-[11px] text-ink">✓</span>{t}</span>
+          <span className="mt-1 hidden text-sm text-ink/60 sm:block">{d}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function ContactView() {
   return (
     <main>
@@ -173,24 +194,28 @@ export function ContactView() {
       <Nav light />
 
       {/* Photo first: one of our own projects behind the heading */}
-      <section className="relative h-[80svh] overflow-hidden bg-ink text-ivory">
+      <section className="relative h-[56svh] overflow-hidden bg-ink text-ivory md:h-[80svh]">
         <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/works/avadh-ayuska/02.jpg" alt="Living room designed and built by The Furn" className="h-full w-full object-cover" />
+          <Pic preload src="/works/avadh-ayuska/02.jpg" alt="Living room designed and built by The Furn" className="h-full w-full object-cover" />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-ink/45" />
         <div className="relative z-10 flex h-full flex-col justify-end p-6 pb-12 md:p-12 md:pb-16">
+          
           <Label dark>Contact us</Label>
           <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
             <span className="block"><SplitText text="Let's talk about" /></span>
             <span className="block text-stone"><SplitText text="your space." delay={0.2} /></span>
           </h1>
+          <button type="button" onClick={() => document.getElementById("enquiry")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+            className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-brass px-5 py-2.5 text-sm font-semibold text-ink md:hidden">
+            Fill the form <span aria-hidden>↓</span>
+          </button>
         </div>
       </section>
 
-      <section className="px-5 py-20 md:px-12 md:py-28">
+      <section id="enquiry" className="scroll-mt-20 px-5 py-14 md:px-12 md:py-28">
         <div className="grid gap-16 md:grid-cols-[1fr_1.7fr] md:gap-20">
-          <Reveal>
+          <Reveal className="order-2 md:order-none">
             <p className="max-w-sm text-lg text-ink/70">Tell us about your home and your budget. We&apos;ll call you to plan a free site visit, then measure, design and quote with no obligation.</p>
             <dl className="mt-12">
               {info.map(([k, v, href]) => (
@@ -201,7 +226,7 @@ export function ContactView() {
               ))}
             </dl>
           </Reveal>
-          <Reveal delay={0.15}><Form /></Reveal>
+          <Reveal delay={0.15} className="order-1 md:order-none"><Trust /><Form /></Reveal>
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, useInView } from "motion/react";
 import { Reveal, SplitText, RollText, motion, ease } from "./fx";
 import { getProject, testimonials } from "./data";
+import { Pic } from "./pic";
 import { Label } from "./ui";
 
 const SLIDE_MS = 8000;
@@ -44,6 +45,7 @@ export function Testimonials() {
     <section id="testimonials" className="px-5 py-28 md:px-12 md:py-40" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
+          
           <Label>Client stories</Label>
           <h2 className="mt-6 text-5xl leading-[0.95] font-bold tracking-[-0.04em] md:text-8xl">
             <span className="block"><SplitText text="Words from the" /></span>
@@ -85,8 +87,7 @@ export function Testimonials() {
             <AnimatePresence initial={false}>
               {p && (
                 <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.i} alt={p.n} className="h-full w-full object-cover" />
+                  <Pic src={p.i} alt={p.n} sizes="(min-width: 768px) 40vw, 90vw" className="h-full w-full object-cover" />
                   {p.video && <ClientVideo src={p.video} poster={p.i} />}
                 </motion.div>
               )}

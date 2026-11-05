@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { motion, useScroll, useTransform, useInView, animate, useMotionValue, useSpring } from "motion/react";
+import { Pic } from "./pic";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -43,7 +44,7 @@ export function SplitText({ text, className = "", delay = 0, play }: { text: str
   return (
     <motion.span className={className} aria-label={text} initial="hidden" {...trigger}>
       {text.split(" ").map((w, i) => (
-        <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.12em] align-bottom">
+        <span key={i} aria-hidden className="-mb-[0.18em] inline-block overflow-hidden pb-[0.3em] align-bottom">
           <motion.span className="inline-block" variants={word} custom={i}>{w}&nbsp;</motion.span>
         </span>
       ))}
@@ -98,8 +99,7 @@ export function ParallaxImg({ src, alt, className = "" }: { src: string; alt: st
   return (
     <motion.div ref={ref} className={`overflow-hidden ${className}`} initial={{ clipPath: "inset(100% 0 0 0)" }}
       whileInView={{ clipPath: "inset(0% 0 0 0)" }} viewport={{ once: true }} transition={{ duration: 1.3, ease }}>
-      { }
-      <motion.img src={src} alt={alt} style={{ y, scale: 1.18 }} className="h-full w-full object-cover" />
+      <motion.div style={{ y, scale: 1.18 }} className="h-full w-full"><Pic src={src} alt={alt} className="h-full w-full object-cover" /></motion.div>
     </motion.div>
   );
 }
@@ -113,7 +113,7 @@ export function WideningImage({ src, alt }: { src: string; alt: string }) {
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   return (
     <div ref={ref} className="h-[85svh] w-full overflow-hidden">
-      <motion.img src={src} alt={alt} style={{ scale, y }} className="h-full w-full object-cover" />
+      <motion.div style={{ scale, y }} className="h-full w-full"><Pic src={src} alt={alt} preload className="h-full w-full object-cover" /></motion.div>
     </div>
   );
 }
@@ -145,5 +145,8 @@ export function HoverCursor() {
     </motion.div>
   );
 }
+
+// next/image that motion can animate (scale, y, opacity)
+export const MotionPic = motion.create(Pic);
 
 export { motion, useScroll, useTransform, ease };

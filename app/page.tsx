@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, RollText, motion, useScroll, useTransform, ease } from "./fx";
+import { SmoothScroll, Reveal, SplitText, RollText, motion, useScroll, useTransform, ease, MotionPic } from "./fx";
 import { MEDIA, services, getProject } from "./data";
 
 // Featured on the home page: projects that have our own photos and videos
@@ -10,6 +10,7 @@ const projects = ["avadh-ayuska", "atmosphere", "casa-rivera", "snowera"].map((s
 import { Label, Heading, Loader, Nav, Cta, Footer } from "./ui";
 import { OurStory } from "./story";
 import { Testimonials } from "./testimonials";
+import { Pic } from "./pic";
 
 // Hero background: one remix film of our projects in the old site's order, cut from the original
 // HD/4K videos and cropped to 1920x1080 (37 s, on the media server). `at` = second each project starts.
@@ -67,8 +68,8 @@ function Services() {
                     </Link>
                   </div>
                   <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 0.9, ease, delay: 0.1 }}
-                    className="aspect-[16/8] overflow-hidden">
-                    <motion.img src={s.i} alt={s.t} initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
+                    className="aspect-[16/8] max-h-[min(52svh,34rem)] w-full overflow-hidden">
+                    <MotionPic src={s.i} alt={s.t} sizes="(min-width: 768px) 50vw, 100vw" initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
                   </motion.div>
                 </div>
               </motion.div>
@@ -97,8 +98,7 @@ function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i: number
   return (
     <div className="sticky top-0 flex h-svh items-center">
       <motion.a href={`/works/${p.slug}`} data-cursor="View" style={{ scale }} className="group relative block h-svh w-full origin-top overflow-hidden bg-ink text-ivory">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
+        <Pic src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
         {p.video && <Reel src={p.video} poster={p.gallery[0]} />}
@@ -158,7 +158,7 @@ function Process() {
             <motion.div key={st.t} className="absolute inset-0" initial={false}
               animate={{ clipPath: i <= active ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }} transition={{ duration: 1, ease }}>
               { }
-              <motion.img src={st.i} alt={st.t} initial={false} animate={{ scale: i === active ? 1 : 1.15 }} transition={{ duration: 1.4, ease }}
+              <MotionPic src={st.i} alt={st.t} sizes="(min-width: 768px) 50vw, 100vw" initial={false} animate={{ scale: i === active ? 1 : 1.15 }} transition={{ duration: 1.4, ease }}
                 className="h-full w-full object-cover" />
             </motion.div>
           ))}
@@ -188,8 +188,7 @@ function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; i: numb
       <div className="mt-6 flex flex-wrap gap-2">
         {st.tags.map((t) => <span key={t} className="rounded-full bg-sand px-4 py-2 text-sm font-medium">{t}</span>)}
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={st.i} alt={st.t} className="mt-8 aspect-[4/3] w-full object-cover md:hidden" />
+      <Pic src={st.i} alt={st.t} className="mt-8 aspect-[4/3] w-full object-cover md:hidden" />
     </div>
   );
 }
@@ -226,10 +225,6 @@ function Hero({ ready }: { ready: boolean }) {
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
           <div>
-            <motion.p initial={{ opacity: 0, y: 24 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 1, ease, delay: 0.4 }}
-              className="mb-5 flex items-center gap-3 text-xs font-semibold tracking-[0.3em] uppercase text-ivory/80">
-              <span className="h-px w-10 bg-brass" />The Furn · Tailored Modular Furniture
-            </motion.p>
             <AnimatePresence mode="wait">
               <motion.div key={active} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.5, ease }}>
                 <h1 className="text-[9vw] leading-[0.95] font-bold tracking-[-0.04em] md:text-[6vw]">
@@ -298,6 +293,7 @@ export default function Home() {
       <section id="process" className="px-5 pt-28 pb-24 md:px-12">
         <Label>How it Works</Label><Heading text="From first sketch" accent="to final handover" />
         <Process />
+        <Reveal><Link href="/process" className="group mt-12 inline-flex items-center gap-2 font-semibold"><RollText>See the full process</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span></Link></Reveal>
       </section>
 
       <Cta />

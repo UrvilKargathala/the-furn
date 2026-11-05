@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import type { MotionValue } from "motion/react";
-import { Reveal, SplitText, ScrollWords, Counter, motion, useScroll, useTransform } from "./fx";
+import { Reveal, SplitText, ScrollWords, Counter, motion, useScroll, useTransform, MotionPic } from "./fx";
 import { Label } from "./ui";
 
 // Story chapters: photos swap and copy changes as the section scrolls (pinned, like prismae / pietra)
@@ -24,7 +24,7 @@ function ChapterImg({ src, i, n, p }: { src: string; i: number; n: number; p: Mo
   const scale = useTransform(p, [i / n - 0.1, (i + 1) / n], [1.3, 1.05]);
   return (
     <motion.div style={{ clipPath: clip }} className="absolute inset-0">
-      <motion.img src={src} alt="" style={{ scale }} className="h-full w-full object-cover" />
+      <MotionPic src={src} alt="" sizes="(min-width: 768px) 50vw, 100vw" style={{ scale }} className="h-full w-full object-cover" />
     </motion.div>
   );
 }

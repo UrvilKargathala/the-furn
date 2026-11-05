@@ -5,6 +5,7 @@ import { useInView, type MotionValue } from "motion/react";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, Counter, RollText, WideningImage, motion, useScroll, useTransform, ease } from "../fx";
 import { img, services } from "../data";
 import { Label, Heading, Arrow, Nav, Cta, Footer } from "../ui";
+import { Pic } from "../pic";
 
 type Service = (typeof services)[number];
 
@@ -13,8 +14,7 @@ function ServiceCard({ s, i }: { s: Service; i: number }) {
   return (
     <Link href={`/services/${s.slug}`} className="group block">
       <div className="relative aspect-[4/3] overflow-hidden bg-ink">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={img(s.i, 1400)} alt={s.t} className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
+        <Pic src={img(s.i, 1400)} alt={s.t} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 top-1/2 -translate-y-1/2 scale-y-0 overflow-hidden bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100">
           <div className="flex w-max animate-marquee gap-8 text-sm font-semibold tracking-[0.15em] whitespace-nowrap uppercase">
             {Array.from({ length: 12 }, (_, k) => <span key={k}>Explore {s.t} <span className="text-brass">↗</span></span>)}
@@ -48,6 +48,7 @@ function WhyUs() {
     <section ref={ref} className="relative h-[320vh]">
       <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-5 pt-16">
         <div className="mb-10 text-center">
+          
           <Label>Why The Furn</Label>
           <h2 className="mt-5 text-4xl font-semibold tracking-tight md:text-6xl">Built differently, <span className="text-ink/35">built to last</span></h2>
         </div>
@@ -83,6 +84,7 @@ export function ServicesView() {
 
       {/* Hero: big split title + stats row (primedecor) */}
       <section className="px-5 pt-40 pb-20 md:px-12 md:pt-48">
+        
         <Label>Our Services</Label>
         <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
           <span className="block"><SplitText text="Tailored furniture" /></span>
@@ -135,8 +137,7 @@ function Options({ s }: { s: Service }) {
           {s.options.map((o, i) => (
             <motion.div key={o.t} className="absolute inset-0" initial={false}
               animate={{ opacity: i === active ? 1 : 0, scale: i === active ? 1 : 1.08 }} transition={{ duration: 0.9, ease }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img(o.i)} alt={o.t} className="h-full w-full object-cover" />
+              <Pic src={img(o.i)} alt={o.t} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover" />
             </motion.div>
           ))}
           <div className="absolute bottom-6 left-6 rounded-full bg-ivory/90 px-5 py-2 text-sm font-semibold backdrop-blur">{s.options[active].t}</div>
@@ -157,8 +158,7 @@ function OptionCard({ o, i, active, onActive }: { o: Service["options"][number];
       <span className="text-sm font-semibold text-brass">0{i + 1}</span>
       <h3 className="mt-3 text-3xl font-semibold tracking-tight md:text-5xl">{o.t}</h3>
       <p className="mt-4 max-w-md text-ink/70">{o.d}</p>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={img(o.i, 1000)} alt={o.t} className="mt-6 aspect-[4/3] w-full object-cover md:hidden" />
+      <Pic src={img(o.i, 1000)} alt={o.t} className="mt-6 aspect-[4/3] w-full object-cover md:hidden" />
     </div>
   );
 }
@@ -197,6 +197,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       <section className="px-5 py-28 md:px-12 md:py-40">
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <div className="md:sticky md:top-32 md:self-start">
+            
             <Label>Overview</Label>
             <Heading text="Designed around" accent="everyday living" />
           </div>
@@ -232,6 +233,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
 
       {/* Options */}
       <section className="mt-3 bg-sand px-5 py-28 md:px-12">
+        
         <Label>Styles & options</Label>
         <Heading text="Choose what" accent="fits your space" />
         <Options s={s} />
@@ -239,6 +241,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
 
       {/* Process: numbered grid (lunarch) */}
       <section className="px-5 py-28 md:px-12">
+        
         <Label>Our process</Label>
         <Heading text="A clear path from" accent="idea to install" />
         <div className="mt-16 grid gap-px overflow-hidden bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
