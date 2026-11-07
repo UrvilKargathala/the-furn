@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "../seo";
 import { StudioView } from "./view";
 
-export const metadata: Metadata = {
-  title: "Studio | The Furn",
-  description: "The design-and-build studio behind The Furn: our story, team, principles and journey.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "About Our Surat Interior Studio",
+  description: "The Furn is a Surat design-and-build studio founded in 2014: our story, principles and the in-house workshop behind every kitchen and wardrobe.",
+  path: "/studio",
+});
 
 export default function Page() {
   return <StudioView />;

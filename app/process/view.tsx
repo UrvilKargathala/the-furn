@@ -1,8 +1,7 @@
-"use client";
 import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, RollText, ParallaxImg } from "../fx";
-import { processDetail } from "../data";
-import { Label, Heading, Arrow, Nav, Cta, Footer } from "../ui";
+import { processDetail } from "../content/services";
+import { Label, Heading, Arrow, Nav, Cta, Footer, PageHero } from "../ui";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -46,11 +45,7 @@ export function ProcessView() {
       <Nav light />
 
       <section className="px-5 pt-40 pb-16 md:px-12 md:pt-48">
-        <Label>Our process</Label>
-        <h1 className="mt-6 text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[8vw]">
-          <span className="block"><SplitText text="From first sketch" /></span>
-          <span className="block text-ink/35"><SplitText text="to final handover" delay={0.2} /></span>
-        </h1>
+        <PageHero label="Our process" lines={["From first sketch", "to final handover"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-8">
           <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">Five clear steps, one team the whole way. You always know what happens next, what it costs and when your room will be ready.</p></Reveal>
           <Reveal delay={0.5}>

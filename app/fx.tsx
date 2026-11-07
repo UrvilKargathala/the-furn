@@ -12,9 +12,17 @@ if (typeof window !== "undefined") window.addEventListener("popstate", () => { b
 
 export function SmoothScroll() {
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.09 });
-    if (!backForward && !location.hash) { window.scrollTo(0, 0); lenis.scrollTo(0, { immediate: true, force: true }); }
+    if (!backForward && !location.hash) window.scrollTo(0, 0);
     backForward = false;
+    // Respect "reduce motion": keep the browser's native scrolling
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({
+      lerp: 0.075,           // lower = longer, softer glide after each wheel step
+      wheelMultiplier: 0.9,  // slightly calmer mouse wheel
+      touchMultiplier: 1.4,  // trackpads and touch keep their natural speed
+      smoothWheel: true,
+      anchors: true,         // in-page links (#contact etc.) glide instead of jumping
+    });
     let id = requestAnimationFrame(function raf(t) {
       lenis.raf(t);
       id = requestAnimationFrame(raf);
@@ -22,6 +30,14 @@ export function SmoothScroll() {
     return () => { cancelAnimationFrame(id); lenis.destroy(); };
   }, []);
   return null;
+}
+
+// Scroll progress for scroll-linked animation (parallax, sticky sections), lightly damped
+// so movement glides with the page instead of stepping with each wheel tick.
+export function useSmoothScroll(options: Parameters<typeof useScroll>[0]) {
+  const { scrollYProgress, ...rest } = useScroll(options);
+  const smooth = useSpring(scrollYProgress, { stiffness: 180, damping: 32, mass: 0.35, restDelta: 0.0005 });
+  return { ...rest, scrollYProgress: smooth };
 }
 
 // Fade + rise when scrolled into view
@@ -55,7 +71,7 @@ export function SplitText({ text, className = "", delay = 0, play }: { text: str
 // Paragraph whose words light up as you scroll through it
 export function ScrollWords({ text, className = "" }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "end 45%"] });
+  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start 85%", "end 45%"] });
   const words = text.split(" ");
   return (
     <p ref={ref} className={className}>
@@ -94,12 +110,12 @@ export function RollText({ children }: { children: string }) {
 // Image wipes in with a clip reveal and drifts on scroll
 export function ParallaxImg({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
   return (
     <motion.div ref={ref} className={`overflow-hidden ${className}`} initial={{ clipPath: "inset(100% 0 0 0)" }}
       whileInView={{ clipPath: "inset(0% 0 0 0)" }} viewport={{ once: true }} transition={{ duration: 1.3, ease }}>
-      <motion.div style={{ y, scale: 1.18 }} className="h-full w-full"><Pic src={src} alt={alt} className="h-full w-full object-cover" /></motion.div>
+      <motion.div style={{ y, scale: 1.18 }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} className="h-full w-full object-cover" /></motion.div>
     </motion.div>
   );
 }
@@ -107,13 +123,13 @@ export function ParallaxImg({ src, alt, className = "" }: { src: string; alt: st
 // Full-width photo band
 export function WideningImage({ src, alt }: { src: string; alt: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start end", "end start"] });
   // Full width edge to edge; the photo slowly zooms out and drifts as you scroll past
   const scale = useTransform(scrollYProgress, [0, 1], [1.25, 1.05]);
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   return (
     <div ref={ref} className="h-[85svh] w-full overflow-hidden">
-      <motion.div style={{ scale, y }} className="h-full w-full"><Pic src={src} alt={alt} preload className="h-full w-full object-cover" /></motion.div>
+      <motion.div style={{ scale, y }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} preload className="h-full w-full object-cover" /></motion.div>
     </div>
   );
 }
@@ -144,6 +160,14 @@ export function HoverCursor() {
       </motion.div>
     </motion.div>
   );
+}
+
+// Mount animation usable from server components (props must be plain data)
+export function Appear({ children, className, initial, animate, transition }: {
+  children?: React.ReactNode; className?: string;
+  initial: Record<string, number | string>; animate: Record<string, number | string>; transition?: Record<string, unknown>;
+}) {
+  return <motion.div className={className} initial={initial} animate={animate} transition={transition}>{children}</motion.div>;
 }
 
 // next/image that motion can animate (scale, y, opacity)

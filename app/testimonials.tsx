@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, useInView } from "motion/react";
 import { Reveal, SplitText, RollText, motion, ease } from "./fx";
-import { getProject, testimonials } from "./data";
+import { getProject, testimonials } from "./content/projects";
 import { Pic } from "./pic";
 import { Label } from "./ui";
 

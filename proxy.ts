@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { projects, services } from "./app/data";
+import { projects } from "./app/content/projects";
+import { services } from "./app/content/services";
 
 // Project and service pages stream (so navigation is instant), which means a missing slug can't
 // change the status code mid-render. Catch unknown slugs here first so they get a real 404.

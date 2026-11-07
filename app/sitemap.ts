@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { projects, services } from "./data";
-
-export const SITE = "https://www.thefurn.co";
+import { SITE_URL as SITE } from "./content/site";
+import { projects } from "./content/projects";
+import { services } from "./content/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const page = (path: string, priority: number, changeFrequency: "weekly" | "monthly" = "monthly") =>
-    ({ url: `${SITE}${path}`, changeFrequency, priority });
+  const abs = (src: string) => (src.startsWith("http") ? src : `${SITE}${src}`);
+  const page = (path: string, priority: number, changeFrequency: "weekly" | "monthly" = "monthly", images: string[] = []) =>
+    ({ url: `${SITE}${path}`, changeFrequency, priority, ...(images.length && { images: images.map(abs) }) });
   return [
     page("", 1, "weekly"),
     page("/works", 0.9, "weekly"),
@@ -13,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page("/studio", 0.7),
     page("/process", 0.7),
     page("/contact", 0.8),
-    ...services.map((s) => page(`/services/${s.slug}`, 0.8)),
-    ...projects.map((p) => page(`/works/${p.slug}`, 0.7)),
+    ...services.map((s) => page(`/services/${s.slug}`, 0.8, "monthly", s.i.startsWith("/") ? [s.i] : [])),
+    ...projects.map((p) => page(`/works/${p.slug}`, 0.7, "monthly", [p.i, ...p.gallery].slice(0, 10))),
   ];
 }

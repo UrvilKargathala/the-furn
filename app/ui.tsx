@@ -1,12 +1,11 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useMotionValueEvent } from "motion/react";
 import { Reveal, SplitText, RollText, ParallaxImg, motion, useScroll, ease } from "./fx";
-import { img, links, services } from "./data";
+import { img, links, CONTACT } from "./content/site";
+import { services } from "./content/services";
 
-export const PHONE = { label: "+91 99256 18895", tel: "tel:+919925618895" };
-export const WHATSAPP = "https://wa.me/919925618895?text=" + encodeURIComponent("Hi The Furn, I'd like to talk about my home.");
 
 const phoneIcon = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" /></svg>;
 const waIcon = (c = "h-6 w-6") => <svg viewBox="0 0 24 24" fill="currentColor" className={c} aria-hidden><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.4 12.3c-.2.5-1.1 1-1.6 1-.4.1-.9.1-2.9-.7-2.4-1-4-3.4-4.1-3.6-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z" /></svg>;
@@ -14,7 +13,7 @@ const waIcon = (c = "h-6 w-6") => <svg viewBox="0 0 24 24" fill="currentColor" c
 // Floating WhatsApp button, phones only (desktop visitors have the nav and CTA)
 export function WhatsAppFab() {
   return (
-    <a href={WHATSAPP} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"
+    <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"
       className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition-transform active:scale-95 md:hidden">
       {waIcon("h-7 w-7")}
     </a>
@@ -46,11 +45,33 @@ export function Heading({ text, accent, dark = false }: { text: string; accent?:
   );
 }
 
+// The diagonal arrow used on every link and card
+export function ArrowIcon({ size = 12 }: { size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 12 12" fill="none" aria-hidden><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>;
+}
+
+// Arrow in a small ivory circle (button end-caps)
 export function Arrow({ className = "" }: { className?: string }) {
   return (
     <span className={`grid h-8 w-8 place-items-center rounded-full bg-ivory text-ink transition-transform duration-500 group-hover:rotate-45 ${className}`}>
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.6" /></svg>
+      <ArrowIcon />
     </span>
+  );
+}
+
+// Big two-line page title (second line muted) with an optional section tag above it.
+// One component so every page hero keeps the same size, spacing and animation.
+export function PageHero({ label, lines, dark = false, as: Tag = "h1", large = false }: {
+  label?: string; lines: [string, string]; dark?: boolean; as?: "h1" | "h2"; large?: boolean;
+}) {
+  return (
+    <>
+      {label && <Label dark={dark}>{label}</Label>}
+      <Tag className={`${label ? "mt-6" : ""} text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] ${large ? "md:text-[9vw]" : "md:text-[8vw]"}`}>
+        <span className="block"><SplitText text={lines[0]} /></span>
+        <span className={`block ${dark ? "text-stone" : "text-ink/35"}`}><SplitText text={lines[1]} delay={0.2} /></span>
+      </Tag>
+    </>
   );
 }
 
@@ -125,7 +146,7 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
             <li key={t}><Link href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></Link></li>
           ))}
         </ul>
-        <a href={PHONE.tel} aria-label={`Call us on ${PHONE.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 md:hidden">{phoneIcon}</a>
+        <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 md:hidden">{phoneIcon}</a>
         <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid h-11 w-11 place-items-center md:hidden">
           <span className="relative block h-3 w-6">
             <span className={`absolute left-0 h-0.5 w-6 bg-current transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
@@ -140,8 +161,8 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
           <Link key={t} href={h} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-lg font-medium hover:bg-ivory/10">{t}</Link>
         ))}
         <div className="mt-2 grid grid-cols-2 gap-2 border-t border-ivory/10 pt-3">
-          <a href={PHONE.tel} className="flex items-center justify-center gap-2 rounded-full bg-brass px-4 py-3 font-semibold text-ink">{phoneIcon}Call us</a>
-          <a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-full border border-ivory/30 px-4 py-3 font-semibold">{waIcon("h-5 w-5")}WhatsApp</a>
+          <a href={CONTACT.phone.href} className="flex items-center justify-center gap-2 rounded-full bg-brass px-4 py-3 font-semibold text-ink">{phoneIcon}Call us</a>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-full border border-ivory/30 px-4 py-3 font-semibold">{waIcon("h-5 w-5")}WhatsApp</a>
         </div>
       </motion.div>
       </div>
@@ -164,7 +185,7 @@ export function Cta() {
             <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
-              <a href={WHATSAPP} target="_blank" rel="noreferrer" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
+              <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
             </div>
           </Reveal>
         </div>
@@ -174,18 +195,24 @@ export function Cta() {
 }
 
 const social: { n: string; href: string; icon: React.ReactNode }[] = [
-  { n: "Instagram", href: "https://www.instagram.com/thefurn.co/", icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-6 w-6"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg> },
+  { n: "Instagram", href: CONTACT.instagram.href, icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-6 w-6"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg> },
   { n: "Pinterest", href: "https://in.pinterest.com/thefurnprojects/", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M12 2C6.5 2 3 5.7 3 9.8c0 2.5 1.4 4.6 3.4 5.2.3.1.5 0 .6-.3l.3-1.1c.1-.3 0-.4-.2-.6-.6-.7-.9-1.6-.9-2.8 0-3.1 2.3-5.3 5.5-5.3 3 0 4.7 1.8 4.7 4.3 0 3.2-1.4 5.9-3.6 5.9-1.2 0-2-1-1.7-2.2.3-1.4 1-3 1-4 0-.9-.5-1.7-1.5-1.7-1.2 0-2.1 1.2-2.1 2.9 0 1 .4 1.8.4 1.8l-1.4 5.9c-.3 1.3 0 3.1 0 3.3 0 .1.2.2.3.1.1-.1 1.4-1.8 1.9-3.5l.7-2.7c.4.7 1.4 1.3 2.5 1.3 3.3 0 5.5-3 5.5-7C21 5 17.5 2 12 2z" /></svg> },
   { n: "LinkedIn", href: "https://www.linkedin.com/company/the-furn-projects/", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M4.98 3.5a2.5 2.5 0 11-.01 5 2.5 2.5 0 01.01-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4v-11z" /></svg> },
-  { n: "WhatsApp", href: "https://wa.me/919925618895", icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.4 12.3c-.2.5-1.1 1-1.6 1-.4.1-.9.1-2.9-.7-2.4-1-4-3.4-4.1-3.6-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z" /></svg> },
+  { n: "WhatsApp", href: CONTACT.whatsapp, icon: <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6"><path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3zm4.4 12.3c-.2.5-1.1 1-1.6 1-.4.1-.9.1-2.9-.7-2.4-1-4-3.4-4.1-3.6-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z" /></svg> },
 ];
 
 // Dark footer over one of our own kitchen photos (like a card, matching the CTA above it)
+// Current year, read in the browser (pages are prerendered, so the server can't know "today")
+const noSubscribe = () => () => {};
+function CurrentYear() {
+  return useSyncExternalStore(noSubscribe, () => String(new Date().getFullYear()), () => "");
+}
+
 export function Footer() {
-  const contact: [string, string, string?][] = [
-    ["Phone", "+91 99256 18895", "tel:+919925618895"],
-    ["Email", "info@thefurn.co", "mailto:info@thefurn.co"],
-    ["Address", "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam, Surat, Gujarat 394510", "https://www.google.com/maps/search/?api=1&query=220%2C%20219%20Sumerru%20Business%20Corner%2C%20Pal%20Gam%2C%20Surat%20394510"],
+  const contact: [string, string, string][] = [
+    ["Phone", CONTACT.phone.label, CONTACT.phone.href],
+    ["Email", CONTACT.email, `mailto:${CONTACT.email}`],
+    ["Address", CONTACT.address, CONTACT.maps],
   ];
   return (
     <footer>
@@ -234,7 +261,7 @@ export function Footer() {
           </div>
 
           <div className="mt-16 flex flex-col gap-2 border-t sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 md:mt-20 border-ivory/15 pt-6 text-sm text-ivory/60">
-            <span>© 2026 The Furn. All rights reserved.</span>
+            <span>© <CurrentYear /> The Furn. All rights reserved.</span>
             <span>Tailored Modular Furniture · Surat, India</span>
           </div>
           <p aria-hidden className="mt-8 bg-gradient-to-b from-ivory via-ivory/70 to-transparent bg-clip-text text-center text-[17vw] leading-[0.82] font-bold tracking-[-0.05em] whitespace-nowrap text-transparent select-none">THE FURN</p>

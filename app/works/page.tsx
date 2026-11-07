@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { pageMeta } from "../seo";
+import { projects } from "../content/projects";
 import { WorksView } from "./view";
 
-export const metadata: Metadata = {
-  title: "Works | The Furn",
-  description: "Modular kitchens, wardrobes and complete interiors designed and built by The Furn.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Our Work: Kitchens, Wardrobes & Home Interiors",
+  description: `${projects.length} real kitchens, wardrobes, villas and complete interiors designed and built by The Furn across Surat and Gujarat, with photos and project films.`,
+  path: "/works",
+});
 
 export default function Page() {
   return <WorksView />;

@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { Mark } from "./ui";
+import { CONTACT } from "./content/site";
 
 export default function Error({ error, retry }: { error: unknown; retry: () => void }) {
   useEffect(() => { console.error(error); }, [error]);
@@ -14,7 +15,7 @@ export default function Error({ error, retry }: { error: unknown; retry: () => v
         <p className="mx-auto mt-6 max-w-md text-ivory/75">This page didn&apos;t load properly. Try again, or reach us directly on WhatsApp.</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <button onClick={() => retry()} className="rounded-full bg-brass px-6 py-3 font-semibold">Try again</button>
-          <a href="https://wa.me/919925618895" className="rounded-full border border-ivory/30 px-6 py-3 font-semibold">WhatsApp us</a>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="rounded-full border border-ivory/30 px-6 py-3 font-semibold">WhatsApp us</a>
         </div>
       </div>
     </main>

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "../seo";
 import { ProcessView } from "./view";
 
-export const metadata: Metadata = {
-  title: "Our process | The Furn",
-  description: "How we work, from the first site visit and 3D design to factory production, installation and handover.",
-};
+export const metadata: Metadata = pageMeta({
+  title: "Our Process: From Site Visit to Handover",
+  description: "How The Furn works in five steps: free site visit, layout and 3D design, fixed itemised quote, workshop production, and installation by our own team.",
+  path: "/process",
+});
 
 export default function Page() {
   return <ProcessView />;

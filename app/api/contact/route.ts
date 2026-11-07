@@ -1,4 +1,4 @@
-import { budgets, enquiryTypes } from "../../data";
+import { budgets, enquiryTypes } from "../../content/site";
 
 type Body = Record<string, unknown>;
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
