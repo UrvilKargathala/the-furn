@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, type MotionValue } from "motion/react";
+import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import { Reveal, SplitText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "../fx";
 import { projects, workCats } from "../content/projects";
 import { Label, ArrowIcon } from "../ui";
@@ -12,7 +12,7 @@ import type { Project } from "../content/types";
 export function WorkCard({ p, big }: { p: Project; big: boolean }) {
   return (
     <Link href={`/works/${p.slug}`} data-cursor="View" className="group block">
-      <div className={`relative overflow-hidden bg-ink ${big ? "aspect-[16/10]" : "aspect-[4/5]"}`}>
+      <div className={`relative aspect-[4/3] overflow-hidden bg-ink ${big ? "md:aspect-[16/10]" : "md:aspect-[4/5]"}`}>
         <Pic src={p.i} alt={p.n} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110" />
         <div aria-hidden className="absolute inset-x-0 bottom-0 translate-y-full bg-ivory py-3 text-ink transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-y-0">
           <div className="flex w-max animate-marquee gap-8 text-sm font-semibold tracking-[0.15em] whitespace-nowrap uppercase">
@@ -103,7 +103,7 @@ export function ProjectVideo({ p }: { p: Project }) {
       <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
         {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
           <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
-            <Film src={src} />
+            <Film src={src} poster={p.i} />
           </Reveal>
         ))}
       </div>
@@ -112,14 +112,23 @@ export function ProjectVideo({ p }: { p: Project }) {
 }
 
 // One film: fills its cell edge to edge; tall clips are trimmed to a screen-high frame on desktop, wide clips show whole
-export function Film({ src }: { src: string }) {
+// The film only starts downloading when it's about to scroll into view, plays while on screen
+// and pauses when scrolled away (saves mobile data: project pages can have three 4K films)
+export function Film({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [wide, setWide] = useState(false);
+  const near = useInView(ref, { margin: "300px 0px", once: true });
+  const onScreen = useInView(ref, { amount: 0.35 });
   const check = () => { const v = ref.current; if (v?.videoWidth) setWide(v.videoWidth > v.videoHeight); };
   useEffect(check, []); // metadata may load before hydration, when onLoadedMetadata isn't attached yet
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || !near) return;
+    if (onScreen) v.play().catch(() => {}); else v.pause();
+  }, [near, onScreen]);
   return (
-    <video ref={ref} src={src} autoPlay muted loop playsInline controls preload="metadata" onLoadedMetadata={check}
-      className={`block w-full ${wide ? "h-auto" : "h-auto object-cover md:h-[85svh]"}`} />
+    <video ref={ref} src={near ? src : undefined} poster={poster} muted loop playsInline controls preload={near ? "metadata" : "none"} onLoadedMetadata={check}
+      className={`block w-full bg-ink ${wide ? "h-auto" : "aspect-[9/16] h-auto object-cover md:aspect-auto md:h-[85svh]"}`} />
   );
 }
 
@@ -162,6 +171,27 @@ export function Lightbox({ images, name, index, onIndex }: { images: string[]; n
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+// Phones only: an even 2-column grid of equal photos; with an odd count the first photo spans the row
+export function PhoneGallery({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
+  const odd = p.gallery.length % 2 === 1;
+  return (
+    <section className="px-5 py-20 md:hidden">
+      <div className="pb-8"><Label>Gallery</Label></div>
+      <div className="grid grid-cols-2 gap-3">
+        {p.gallery.map((g, i) => {
+          const wide = odd && i === 0;
+          return (
+            <Reveal key={g + i} delay={(i % 2) * 0.06} className={wide ? "col-span-2" : ""}>
+              <Pic src={g} alt={`${p.n}, photo ${i + 1}`} width={800} height={1000} sizes={wide ? "100vw" : "50vw"} data-cursor="Expand" onClick={() => onOpen(i)}
+                className={`w-full cursor-zoom-in bg-sand object-cover ${wide ? "aspect-[4/3]" : "aspect-[4/5]"}`} />
+            </Reveal>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -219,7 +249,10 @@ export function ProjectGallery({ p }: { p: Project }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <>
-      {p.gallery.length > 6 ? <GalleryGrid p={p} onOpen={setOpen} /> : <Gallery p={p} onOpen={setOpen} />}
+      <PhoneGallery p={p} onOpen={setOpen} />
+      <div className="hidden md:block">
+        {p.gallery.length > 6 ? <GalleryGrid p={p} onOpen={setOpen} /> : <Gallery p={p} onOpen={setOpen} />}
+      </div>
       <Lightbox images={p.gallery} name={p.n} index={open} onIndex={setOpen} />
     </>
   );

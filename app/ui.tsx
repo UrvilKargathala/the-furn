@@ -14,7 +14,7 @@ const waIcon = (c = "h-6 w-6") => <svg viewBox="0 0 24 24" fill="currentColor" c
 export function WhatsAppFab() {
   return (
     <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with us on WhatsApp"
-      className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition-transform active:scale-95 md:hidden">
+      className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition-transform active:scale-95 lg:hidden">
       {waIcon("h-7 w-7")}
     </a>
   );
@@ -89,7 +89,7 @@ export function Mark({ className = "" }: { className?: string }) {
 
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link href="/" className="flex items-center text-ivory">
+    <Link href="/" className="flex min-h-11 items-center text-ivory">
       <Mark className={`w-auto transition-all duration-500 ${compact ? "h-6" : "h-7 md:h-9"}`} />
       <span className="sr-only">The Furn</span>
     </Link>
@@ -137,17 +137,17 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
   const clear = atTop && !light;
   return (
     <motion.header initial={{ y: -100, opacity: 0 }} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
-      className="fixed inset-x-0 top-0 z-50">
+      className="pointer-events-none fixed inset-x-0 top-0 z-50">
       <div className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${hidden ? "-translate-y-[150%]" : "translate-y-0"}`}>
-      <nav className={`flex w-full items-center justify-between gap-10 border-b px-5 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:px-12 ${clear ? "border-transparent bg-transparent py-4" : "border-ivory/10 bg-ink/80 py-3 backdrop-blur-xl"}`}>
+      <nav className={`pointer-events-auto flex w-full items-center justify-between gap-10 border-b px-5 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:px-12 ${clear ? "border-transparent bg-transparent py-4" : "border-ivory/10 bg-ink/80 py-3 backdrop-blur-xl"}`}>
         <Logo />
-        <ul className={`hidden items-center gap-1 transition-all duration-500 md:flex text-[17px]`}>
+        <ul className={`hidden items-center gap-1 transition-all duration-500 lg:flex text-[17px]`}>
           {links.map(([t, h]) => (
             <li key={t}><Link href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></Link></li>
           ))}
         </ul>
-        <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 md:hidden">{phoneIcon}</a>
-        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid h-11 w-11 place-items-center md:hidden">
+        <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 lg:hidden">{phoneIcon}</a>
+        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid h-11 w-11 place-items-center lg:hidden">
           <span className="relative block h-3 w-6">
             <span className={`absolute left-0 h-0.5 w-6 bg-current transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
             <span className={`absolute left-0 h-0.5 bg-current transition-all duration-300 ${open ? "top-1.5 w-6 -rotate-45" : "top-3 w-4"}`} />
@@ -156,7 +156,7 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
       </nav>
       <motion.div initial={false} animate={open ? { opacity: 1, y: 0, pointerEvents: "auto" } : { opacity: 0, y: -12, pointerEvents: "none" }}
         transition={{ duration: 0.4, ease }}
-        className="border-b border-ivory/10 bg-ink/90 p-3 text-ivory backdrop-blur-xl md:hidden">
+        className="border-b border-ivory/10 bg-ink/90 p-3 text-ivory backdrop-blur-xl lg:hidden">
         {links.map(([t, h]) => (
           <Link key={t} href={h} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3 text-lg font-medium hover:bg-ivory/10">{t}</Link>
         ))}
@@ -236,14 +236,14 @@ export function Footer() {
             <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-[0.8fr_1.1fr_1.5fr] md:gap-10">
               <Reveal delay={0.1}>
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Menu</p>
-                <ul className="space-y-3 text-base md:text-lg">
-                  {links.map(([t, h]) => <li key={t}><Link href={h} className="group text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
+                <ul className="space-y-0.5 text-base md:text-lg">
+                  {links.map(([t, h]) => <li key={t}><Link href={h} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Services</p>
-                <ul className="space-y-3 text-base md:text-lg">
-                  {services.map((s) => <li key={s.slug}><Link href={`/services/${s.slug}`} className="group text-ivory/85 hover:text-ivory"><RollText>{s.t}</RollText></Link></li>)}
+                <ul className="space-y-0.5 text-base md:text-lg">
+                  {services.map((s) => <li key={s.slug}><Link href={`/services/${s.slug}`} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{s.t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.3} className="col-span-2 md:col-span-1">
@@ -252,7 +252,7 @@ export function Footer() {
                   {contact.map(([k, v, href]) => (
                     <li key={k}>
                       <p className="text-sm text-ivory/50">{k}</p>
-                      <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-1 block text-base leading-snug break-words text-ivory/90 hover:text-ivory md:text-lg">{v}</a>
+                      <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-0.5 flex min-h-11 items-center text-base leading-snug break-words text-ivory/90 hover:text-ivory md:text-lg">{v}</a>
                     </li>
                   ))}
                 </ul>

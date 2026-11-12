@@ -51,7 +51,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <Reveal>
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/50">
-            <Link href="/works" className="hover:text-ink">Works</Link><span>/</span><span className="text-ink">{p.n}</span>
+            <Link href="/works" className="inline-flex min-h-11 items-center hover:text-ink">Works</Link><span>/</span><span className="text-ink">{p.n}</span>
           </nav>
         </Reveal>
         <div className="mt-6 grid items-end gap-8 md:grid-cols-[1.5fr_1fr]">
@@ -119,7 +119,7 @@ export function WorkDetailView({ p }: { p: Project }) {
               ))}
               {p.insta && <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
                 <dt className="text-ink/50">See more</dt>
-                <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText><ArrowIcon /></a></dd>
+                <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex min-h-11 items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText><ArrowIcon /></a></dd>
               </div>}
             </dl>
           </Reveal>

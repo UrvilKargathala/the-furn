@@ -65,7 +65,7 @@ export function Services() {
                     <div className="mt-5 flex flex-wrap gap-2">
                       {s.tags.map((t) => <span key={t} className="rounded-full border border-ink/15 px-3 py-1 text-xs">{t}</span>)}
                     </div>
-                    <Link href={`/services/${s.slug}`} className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold">
+                    <Link href={`/services/${s.slug}`} className="group mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold">
                       <RollText>View service</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
                     </Link>
                   </div>
@@ -99,13 +99,13 @@ export function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i:
   const scale = useTransform(progress, [i / n, 1], [1, 1 - (n - 1 - i) * 0.05]);
   const dim = useTransform(progress, [i / n, 1], [0, (n - 1 - i) * 0.15]);
   return (
-    <div className="sticky top-0 flex h-svh items-center">
-      <motion.a href={`/works/${p.slug}`} data-cursor="View" style={{ scale }} className="group relative block h-svh w-full origin-top overflow-hidden bg-ink text-ivory">
+    <div className="sticky top-0 flex h-[85svh] items-center md:h-svh">
+      <motion.a href={`/works/${p.slug}`} data-cursor="View" style={{ scale }} className="group relative block h-full w-full origin-top overflow-hidden bg-ink text-ivory">
         <Pic src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
         {p.video && <Reel src={p.video} poster={p.gallery[0]} />}
-        <div className="relative flex h-full flex-col justify-between px-5 pt-28 pb-10 md:px-12 md:pt-32 md:pb-12">
+        <div className="relative flex h-full flex-col justify-between px-5 pt-20 pb-8 md:px-12 md:pt-32 md:pb-12">
           <div className="max-w-xl">
             <span className="text-xs font-semibold tracking-[0.2em] text-ivory/60 uppercase">0{i + 1} / 0{n} · {p.c}</span>
             <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
@@ -242,8 +242,8 @@ export function Hero({ ready }: { ready: boolean }) {
             </AnimatePresence>
           </div>
           {/* Which project is on screen right now */}
-          <Link href={`/works/${now.slug}`} className="group flex items-center gap-3 self-start text-sm text-ivory/80 hover:text-ivory md:self-end">
-            <span className="font-mono tracking-[0.2em]">{String(clip + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+          <Link href={`/works/${now.slug}`} className="group flex min-h-11 items-center gap-3 self-start text-sm text-ivory/80 hover:text-ivory md:self-end">
+            <span className="font-mono tracking-[0.2em] whitespace-nowrap">{String(clip + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
             <span className="h-px w-8 bg-ivory/40" />
             <AnimatePresence mode="wait">
               <motion.span key={now.slug} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.4, ease }} className="font-semibold">{now.n}</motion.span>

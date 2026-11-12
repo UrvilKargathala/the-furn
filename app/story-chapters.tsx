@@ -23,15 +23,15 @@ export function ChapterImg({ src, i, n, p }: { src: string; i: number; n: number
 
 export function ChapterText({ c, i, n, p }: { c: (typeof chapters)[number]; i: number; n: number; p: MotionValue<number> }) {
   const a = i / n, b = (i + 1) / n, first = i === 0, last = i === n - 1;
-  const from = first ? 0 : a - 0.06;
-  const range = [from, a + 0.04, b - 0.08, b - 0.02];
+  // Fade in just after the chapter starts and out just before it ends, so two chapters never show at once
+  const range = [first ? 0 : a + 0.01, first ? 0.001 : a + 0.07, b - 0.09, b - 0.03];
   const opacity = useTransform(p, range, [first ? 1 : 0, 1, 1, last ? 1 : 0]);
   const y = useTransform(p, range, [first ? 0 : 40, 0, 0, last ? 0 : -40]);
   return (
     <motion.div style={{ opacity, y }} className="absolute inset-0 flex flex-col justify-center">
       <span className="font-mono text-sm tracking-[0.2em] text-brass">{c.n} / 0{n}</span>
-      <h3 className="mt-4 text-4xl leading-[1] font-bold tracking-[-0.03em] md:text-7xl">{c.t}</h3>
-      <p className="mt-6 max-w-md text-lg leading-relaxed text-ink/70 md:text-xl">{c.d}</p>
+      <h3 className="mt-3 text-3xl leading-[1.05] font-bold tracking-[-0.03em] md:mt-4 md:text-7xl">{c.t}</h3>
+      <p className="mt-4 max-w-md text-base leading-relaxed text-ink/70 md:mt-6 md:text-xl">{c.d}</p>
     </motion.div>
   );
 }
@@ -41,13 +41,13 @@ export function Chapters() {
   const { scrollYProgress: p } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
   const n = chapters.length;
   return (
-    <div ref={ref} style={{ height: `${n * 95}vh` }} className="relative">
-      <div className="sticky top-0 flex h-svh flex-col justify-center gap-6 px-5 pt-20 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-16 md:px-12 md:pt-0">
-        <div className="relative h-[40svh] overflow-hidden bg-ink md:h-[78svh]">
+    <div ref={ref} className="relative h-[240svh] md:h-[285vh]">
+      <div className="sticky top-0 flex h-svh flex-col justify-center gap-5 px-5 pt-16 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-16 md:px-12 md:pt-0">
+        <div className="relative h-[34svh] shrink-0 overflow-hidden bg-ink md:h-[78svh]">
           {chapters.map((c, i) => <ChapterImg key={c.n} src={c.img} i={i} n={n} p={p} />)}
         </div>
         <div className="flex flex-col gap-6 md:gap-10">
-          <div className="relative h-[36svh] md:h-[52svh]">
+          <div className="relative h-[42svh] md:h-[52svh]">
             {chapters.map((c, i) => <ChapterText key={c.n} c={c} i={i} n={n} p={p} />)}
           </div>
           <div className="h-px w-full bg-ink/15"><motion.div style={{ scaleX: p }} className="h-full origin-left bg-ink" /></div>

@@ -53,19 +53,19 @@ export function ContactView() {
       </section>
 
       <section id="enquiry" className="scroll-mt-20 px-5 py-14 md:px-12 md:py-28">
-        <div className="grid gap-16 md:grid-cols-[1fr_1.7fr] md:gap-20">
-          <Reveal className="order-2 md:order-none">
+        <div className="grid gap-16 lg:grid-cols-[1fr_1.7fr] lg:gap-20">
+          <Reveal className="order-2 lg:order-none">
             <p className="max-w-sm text-lg text-ink/70">Tell us about your home and your budget. We&apos;ll call you to plan a free site visit, then measure, design and quote with no obligation.</p>
             <dl className="mt-12">
               {info.map(([k, v, href]) => (
-                <div key={k} className="flex justify-between gap-6 border-t border-ink/15 py-5">
+                <div key={k} className="flex items-center justify-between gap-6 border-t border-ink/15 py-3">
                   <dt className="text-ink/50">{k}</dt>
-                  <dd className="max-w-[16rem] text-right font-semibold">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="underline-offset-4 hover:underline">{v}</a> : v}</dd>
+                  <dd className="max-w-[16rem] text-right font-semibold md:max-w-md lg:max-w-[16rem]">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="inline-flex min-h-11 items-center justify-end underline-offset-4 hover:underline">{v}</a> : v}</dd>
                 </div>
               ))}
             </dl>
           </Reveal>
-          <Reveal delay={0.15} className="order-1 md:order-none"><Trust /><Form /></Reveal>
+          <Reveal delay={0.15} className="order-1 lg:order-none"><Trust /><Form /></Reveal>
         </div>
       </section>
 

@@ -89,7 +89,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <Reveal>
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/50">
-            <Link href="/services" className="hover:text-ink">Services</Link><span>/</span><span className="text-ink">{s.t}</span>
+            <Link href="/services" className="inline-flex min-h-11 items-center hover:text-ink">Services</Link><span>/</span><span className="text-ink">{s.t}</span>
           </nav>
         </Reveal>
         <h1 className="mt-6 text-[14vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[9vw]"><SplitText text={s.t} /></h1>

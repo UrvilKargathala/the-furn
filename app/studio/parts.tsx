@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, useMotionValueEvent, type MotionValue } from "motion/react";
 import { Reveal, SplitText, RollText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "../fx";
-import { img, CONTACT, STATS } from "../content/site";
+import { img, STATS } from "../content/site";
 import { Label, Arrow } from "../ui";
 import { Pic } from "../pic";
 
@@ -19,7 +19,7 @@ const journey = [
   { y: "2014", t: "The first workshop", d: "Two carpenters and a designer start building kitchens in a 1,200 sq ft shed in Surat." },
   { y: "2017", t: "Modular, in-house", d: "We invest in CNC cutting and edge-banding machines and bring all production under one roof." },
   { y: "2020", t: "Complete interiors", d: "Clients ask for whole homes, so we grow a design team to plan every room together." },
-  { y: "2023", t: "Six cities", d: "Dedicated install teams take The Furn to Surat, Vadodara, Rajkot and beyond." },
+  { y: "2023", t: "Across Gujarat", d: `Dedicated install teams take The Furn to ${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}.` },
   { y: "2026", t: "The Furn studio", d: "A new design studio and material library where clients can touch every finish before choosing." },
 ];
 
@@ -28,7 +28,7 @@ export function Numbers() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
   const [i, setI] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) => setI(Math.min(numbers.length - 1, Math.floor(v * numbers.length))));
+  useMotionValueEvent(scrollYProgress, "change", (v) => setI(Math.max(0, Math.min(numbers.length - 1, Math.floor(v * numbers.length)))));
   const scale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
   return (
     <section ref={ref} className="relative" style={{ height: `${numbers.length * 90}vh` }}>
@@ -91,26 +91,27 @@ export function Milestone({ j, i, p }: { j: (typeof journey)[number]; i: number;
 
 // Photos rise and tilt over a giant wordmark while the CTA stays pinned (raumora)
 export const risers = [
-  { i: "1556912173-3bb406ef7e77", x: "8%", r: -8 },
-  { i: "1616486338812-3dadae4b4ace", x: "62%", r: 6 },
-  { i: "1618221195710-dd6b41faaea6", x: "30%", r: -4 },
-  { i: "1600210492486-724fe5c67fb0", x: "78%", r: 9 },
+  // x = desktop lane; xs = phone/tablet lane. Photos pass behind the heading, never over it
+  { i: "1556912173-3bb406ef7e77", x: "8%", xs: "4%", r: -8 },
+  { i: "1616486338812-3dadae4b4ace", x: "62%", xs: "62%", r: 6 },
+  { i: "1618221195710-dd6b41faaea6", x: "30%", xs: "32%", r: -4 },
+  { i: "1600210492486-724fe5c67fb0", x: "78%", xs: "70%", r: 9 },
 ];
 
 export function FinalCta() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
   return (
-    <section ref={ref} id="contact" className="relative h-[260vh]">
+    <section ref={ref} id="contact" className="relative h-[220vh] md:h-[260vh]">
       <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-5">
         <p aria-hidden className="absolute text-[24vw] leading-none font-bold tracking-[-0.05em] whitespace-nowrap text-ink/[0.06]">THE FURN</p>
         {risers.map((r, k) => <Riser key={r.i} r={r} k={k} p={scrollYProgress} />)}
-        <div className="relative z-10 text-center">
+        <div className="relative z-20 text-center">
           <h2 className="mx-auto max-w-3xl text-5xl leading-[1] font-bold tracking-tight md:text-8xl">
-            <SplitText text="Ready to transform" /><SplitText text="your space?" className="text-ink/35" delay={0.2} />
+            <SplitText text="Ready to transform" /><SplitText text="your space?" className="text-[#a7a5a1]" delay={0.2} />
           </h2>
           <Reveal delay={0.3} className="mt-10 flex flex-wrap justify-center gap-3">
-            <a href={`mailto:${CONTACT.email}`} className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></a>
+            <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></Link>
             <Link href="/works" className="group rounded-full border border-ink/20 bg-ivory/80 px-6 py-3 font-semibold backdrop-blur"><RollText>See our work</RollText></Link>
           </Reveal>
         </div>
@@ -124,8 +125,11 @@ export function Riser({ r, k, p }: { r: (typeof risers)[number]; k: number; p: M
   const y = useTransform(p, [start, start + 0.55], ["70vh", "-90vh"]);
   const rotate = useTransform(p, [start, start + 0.55], [0, r.r]);
   return (
-    <motion.div style={{ y, rotate, left: r.x }} className="absolute top-1/2 aspect-[4/5] w-36 overflow-hidden shadow-2xl md:w-56">
-      <Pic src={img(r.i, 600)} alt="" sizes="20vw" className="h-full w-full object-cover" />
-    </motion.div>
+    <div style={{ "--xs": r.xs, "--x": r.x } as React.CSSProperties}
+      className="absolute top-1/2 z-0 left-[var(--xs)] w-28 lg:left-[var(--x)] lg:w-56">
+      <motion.div style={{ y, rotate }} className="aspect-[4/5] w-full overflow-hidden shadow-2xl">
+        <Pic src={img(r.i, 600)} alt="" sizes="20vw" className="h-full w-full object-cover" />
+      </motion.div>
+    </div>
   );
 }

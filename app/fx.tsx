@@ -36,7 +36,10 @@ export function SmoothScroll() {
 // so movement glides with the page instead of stepping with each wheel tick.
 export function useSmoothScroll(options: Parameters<typeof useScroll>[0]) {
   const { scrollYProgress, ...rest } = useScroll(options);
-  const smooth = useSpring(scrollYProgress, { stiffness: 180, damping: 32, mass: 0.35, restDelta: 0.0005 });
+  const spring = useSpring(scrollYProgress, { stiffness: 180, damping: 32, mass: 0.35, restDelta: 0.0005 });
+  // Always a real number between 0 and 1: sections that turn progress into a list index
+  // (Studio "In numbers", Our Story chapters) must never see -0.001, 1.002 or NaN
+  const smooth = useTransform(spring, (v) => (Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0));
   return { ...rest, scrollYProgress: smooth };
 }
 

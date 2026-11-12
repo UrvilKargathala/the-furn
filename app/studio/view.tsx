@@ -69,7 +69,7 @@ export function StudioView() {
           <div>
             <ScrollWords className="text-3xl leading-tight font-semibold tracking-tight md:text-5xl"
               text="We believe a home should be felt, not just seen. For over a decade we've helped families build kitchens they love cooking in, wardrobes that hold everything, and rooms that balance beauty with real life. No showroom sizes, no shortcuts, no compromise." />
-            <Reveal><Link href="/works" className="group mt-10 inline-flex items-center gap-2 font-semibold"><RollText>See all projects</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span></Link></Reveal>
+            <Reveal><Link href="/works" className="group mt-8 inline-flex min-h-11 items-center gap-2 font-semibold"><RollText>See all projects</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span></Link></Reveal>
           </div>
         </div>
       </section>

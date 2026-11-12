@@ -47,23 +47,23 @@ export function Testimonials() {
         <div>
           
           <Label>Client stories</Label>
-          <h2 className="mt-6 text-5xl leading-[0.95] font-bold tracking-[-0.04em] md:text-8xl">
+          <h2 className="mt-6 text-5xl leading-[0.95] font-bold tracking-[-0.04em] md:text-7xl lg:text-8xl">
             <span className="block"><SplitText text="Words from the" /></span>
             <span className="block text-ink/35"><SplitText text="homes we built." delay={0.2} /></span>
           </h2>
         </div>
       </div>
 
-      <div className="mt-14 grid items-center gap-10 md:mt-20 md:grid-cols-[1.25fr_1fr] md:gap-20">
+      <div className="mt-14 grid items-center gap-10 md:mt-16 md:gap-14 lg:mt-20 lg:grid-cols-[1.25fr_1fr] lg:gap-20">
         <div className="flex flex-col gap-10 md:gap-14">
           <div className="relative">
             <span aria-hidden className="absolute -top-10 -left-1 text-[9rem] leading-none text-brass/30 select-none md:-top-16 md:text-[14rem]">“</span>
             <AnimatePresence mode="wait">
-              <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.7, ease }} className="relative min-h-[14rem] md:min-h-[17rem]">
-                <blockquote className="pt-10 text-3xl leading-[1.12] font-medium tracking-tight md:pt-16 md:text-5xl">{t.quote}</blockquote>
+              <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.7, ease }} className="relative min-h-[14rem] md:min-h-[12rem] lg:min-h-[17rem]">
+                <blockquote className="pt-10 text-3xl leading-[1.12] font-medium tracking-tight md:pt-14 md:text-4xl lg:pt-16 lg:text-5xl">{t.quote}</blockquote>
                 <figcaption className="mt-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brass" />
-                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/55">{t.role}{p ? <> · <Link href={`/works/${p.slug}`} className="group underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
+                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/55">{t.role}{p ? <> · <Link href={`/works/${p.slug}`} className="group inline-flex min-h-11 items-center underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
                 </figcaption>
               </motion.div>
             </AnimatePresence>
@@ -83,11 +83,11 @@ export function Testimonials() {
 
         {/* The project behind the quote: photo wipes in, with the client's film when we have one */}
         <Reveal delay={0.1}>
-          <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden bg-ink md:max-h-[78svh] md:max-w-none md:justify-self-end">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden bg-ink md:aspect-[16/10] md:max-w-none lg:aspect-[4/5] lg:max-h-[78svh] lg:justify-self-end">
             <AnimatePresence initial={false}>
               {p && (
                 <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">
-                  <Pic src={p.i} alt={p.n} sizes="(min-width: 768px) 40vw, 90vw" className="h-full w-full object-cover" />
+                  <Pic src={p.i} alt={p.n} sizes="(min-width: 1024px) 40vw, 90vw" className="h-full w-full object-cover" />
                   {p.video && <ClientVideo src={p.video} poster={p.i} />}
                 </motion.div>
               )}
