@@ -3,7 +3,7 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useMotionValueEvent } from "motion/react";
 import { Reveal, SplitText, RollText, ParallaxImg, motion, useScroll, ease } from "./fx";
-import { img, links, CONTACT } from "./content/site";
+import { links, CONTACT } from "./content/site";
 import { services } from "./content/services";
 
 
@@ -39,8 +39,8 @@ export function Label({ children, dark = false }: { children: string; dark?: boo
 export function Heading({ text, accent, dark = false }: { text: string; accent?: string; dark?: boolean }) {
   return (
     <h2 className={`mt-5 max-w-4xl text-4xl font-semibold leading-[1.05] tracking-tight md:text-7xl ${dark ? "text-ivory" : ""}`}>
-      <SplitText text={text} />
-      {accent && <SplitText text={accent} className={dark ? "text-stone" : "text-ink/35"} delay={0.15} />}
+      <span className="block"><SplitText text={text} /></span>
+      {accent && <span className="block"><SplitText text={accent} className={dark ? "text-stone" : "text-ink/45"} delay={0.15} /></span>}
     </h2>
   );
 }
@@ -69,7 +69,7 @@ export function PageHero({ label, lines, dark = false, as: Tag = "h1", large = f
       {label && <Label dark={dark}>{label}</Label>}
       <Tag className={`${label ? "mt-6" : ""} text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] ${large ? "md:text-[9vw]" : "md:text-[8vw]"}`}>
         <span className="block"><SplitText text={lines[0]} /></span>
-        <span className={`block ${dark ? "text-stone" : "text-ink/35"}`}><SplitText text={lines[1]} delay={0.2} /></span>
+        <span className={`block ${dark ? "text-stone" : "text-ink/45"}`}><SplitText text={lines[1]} delay={0.2} /></span>
       </Tag>
     </>
   );
@@ -143,11 +143,11 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
         <Logo />
         <ul className={`hidden items-center gap-1 transition-all duration-500 lg:flex text-[17px]`}>
           {links.map(([t, h]) => (
-            <li key={t}><Link href={h} className="group block rounded-full px-4 py-2 transition-colors hover:bg-ivory/10"><RollText>{t}</RollText></Link></li>
+            <li key={t}><Link href={h} className={`group block rounded-full transition-colors ${h === "/contact" ? "ml-2 bg-brass px-5 py-2 font-semibold text-ink hover:bg-ivory" : "px-4 py-2 hover:bg-ivory/10"}`}><RollText>{t}</RollText></Link></li>
           ))}
         </ul>
-        <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-ivory/25 lg:hidden">{phoneIcon}</a>
-        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="grid h-11 w-11 place-items-center lg:hidden">
+        <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto hidden h-11 w-11 place-items-center rounded-full border border-ivory/25 md:grid lg:hidden">{phoneIcon}</a>
+        <button onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} className="ml-auto grid h-11 w-11 place-items-center md:ml-0 lg:hidden">
           <span className="relative block h-3 w-6">
             <span className={`absolute left-0 h-0.5 w-6 bg-current transition-all duration-300 ${open ? "top-1.5 rotate-45" : "top-0"}`} />
             <span className={`absolute left-0 h-0.5 bg-current transition-all duration-300 ${open ? "top-1.5 w-6 -rotate-45" : "top-3 w-4"}`} />
@@ -170,16 +170,34 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
   );
 }
 
+// Slim enquiry prompt for the middle of a page (after the Works grid, at the end of a project)
+export function EnquiryBand({ title, text }: { title: string; text: string }) {
+  return (
+    <section className="px-5 py-16 md:px-12 md:py-20">
+      <Reveal className="flex flex-wrap items-center justify-between gap-8 bg-sand p-8 md:p-12">
+        <div>
+          <h2 className="text-3xl font-semibold tracking-tight md:text-5xl">{title}</h2>
+          <p className="mt-3 max-w-xl text-lg text-ink/70">{text}</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a free site visit</RollText><Arrow /></Link>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="group rounded-full border border-ink/25 px-6 py-3 font-semibold"><RollText>WhatsApp us</RollText></a>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 export function Cta() {
   return (
     <section id="contact">
       <div className="relative overflow-hidden bg-ink px-6 py-24 text-center text-ivory md:py-36">
-        <ParallaxImg src={img("1565538810643-b5bdb714032a", 2400)} alt="" className="absolute inset-0 opacity-40" />
+        <ParallaxImg src="/works/casa-rivera/05.jpg" alt="" className="absolute inset-0 opacity-40" />
         <div className="relative">
           
           <Label dark>Start your project</Label>
           <h2 className="mx-auto mt-6 max-w-4xl text-5xl leading-[1] font-bold tracking-tight md:text-8xl">
-            <SplitText text="Let's build your" /><SplitText text="dream space." className="text-stone" delay={0.2} />
+            <span className="block"><SplitText text="Let's build your" /></span><span className="block"><SplitText text="dream space." className="text-stone" delay={0.2} /></span>
           </h2>
           <Reveal delay={0.3}>
             <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
@@ -235,23 +253,23 @@ export function Footer() {
             </Reveal>
             <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-[0.8fr_1.1fr_1.5fr] md:gap-10">
               <Reveal delay={0.1}>
-                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Menu</p>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/65 uppercase">Menu</p>
                 <ul className="space-y-0.5 text-base md:text-lg">
                   {links.map(([t, h]) => <li key={t}><Link href={h} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.2}>
-                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Services</p>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/65 uppercase">Services</p>
                 <ul className="space-y-0.5 text-base md:text-lg">
                   {services.map((s) => <li key={s.slug}><Link href={`/services/${s.slug}`} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{s.t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.3} className="col-span-2 md:col-span-1">
-                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/50 uppercase">Contact</p>
+                <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/65 uppercase">Contact</p>
                 <ul className="space-y-5">
                   {contact.map(([k, v, href]) => (
                     <li key={k}>
-                      <p className="text-sm text-ivory/50">{k}</p>
+                      <p className="text-sm text-ivory/65">{k}</p>
                       <a href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="mt-0.5 flex min-h-11 items-center text-base leading-snug break-words text-ivory/90 hover:text-ivory md:text-lg">{v}</a>
                     </li>
                   ))}
@@ -260,7 +278,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col gap-2 border-t sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 md:mt-20 border-ivory/15 pt-6 text-sm text-ivory/60">
+          <div className="mt-16 flex flex-col gap-2 border-t sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 md:mt-20 border-ivory/15 pt-6 text-sm text-ivory/70">
             <span>© <CurrentYear /> The Furn. All rights reserved.</span>
             <span>Tailored Modular Furniture · Surat, India</span>
           </div>

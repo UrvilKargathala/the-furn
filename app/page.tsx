@@ -15,7 +15,7 @@ export default function Home() {
       <OurStory />
 
       {/* Services: click-to-open accordion */}
-      <section id="services" className=" bg-sand px-5 py-28 md:px-12">
+      <section id="services" className=" bg-sand px-5 py-24 md:px-12 md:py-32">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div><Label>Services</Label><Heading text="Complete solutions" accent="for every room" /></div>
           <Reveal><p className="max-w-xs text-ink/70">Every module is designed in-house and built to your exact measurements.</p></Reveal>
@@ -26,9 +26,9 @@ export default function Home() {
       <Testimonials />
 
       {/* Projects: stacked pinned cards (prismae style) */}
-      <section id="projects" className="py-28">
+      <section id="projects" className="pt-20 pb-28 md:pt-24">
         <div className="flex flex-wrap items-end justify-between gap-6 px-5 md:px-12">
-          <div><Label>Our Works</Label><Heading text="Featured" accent="projects" /></div>
+          <div><Label>Selected work</Label><Heading text="Rooms that tell" accent="our story" /></div>
         </div>
         <FeaturedProjects />
         <Reveal className="mt-12 flex justify-center">
@@ -42,7 +42,7 @@ export default function Home() {
       </section>
 
       {/* Process: steps scroll on the left, pinned photo swaps on the right (prismae style) */}
-      <section id="process" className="px-5 pt-28 pb-24 md:px-12">
+      <section id="process" className="px-5 pt-24 pb-24 md:px-12 md:pt-32 md:pb-32">
         <Label>How it Works</Label><Heading text="From first sketch" accent="to final handover" />
         <Process />
         <Reveal><Link href="/process" className="group mt-12 inline-flex items-center gap-2 font-semibold"><RollText>See the full process</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span></Link></Reveal>

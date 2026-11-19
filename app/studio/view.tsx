@@ -12,20 +12,6 @@ const principles = [
   { t: "Here after handover", d: "A 10-year hardware warranty and a team that picks up the phone when you call." },
 ];
 
-const team = [
-  { n: "Arjun Mehta", r: "Founder & Design Lead", i: "1500648767791-00dcc994a43e" },
-  { n: "Riya Shah", r: "Head of Interiors", i: "1494790108377-be9c29b29330" },
-  { n: "Karan Patel", r: "Production Manager", i: "1506794778202-cad84cf45f1d" },
-  { n: "Neha Desai", r: "Client Experience", i: "1544005313-94ddf0286df2" },
-];
-
-const awards = [
-  { y: "2026", t: "Best Modular Kitchen Studio", o: "Gujarat Interior Awards" },
-  { y: "2025", t: "Excellence in Residential Design", o: "Home & Design Trends" },
-  { y: "2024", t: "Top 10 Interior Brands, Gujarat", o: "Interior Today" },
-  { y: "2023", t: "Craftsmanship Award", o: "Indian Furniture Council" },
-];
-
 export function StudioView() {
   return (
     <main>
@@ -63,8 +49,8 @@ export function StudioView() {
           <div className="space-y-6 text-sm">
             
             <Label>Who we are</Label>
-            <Reveal><p className="text-ink/50">Based in</p><p className="font-semibold">Surat, India</p></Reveal>
-            <Reveal delay={0.1}><p className="text-ink/50">Since</p><p className="font-semibold">2014 – Present</p></Reveal>
+            <Reveal><p className="text-ink/60">Based in</p><p className="font-semibold">Surat, India</p></Reveal>
+            <Reveal delay={0.1}><p className="text-ink/60">Since</p><p className="font-semibold">2014 – Present</p></Reveal>
           </div>
           <div>
             <ScrollWords className="text-3xl leading-tight font-semibold tracking-tight md:text-5xl"
@@ -77,14 +63,14 @@ export function StudioView() {
       <Numbers />
 
       {/* Mission & vision (lunarch / raumora) */}
-      <section className="px-5 py-28 md:px-12">
+      <section className="px-5 py-24 md:px-12 md:py-32">
         
         <Label>Our foundation</Label>
         <Heading text="What drives" accent="every project" />
         <div className="mt-16 grid gap-6 md:grid-cols-2">
           {[
-            { h: "Our mission", p: "To design and build furniture that fits each home perfectly, with honest pricing, in-house quality and a team that stays with you long after handover.", i: "1556911220-bff31c812dba" },
-            { h: "Our vision", p: "To make made-to-measure interiors the norm, not a luxury, so every family can live in a home designed around them.", i: "1618221195710-dd6b41faaea6" },
+            { h: "Our mission", p: "To design and build furniture that fits each home perfectly, with honest pricing, in-house quality and a team that stays with you long after handover.", i: "/works/atmosphere/02.jpg" },
+            { h: "Our vision", p: "To make made-to-measure interiors the norm, not a luxury, so every family can live in a home designed around them.", i: "/works/avadh-ayuska/02.jpg" },
           ].map((c, k) => (
             <Reveal key={c.h} delay={k * 0.15}>
               <article className="group overflow-hidden bg-sand">
@@ -118,7 +104,7 @@ export function StudioView() {
       </section>
 
       {/* Journey timeline (lunarch) */}
-      <section className="px-5 py-28 md:px-12">
+      <section className="px-5 py-24 md:px-12 md:py-32">
         <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
           <div className="md:sticky md:top-32 md:self-start">
             
@@ -127,47 +113,6 @@ export function StudioView() {
           </div>
           <Journey />
         </div>
-      </section>
-
-      {/* Team (stux / raumora): photos warm up from greyscale on hover */}
-      <section className="px-5 pb-28 md:px-12">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div><Label>The team</Label><Heading text="The people" accent="behind every space" /></div>
-          <Reveal><p className="max-w-xs text-ink/70">Designers, makers and fitters who care about the last millimetre as much as you do.</p></Reveal>
-        </div>
-        <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-          {team.map((m, i) => (
-            <Reveal key={m.n} delay={i * 0.1} className={i % 2 ? "md:mt-16" : ""}>
-              <div className="group">
-                <div className="aspect-[3/4] overflow-hidden bg-sand">
-                  <Pic src={img(m.i, 800)} alt={m.n} sizes="(min-width: 768px) 25vw, 50vw" className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold md:text-xl">{m.n}</h3>
-                <p className="text-sm text-ink/60">{m.r}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Awards (stux): rows fill with colour on hover */}
-      <section className="px-5 pb-28 md:px-12">
-        
-        <Label>Recognition</Label>
-        <Heading text="Honoured for" accent="our craft" />
-        <ul className="mt-14 border-t border-ink/15">
-          {awards.map((a, i) => (
-            <Reveal key={a.t} delay={i * 0.06}>
-              <li className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-4 overflow-hidden border-b border-ink/15 px-2 py-6 md:grid-cols-[8rem_1fr_1fr_3rem] md:gap-8 md:px-4 md:py-8">
-                <span className="absolute inset-0 origin-bottom scale-y-0 bg-sand transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100" />
-                <span className="relative w-fit rounded-full bg-brass px-3 py-1 text-xs font-semibold text-ivory">{a.y}</span>
-                <span className="relative text-xl font-semibold tracking-tight md:text-3xl">{a.t}</span>
-                <span className="relative hidden text-ink/60 md:block">{a.o}</span>
-                <span className="relative text-sm text-ink/40">0{i + 1}</span>
-              </li>
-            </Reveal>
-          ))}
-        </ul>
       </section>
 
       <FinalCta />

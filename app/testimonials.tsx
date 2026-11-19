@@ -1,29 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, useInView } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import { Reveal, SplitText, RollText, motion, ease } from "./fx";
 import { getProject, testimonials } from "./content/projects";
 import { Pic } from "./pic";
 import { Label } from "./ui";
 
 const SLIDE_MS = 8000;
-// TEMPORARY (owner request): sample quotes are shown on the live site too. Set to false once real quotes are in data.ts,
-// then production shows only entries without `sample`, and hides the section if there are none.
-const SHOW_SAMPLES = true;
+// Sample quotes are hidden on the live site (they still show in development). Add real quotes in content/projects.ts
+// without `sample` and the section appears on its own.
+const SHOW_SAMPLES = false;
 const list = SHOW_SAMPLES || process.env.NODE_ENV === "development" ? testimonials : testimonials.filter((t) => !t.sample);
-
-// Client film for the current story: plays only while on screen
-function ClientVideo({ src, poster }: { src: string; poster: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const inView = useInView(ref, { amount: 0.4 });
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    if (inView) v.play().catch(() => {}); else v.pause();
-  }, [inView]);
-  return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" className="absolute inset-0 h-full w-full object-cover" />;
-}
 
 export function Testimonials() {
   const [i, setI] = useState(0);
@@ -42,14 +30,14 @@ export function Testimonials() {
   const go = (d: number) => setI((x) => (x + d + n) % n);
 
   return (
-    <section id="testimonials" className="px-5 py-28 md:px-12 md:py-40" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <section id="testimonials" className="px-5 pt-24 pb-10 md:px-12 md:pt-32 md:pb-12" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
           
           <Label>Client stories</Label>
           <h2 className="mt-6 text-5xl leading-[0.95] font-bold tracking-[-0.04em] md:text-7xl lg:text-8xl">
             <span className="block"><SplitText text="Words from the" /></span>
-            <span className="block text-ink/35"><SplitText text="homes we built." delay={0.2} /></span>
+            <span className="block text-ink/45"><SplitText text="homes we built." delay={0.2} /></span>
           </h2>
         </div>
       </div>
@@ -63,7 +51,7 @@ export function Testimonials() {
                 <blockquote className="pt-10 text-3xl leading-[1.12] font-medium tracking-tight md:pt-14 md:text-4xl lg:pt-16 lg:text-5xl">{t.quote}</blockquote>
                 <figcaption className="mt-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brass" />
-                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/55">{t.role}{p ? <> · <Link href={`/works/${p.slug}`} className="group inline-flex min-h-11 items-center underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
+                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/65">{t.role}{p ? <> · <Link href={`/works/${p.slug}`} className="group inline-flex min-h-11 items-center underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
                 </figcaption>
               </motion.div>
             </AnimatePresence>
@@ -74,7 +62,7 @@ export function Testimonials() {
               <button onClick={() => go(-1)} aria-label="Previous story" className="grid h-14 w-14 place-items-center rounded-full border border-ink/20 text-xl transition-colors hover:bg-ink hover:text-ivory">←</button>
               <button onClick={() => go(1)} aria-label="Next story" className="grid h-14 w-14 place-items-center rounded-full border border-ink/20 text-xl transition-colors hover:bg-ink hover:text-ivory">→</button>
             </div>
-            <span className="font-mono text-sm tracking-[0.2em] text-ink/55">{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
+            <span className="font-mono text-sm tracking-[0.2em] text-ink/65">{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
             <div className="h-px flex-1 bg-ink/15">
               <motion.div key={`${i}-${paused}`} initial={{ scaleX: paused ? 1 : 0 }} animate={{ scaleX: 1 }} transition={{ duration: paused ? 0 : SLIDE_MS / 1000, ease: "linear" }} className="h-full origin-left bg-ink" />
             </div>
@@ -88,7 +76,6 @@ export function Testimonials() {
               {p && (
                 <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">
                   <Pic src={p.i} alt={p.n} sizes="(min-width: 1024px) 40vw, 90vw" className="h-full w-full object-cover" />
-                  {p.video && <ClientVideo src={p.video} poster={p.i} />}
                 </motion.div>
               )}
             </AnimatePresence>

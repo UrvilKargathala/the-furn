@@ -18,7 +18,8 @@ export async function POST(req: Request) {
   const errors: Record<string, string> = {};
   if (name.length < 2) errors.name = "Please enter your name";
   if (!/^[+\d][\d\s()-]{8,}$/.test(phone)) errors.phone = "Please enter a valid phone number";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email";
+  // Email is optional, but must be valid when given
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email";
   if (state.length < 2) errors.state = "Please choose your state";
   if (city.length < 2) errors.city = "Please choose your city";
   if (!budget) errors.budget = "Please choose a budget";
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
 
   const text = [
     `Customer category: ${budget!.tier} (${budget!.t})`,
-    `Name: ${name}`, `Phone: ${phone}`, `Email: ${email}`, `City: ${city}, ${state}`,
+    `Name: ${name}`, `Phone: ${phone}`, `Email: ${email || "Not given"}`, `City: ${city}, ${state}`,
     `Looking for: ${type || "Not specified"}`, "", message || "(no message)",
   ].join("\n");
   const res = await fetch("https://api.resend.com/emails", {
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
     body: JSON.stringify({
       from: process.env.CONTACT_FROM_EMAIL ?? "The Furn <onboarding@resend.dev>",
       to: to.split(",").map((s) => s.trim()),
-      reply_to: email,
+      ...(email && { reply_to: email }),
       subject: `[${budget!.tier}] New enquiry from ${name}`,
       text,
     }),

@@ -4,9 +4,9 @@ import { AnimatePresence, useInView, type MotionValue } from "motion/react";
 import Link from "next/link";
 import { SplitText, RollText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "./fx";
 import { MEDIA } from "./content/site";
-import { services } from "./content/services";
+import { services, processDetail } from "./content/services";
 import { getProject } from "./content/projects";
-import { Loader, Nav, ArrowIcon } from "./ui";
+import { Loader, Nav, ArrowIcon, Arrow } from "./ui";
 import { Pic } from "./pic";
 
 // Featured on the home page: projects that have our own photos and videos
@@ -36,12 +36,8 @@ export const heroScenes = [
   { from: 25, h: ["Details you feel", "every single day"], d: "Honest materials, quiet finishes and storage that disappears into the room." },
 ];
 
-export const steps = [
-  { t: "Consult", tags: ["Site visit", "Measurements", "Budget"], d: "We visit, measure and listen to how the space is really used.", i: "/works/avadh-ayuska/02.jpg" },
-  { t: "Design", tags: ["3D layouts", "Material board", "Quote"], d: "3D layouts, material boards and a transparent, itemised quote.", i: "/works/palladium/10.jpg" },
-  { t: "Craft", tags: ["In-house factory", "Edge banding", "Quality check"], d: "Factory-made modules with precision edges and soft-close hardware.", i: "/works/casa-rivera/05.jpg" },
-  { t: "Install", tags: ["On-site fitting", "Cleanup", "Handover"], d: "Clean, on-schedule fitting and a final walkthrough with you.", i: "/works/globcon/11.jpg" },
-];
+// Same five steps as the /process page
+const steps = processDetail;
 
 export function Services() {
   const [open, setOpen] = useState(0);
@@ -51,8 +47,8 @@ export function Services() {
         <div key={s.t} className="border-b border-ink/15">
           <button onClick={() => setOpen(open === i ? -1 : i)} onMouseEnter={() => setOpen(i)} aria-expanded={open === i}
             className="group flex w-full items-center justify-between gap-6 py-6 text-left md:py-8">
-            <span className="text-sm font-semibold text-ink/40">0{i + 1}</span>
-            <span className={`flex-1 text-2xl font-semibold tracking-tight transition-all duration-500 md:text-5xl ${open === i ? "" : "text-ink/50 group-hover:translate-x-3 group-hover:text-ink"}`}>{s.t}</span>
+            <span className="text-sm font-semibold text-ink/65">0{i + 1}</span>
+            <span className={`flex-1 text-2xl font-semibold tracking-tight transition-all duration-500 md:text-5xl ${open === i ? "" : "text-ink/60 group-hover:translate-x-3 group-hover:text-ink"}`}>{s.t}</span>
             <span className={`grid h-10 w-10 place-items-center rounded-full border border-ink/20 text-xl transition-transform duration-500 ${open === i ? "rotate-45 bg-ink text-ivory" : ""}`}>+</span>
           </button>
           <AnimatePresence initial={false}>
@@ -104,10 +100,9 @@ export function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i:
         <Pic src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
-        {p.video && <Reel src={p.video} poster={p.gallery[0]} />}
         <div className="relative flex h-full flex-col justify-between px-5 pt-20 pb-8 md:px-12 md:pt-32 md:pb-12">
           <div className="max-w-xl">
-            <span className="text-xs font-semibold tracking-[0.2em] text-ivory/60 uppercase">0{i + 1} / 0{n} · {p.c}</span>
+            <span className="text-xs font-semibold tracking-[0.2em] text-ivory/70 uppercase">0{i + 1} / 0{n} · {p.c}</span>
             <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
             <p className="mt-4 text-ivory/80 md:text-lg">{p.d}</p>
             {p.l && <p className="mt-5 text-sm font-semibold tracking-[0.15em] uppercase">{p.l}, India</p>}
@@ -119,30 +114,14 @@ export function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i:
             </span>
             {p.area && (
               <div className="text-right">
-                <p className="text-xs text-ivory/60">Area</p>
+                <p className="text-xs text-ivory/70">Area</p>
                 <p className="text-2xl font-semibold md:text-4xl">{p.area}</p>
-                {p.days && <><p className="mt-3 text-xs text-ivory/60">Delivered in</p><p className="text-lg font-semibold md:text-2xl">{p.days}</p></>}
+                {p.days && <><p className="mt-3 text-xs text-ivory/70">Delivered in</p><p className="text-lg font-semibold md:text-2xl">{p.days}</p></>}
               </div>
             )}
           </div>
         </div>
       </motion.a>
-    </div>
-  );
-}
-
-// Small looping film of the project: plays only while its card is on screen
-export function Reel({ src, poster }: { src: string; poster: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const inView = useInView(ref, { amount: 0.5 });
-  useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    if (inView) v.play().catch(() => {}); else v.pause();
-  }, [inView]);
-  return (
-    <div className="absolute right-6 bottom-28 hidden aspect-[9/16] h-[46%] overflow-hidden border border-ivory/25 shadow-2xl md:right-10 md:bottom-auto md:top-1/2 md:block md:-translate-y-1/2">
-      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" className="h-full w-full object-cover" />
     </div>
   );
 }
@@ -240,6 +219,10 @@ export function Hero({ ready }: { ready: boolean }) {
                   className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{scene.d}</motion.p>
               </motion.div>
             </AnimatePresence>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease, delay: 0.7 }} className="mt-7 flex flex-wrap gap-3">
+              <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a free site visit</RollText><Arrow /></Link>
+              <Link href="/works" className="group rounded-full border border-ivory/40 px-6 py-3 font-semibold backdrop-blur-md"><RollText>See our work</RollText></Link>
+            </motion.div>
           </div>
           {/* Which project is on screen right now */}
           <Link href={`/works/${now.slug}`} className="group flex min-h-11 items-center gap-3 self-start text-sm text-ivory/80 hover:text-ivory md:self-end">

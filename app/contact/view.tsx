@@ -59,11 +59,16 @@ export function ContactView() {
             <dl className="mt-12">
               {info.map(([k, v, href]) => (
                 <div key={k} className="flex items-center justify-between gap-6 border-t border-ink/15 py-3">
-                  <dt className="text-ink/50">{k}</dt>
+                  <dt className="text-ink/60">{k}</dt>
                   <dd className="max-w-[16rem] text-right font-semibold md:max-w-md lg:max-w-[16rem]">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="inline-flex min-h-11 items-center justify-end underline-offset-4 hover:underline">{v}</a> : v}</dd>
                 </div>
               ))}
             </dl>
+            <a href={CONTACT.maps} target="_blank" rel="noreferrer" aria-label="Open our studio in Google Maps" className="group relative mt-8 block aspect-[4/3] overflow-hidden bg-sand">
+              <iframe title="Map showing The Furn studio in Pal Gam, Surat" loading="lazy" referrerPolicy="no-referrer-when-downgrade" tabIndex={-1}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(CONTACT.address)}&z=15&output=embed`} className="pointer-events-none h-full w-full border-0 grayscale-[35%]" />
+              <span className="absolute right-4 bottom-4 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-ivory transition-colors group-hover:bg-brass group-hover:text-ink">Open in Google Maps ↗</span>
+            </a>
           </Reveal>
           <Reveal delay={0.15} className="order-1 lg:order-none"><Trust /><Form /></Reveal>
         </div>

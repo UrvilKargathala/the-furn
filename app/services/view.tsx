@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, Counter, RollText, WideningImage } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage } from "../fx";
 import { img, STATS } from "../content/site";
 import { services } from "../content/services";
 import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "../ui";
@@ -7,6 +7,7 @@ import { Pic } from "../pic";
 
 import type { Service } from "../content/types";
 import { WhyUs, Options } from "./parts";
+import { StatsRow } from "../stats";
 
 // Card: photo zooms on hover and a scrolling "Explore" strip slides across it (primedecor + lunarch)
 function ServiceCard({ s, i }: { s: Service; i: number }) {
@@ -25,9 +26,9 @@ function ServiceCard({ s, i }: { s: Service; i: number }) {
       </div>
       <div className="mt-5 flex items-baseline justify-between gap-4">
         <h3 className="text-2xl font-semibold tracking-tight md:text-4xl">{s.t}</h3>
-        <span className="text-sm font-semibold text-ink/40">({String(i + 1).padStart(2, "0")})</span>
+        <span className="text-sm font-semibold text-ink/65">({String(i + 1).padStart(2, "0")})</span>
       </div>
-      <p className="mt-2 max-w-md text-ink/70">{s.short}</p>
+      <p className="mt-2 max-w-md text-lg text-ink/70">{s.short}</p>
     </Link>
   );
 }
@@ -48,18 +49,18 @@ export function ServicesView() {
             <a href="#contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></a>
           </Reveal>
         </div>
-        <div className="mt-20 grid grid-cols-2 border-t border-ink/15 md:grid-cols-4">
-          {[[STATS.years, "+", "Years of experience"], [STATS.homes, "+", "Homes delivered"], [STATS.cities.length, "", "Cities served"], [STATS.warrantyYears, " yr", "Hardware warranty"]].map(([n, s, t], i) => (
-            <Reveal key={t as string} delay={i * 0.1} className="border-b border-ink/15 py-6 md:border-b-0 md:py-8">
-              <p className="text-sm text-ink/60">{t}</p>
-              <p className="mt-2 text-4xl font-semibold tracking-tight md:text-5xl"><Counter to={n as number} suffix={s as string} /></p>
-            </Reveal>
-          ))}
+        <div className="mt-20">
+          <StatsRow stats={[
+            { n: STATS.years, s: "+", t: "Years of design & build experience", href: "/studio" },
+            { n: STATS.homes, s: "+", t: "Homes delivered across Gujarat", href: "/works" },
+            { n: STATS.cities.length, s: "", t: "Cities served by our own install teams", href: "/contact" },
+            { n: STATS.warrantyYears, s: " yr", t: "Hardware warranty on every project", href: "/process" },
+          ]} />
         </div>
       </section>
 
       {/* Services grid */}
-      <section className="px-5 pb-28 md:px-12">
+      <section className="px-5 pb-24 md:px-12 md:pb-32">
         <div className="grid gap-x-8 gap-y-16 md:grid-cols-2">
           {services.map((s, i) => (
             <Reveal key={s.slug} delay={(i % 2) * 0.15} className={i % 2 ? "md:mt-28" : ""}>
@@ -88,7 +89,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       {/* Hero: breadcrumb, title, actions (lunarch) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <Reveal>
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/50">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
             <Link href="/services" className="inline-flex min-h-11 items-center hover:text-ink">Services</Link><span>/</span><span className="text-ink">{s.t}</span>
           </nav>
         </Reveal>
@@ -109,7 +110,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       <WideningImage src={img(s.i, 2400)} alt={s.t} />
 
       {/* Overview article: heading pins while the copy scrolls */}
-      <section className="px-5 py-28 md:px-12 md:py-40">
+      <section className="px-5 py-24 md:px-12 md:py-32">
         <div className="grid gap-12 md:grid-cols-[1fr_1.4fr]">
           <div className="md:sticky md:top-32 md:self-start">
             
@@ -147,7 +148,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       </section>
 
       {/* Options */}
-      <section className="mt-3 bg-sand px-5 py-28 md:px-12">
+      <section className="mt-3 bg-sand px-5 py-24 md:px-12 md:py-32">
         
         <Label>Styles & options</Label>
         <Heading text="Choose what" accent="fits your space" />
@@ -155,7 +156,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       </section>
 
       {/* Process: numbered grid (lunarch) */}
-      <section className="px-5 py-28 md:px-12">
+      <section className="px-5 py-24 md:px-12 md:py-32">
         
         <Label>Our process</Label>
         <Heading text="A clear path from" accent="idea to install" />
@@ -164,7 +165,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
             <Reveal key={p.t} delay={(i % 3) * 0.1} className="bg-ivory p-8 md:p-10">
               <span className="grid h-12 w-12 place-items-center rounded-full border border-brass text-sm font-semibold text-brass">0{i + 1}</span>
               <h3 className="mt-8 text-2xl font-semibold tracking-tight">{p.t}</h3>
-              <p className="mt-3 text-ink/70">{p.d}</p>
+              <p className="mt-3 text-lg text-ink/70">{p.d}</p>
             </Reveal>
           ))}
           <Reveal delay={0.2} className="flex flex-col justify-between bg-brass p-8 text-ivory md:p-10">
@@ -175,7 +176,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       </section>
 
       {/* Other services */}
-      <section className="px-5 pb-28 md:px-12">
+      <section className="px-5 pb-24 md:px-12 md:pb-32">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div><Label>Explore more</Label><Heading text="Other" accent="services" /></div>
           <Reveal><Link href="/services" className="group flex items-center gap-3 rounded-full bg-ink py-1.5 pr-1.5 pl-5 text-sm font-semibold text-ivory"><RollText>All services</RollText><Arrow /></Link></Reveal>

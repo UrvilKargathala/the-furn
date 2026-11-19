@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage } from "../fx";
 import { projects } from "../content/projects";
-import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "../ui";
+import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero, EnquiryBand } from "../ui";
 import { Pic } from "../pic";
 
 import type { Project } from "../content/types";
@@ -18,11 +18,12 @@ export function WorksView() {
         <PageHero label="Our Works" lines={["Homes we've", "brought to life"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
           <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across Gujarat, each one designed around the family that lives in it.</p></Reveal>
-          <Reveal delay={0.5}><p className="text-sm font-semibold tracking-[0.2em] text-ink/50 uppercase">{String(projects.length).padStart(2, "0")} projects</p></Reveal>
+          <Reveal delay={0.5}><p className="text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">{String(projects.length).padStart(2, "0")} projects</p></Reveal>
         </div>
       </section>
 
       <WorksFilter />
+      <EnquiryBand title="Planning your own space?" text="Tell us about your home and we'll visit, measure and quote at no cost." />
 
       <section>
         <div className="px-5 pb-14 md:px-12"><Label>Spotlight</Label><Heading text="Stories worth" accent="a closer look" /></div>
@@ -50,7 +51,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       {/* Title + tagline (primedecor) and spec table (homespaceid) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <Reveal>
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/50">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
             <Link href="/works" className="inline-flex min-h-11 items-center hover:text-ink">Works</Link><span>/</span><span className="text-ink">{p.n}</span>
           </nav>
         </Reveal>
@@ -61,7 +62,7 @@ export function WorkDetailView({ p }: { p: Project }) {
         <dl className="mt-16 grid grid-cols-2 md:grid-cols-6">
           {meta.map(([k, v], i) => (
             <Reveal key={k} delay={i * 0.06} className="border-t border-ink/15 py-5 pr-4">
-              <dt className="text-sm text-ink/50">{k}</dt>
+              <dt className="text-sm text-ink/60">{k}</dt>
               <dd className="mt-1 text-lg font-semibold">{v}</dd>
             </Reveal>
           ))}
@@ -73,7 +74,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       {p.video && <ProjectVideo p={p} />}
 
       {/* Story: label pins on the left while the copy scrolls */}
-      {story.length > 0 && <section className="px-5 py-28 md:px-12 md:py-40">
+      {story.length > 0 && <section className="px-5 py-24 md:px-12 md:py-32">
         {story.map(([k, v], i) => (
           <div key={k} className="grid gap-6 border-t border-ink/15 py-12 md:grid-cols-[1fr_2fr] md:py-16">
             <div className="md:sticky md:top-32 md:self-start">
@@ -106,7 +107,7 @@ export function WorkDetailView({ p }: { p: Project }) {
 
       <ProjectGallery p={p} />
 
-      <section className="px-5 pb-28 md:px-12">
+      <section className="px-5 pb-24 md:px-12 md:pb-32">
         <div className="grid gap-12 md:grid-cols-2">
           <Reveal>
             
@@ -114,11 +115,11 @@ export function WorkDetailView({ p }: { p: Project }) {
             <dl className="mt-8">
               {p.credits.map((c) => (
                 <div key={c.r} className="flex justify-between gap-6 border-t border-ink/15 py-5">
-                  <dt className="text-ink/50">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
+                  <dt className="text-ink/60">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
                 </div>
               ))}
               {p.insta && <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
-                <dt className="text-ink/50">See more</dt>
+                <dt className="text-ink/60">See more</dt>
                 <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex min-h-11 items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText><ArrowIcon /></a></dd>
               </div>}
             </dl>
@@ -135,6 +136,8 @@ export function WorkDetailView({ p }: { p: Project }) {
           )}
         </div>
       </section>
+
+      <EnquiryBand title="Want something like this?" text={`We can design and build a space like ${p.n} around your home, your storage and your budget.`} />
 
       {/* Next project */}
       <Link href={`/works/${next.slug}`} data-cursor="Next" className="group relative flex h-[80svh] flex-col justify-end overflow-hidden bg-ink px-5 py-10 text-ivory md:px-12 md:py-12">

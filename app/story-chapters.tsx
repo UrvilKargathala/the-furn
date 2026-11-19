@@ -41,7 +41,7 @@ export function Chapters() {
   const { scrollYProgress: p } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
   const n = chapters.length;
   return (
-    <div ref={ref} className="relative h-[240svh] md:h-[285vh]">
+    <div ref={ref} className="relative h-[240svh] md:h-[240vh]">
       <div className="sticky top-0 flex h-svh flex-col justify-center gap-5 px-5 pt-16 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-16 md:px-12 md:pt-0">
         <div className="relative h-[34svh] shrink-0 overflow-hidden bg-ink md:h-[78svh]">
           {chapters.map((c, i) => <ChapterImg key={c.n} src={c.img} i={i} n={n} p={p} />)}

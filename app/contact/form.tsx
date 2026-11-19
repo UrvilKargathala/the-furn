@@ -65,12 +65,12 @@ export function Select({ label, value, onChange, options, placeholder, error, re
 
   return (
     <div ref={ref} className="relative" onKeyDown={onKeyDown}>
-      <label id={id} className="text-sm text-ink/55">{label}{required && <><span className="text-brass" aria-hidden> *</span><span className="sr-only"> (required)</span></>}</label>
+      <label id={id} className="text-sm text-ink/65">{label}{required && <><span className="text-brass" aria-hidden> *</span><span className="sr-only"> (required)</span></>}</label>
       <button ref={button} type="button" aria-haspopup="listbox" aria-expanded={open} aria-controls={open ? listId : undefined}
         aria-labelledby={`${id} ${id}-value`} aria-describedby={error ? errorId : undefined}
         onClick={() => (open ? close() : openList())} disabled={disabled}
         className={`mt-2 flex w-full items-center justify-between gap-4 border-b py-3 text-left text-lg transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brass ${error ? "border-red-600" : open ? "border-ink" : "border-ink/25 hover:border-ink/60"} ${disabled ? "cursor-not-allowed opacity-45" : ""}`}>
-        <span id={`${id}-value`} className={current ? "" : "text-ink/35"}>{loading ? "Loading..." : current ? current.t : placeholder}</span>
+        <span id={`${id}-value`} className={current ? "" : "text-ink/45"}>{loading ? "Loading..." : current ? current.t : placeholder}</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden className={`shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}><path d="M2 5l5 5 5-5" stroke="currentColor" strokeWidth="1.6" /></svg>
       </button>
       <AnimatePresence>
@@ -85,7 +85,7 @@ export function Select({ label, value, onChange, options, placeholder, error, re
             <ul ref={list} id={listId} role="listbox" aria-labelledby={id} tabIndex={-1}
               aria-activedescendant={!search && shown[active] ? optId(active) : undefined}
               className="max-h-72 overflow-y-auto overscroll-contain outline-none">
-              {shown.length === 0 && <li role="presentation" className="px-4 py-3 text-sm text-ink/50">No match</li>}
+              {shown.length === 0 && <li role="presentation" className="px-4 py-3 text-sm text-ink/60">No match</li>}
               {shown.map((o, i) => (
                 <li key={o.v} id={optId(i)} role="option" aria-selected={o.v === value}
                   onMouseEnter={() => setActive(i)} onMouseDown={(e) => e.preventDefault()} onClick={() => pick(o)}
@@ -108,7 +108,7 @@ export function Field({ label, name, value, onChange, error, type = "text", requ
   const cls = `mt-2 block w-full border-b bg-transparent py-3 text-lg outline-none transition-colors placeholder:text-ink/30 ${error ? "border-red-600" : "border-ink/25 hover:border-ink/60 focus:border-ink"}`;
   return (
     <div>
-      <label htmlFor={name} className="text-sm text-ink/55">{label}{required && <span className="text-brass"> *</span>}</label>
+      <label htmlFor={name} className="text-sm text-ink/65">{label}{required && <span className="text-brass"> *</span>}</label>
       {multiline
         ? <textarea id={name} name={name} value={value} onChange={(e) => onChange(e.target.value)} rows={4} className={`${cls} resize-none`} />
         : <input id={name} name={name} type={type} value={value} onChange={(e) => onChange(e.target.value)} autoComplete={autoComplete} className={cls} />}
@@ -170,23 +170,31 @@ export function Form() {
 
   return (
     <form onSubmit={submit} noValidate className="grid gap-8">
-      <div className="grid gap-8 md:grid-cols-2">
-        <Field label="Full name" name="name" value={f.name} onChange={set("name")} error={errors.name} required autoComplete="name" />
-        <Field label="Phone" name="phone" type="tel" value={f.phone} onChange={set("phone")} error={errors.phone} required autoComplete="tel" />
-        <Field label="Email" name="email" type="email" value={f.email} onChange={set("email")} error={errors.email} required autoComplete="email" />
-        <Select label="State" required search value={f.state} onChange={pickState} placeholder="Select your state" options={states} error={errors.state} loading={states.length === 0} />
-        <Select label="City" required search value={f.city} onChange={set("city")} placeholder={f.state ? "Select your city" : "Choose a state first"} error={errors.city}
-          disabled={!f.state || loadingCities} loading={loadingCities} options={[...cities, { v: OTHER, t: "My city isn't listed" }]} />
-        {f.city === OTHER && <Field label="Your city" name="cityOther" value={f.cityOther} onChange={set("cityOther")} required />}
-        <Select label="What are you looking for?" value={f.type} onChange={set("type")} placeholder="Select a service" options={enquiryTypes.map((t) => ({ v: t, t }))} error={errors.type} />
-        <Select label="Your budget" required value={f.budget} onChange={set("budget")} placeholder="Select a budget range" error={errors.budget}
-          options={budgets.map((b) => ({ v: b.v, t: b.t, hint: b.tier }))} />
-      </div>
-      <Field label="Tell us about your space" name="message" value={f.message} onChange={set("message")} multiline />
+      <fieldset className="grid gap-8">
+        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">1</span>About you</legend>
+        <div className="grid gap-8 md:grid-cols-2">
+          <Field label="Full name" name="name" value={f.name} onChange={set("name")} error={errors.name} required autoComplete="name" />
+          <Field label="Phone" name="phone" type="tel" value={f.phone} onChange={set("phone")} error={errors.phone} required autoComplete="tel" />
+          <Select label="State" required search value={f.state} onChange={pickState} placeholder="Select your state" options={states} error={errors.state} loading={states.length === 0} />
+          <Select label="City" required search value={f.city} onChange={set("city")} placeholder={f.state ? "Select your city" : "Choose a state first"} error={errors.city}
+            disabled={!f.state || loadingCities} loading={loadingCities} options={[...cities, { v: OTHER, t: "My city isn't listed" }]} />
+          {f.city === OTHER && <Field label="Your city" name="cityOther" value={f.cityOther} onChange={set("cityOther")} required />}
+          <Field label="Email (optional)" name="email" type="email" value={f.email} onChange={set("email")} error={errors.email} autoComplete="email" />
+        </div>
+      </fieldset>
+      <fieldset className="mt-4 grid gap-8">
+        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">2</span>About your project</legend>
+        <div className="grid gap-8 md:grid-cols-2">
+          <Select label="What are you looking for?" value={f.type} onChange={set("type")} placeholder="Select a service" options={enquiryTypes.map((t) => ({ v: t, t }))} error={errors.type} />
+          <Select label="Your budget" required value={f.budget} onChange={set("budget")} placeholder="Select a budget range" error={errors.budget}
+            options={budgets.map((b) => ({ v: b.v, t: b.t, hint: b.tier }))} />
+        </div>
+        <Field label="Tell us about your space (optional)" name="message" value={f.message} onChange={set("message")} multiline />
+      </fieldset>
       {/* Honeypot: hidden from people, bots fill it in */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden value={f.company} onChange={(e) => set("company")(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
       <div className="flex flex-wrap items-center justify-between gap-6">
-        <p className="max-w-xs text-sm text-ink/50">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}Free consultation. No obligation.</p>
+        <p className="max-w-xs text-sm text-ink/60">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}Free consultation. No obligation.</p>
         <button type="submit" disabled={state === "sending"} className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-7 font-semibold text-ivory transition-opacity disabled:opacity-60">
           <RollText>{state === "sending" ? "Sending..." : "Send enquiry"}</RollText><Arrow />
         </button>

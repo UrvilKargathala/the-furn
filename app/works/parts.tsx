@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, useInView, type MotionValue } from "motion/react";
+import { AnimatePresence, useInView } from "motion/react";
 import { Reveal, SplitText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "../fx";
 import { projects, workCats } from "../content/projects";
 import { Label, ArrowIcon } from "../ui";
@@ -10,6 +10,8 @@ import type { Project } from "../content/types";
 
 // Card: hover zoom + "See project details" strip (primedecor), spec table underneath (resonance)
 export function WorkCard({ p, big }: { p: Project; big: boolean }) {
+  // Projects without area/year/city still get a details row, so every card has the same shape
+  const details = [["Area", p.area], ["Year", p.y], ["City", p.l]].filter(([, v]) => v);
   return (
     <Link href={`/works/${p.slug}`} data-cursor="View" className="group block">
       <div className={`relative aspect-[4/3] overflow-hidden bg-ink ${big ? "md:aspect-[16/10]" : "md:aspect-[4/5]"}`}>
@@ -22,9 +24,9 @@ export function WorkCard({ p, big }: { p: Project; big: boolean }) {
         <span className="absolute top-4 left-4 rounded-full bg-ivory/90 px-3 py-1 text-xs font-semibold tracking-wider uppercase backdrop-blur">{p.c}</span>
       </div>
       <h3 className="mt-5 text-2xl font-semibold tracking-tight md:text-3xl">{p.n}</h3>
-      <dl className="mt-3 flex gap-10 border-t border-ink/15 pt-3 text-sm">
-        {[["Area", p.area], ["Year", p.y], ["City", p.l]].filter(([, v]) => v).map(([k, v]) => (
-          <div key={k}><dt className="text-ink/50">{k}</dt><dd className="mt-0.5 font-medium">{v}</dd></div>
+      <dl className="mt-3 flex gap-10 border-t border-ink/15 pt-3 text-base">
+        {(details.length ? details : [["Type", p.c], ["Photos", String(p.gallery.length)]]).map(([k, v]) => (
+          <div key={k}><dt className="text-ink/60">{k}</dt><dd className="mt-0.5 font-medium">{v}</dd></div>
         ))}
       </dl>
     </Link>
@@ -58,77 +60,58 @@ export function Spotlight({ p }: { p: Project }) {
   );
 }
 
-// Pinned row of photos that slides sideways as you scroll down
-export function Gallery({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
-  const n = p.gallery.length;
-  const track = useRef<HTMLDivElement>(null);
-  const [dist, setDist] = useState(0);
-  // Measure how far the row must travel so the last photo ends on screen, at any width
-  useEffect(() => {
-    const measure = () => track.current && setDist(Math.max(0, track.current.scrollWidth - window.innerWidth));
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-  const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
-  return (
-    <section ref={ref} className="relative" style={{ height: `${n * 70}vh` }}>
-      <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
-        <div className="px-5 pb-10 md:px-12"><Label>Gallery</Label></div>
-        <motion.div ref={track} style={{ x }} className="flex w-max gap-[4vw] px-5 md:px-12">
-          {p.gallery.map((g, i) => <GalleryImg key={g + i} src={g} name={p.n} i={i} p={scrollYProgress} n={n} onOpen={onOpen} />)}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-export function GalleryImg({ src, name, i, p, n, onOpen }: { src: string; name: string; i: number; p: MotionValue<number>; n: number; onOpen: (i: number) => void }) {
-  const scale = useTransform(p, [Math.max(0, (i - 1) / n), i / n, (i + 1) / n], [0.9, 1, 0.9]);
-  return (
-    <motion.div style={{ scale }} className="h-[62svh] w-[80vw] shrink-0 overflow-hidden md:w-[60vw]">
-      <Pic src={src} alt={`${name}, photo ${i + 1}`} sizes="(min-width: 768px) 60vw, 80vw" data-cursor="Expand" onClick={() => onOpen(i)} className="h-full w-full cursor-zoom-in object-cover" />
-    </motion.div>
-  );
-}
-
-// Project film: plays muted on loop, sound and controls on demand
+// Project films keep their real shape. A single tall (phone) film sits beside the project summary;
+// several films line up in a centred row; wide films span the page.
 export function ProjectVideo({ p }: { p: Project }) {
+  const films = [p.video, ...(p.moreVideos ?? [])];
+  const [tall, setTall] = useState(true);
+  const solo = films.length === 1;
   return (
-    <section className="px-3 pt-28 md:px-12 md:pt-40">
-      <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
-      {/* Films fill the full width with no black bars: one film spans the row, two or more share it */}
-      <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
-        {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
-          <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
-            <Film src={src} poster={p.i} />
+    <section className="px-5 pt-24 md:px-12 md:pt-32">
+      {solo && tall ? (
+        <div className="grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-20">
+          <Reveal className="mx-auto w-full max-w-sm md:w-auto md:max-w-none"><Film src={films[0]} poster={p.i} onShape={setTall} /></Reveal>
+          <Reveal delay={0.15}>
+            <Label>Project film</Label>
+            <p className="mt-6 max-w-xl text-3xl leading-tight font-semibold tracking-tight md:text-5xl">{p.d}</p>
+            <p className="mt-6 max-w-md text-lg text-ink/70">A walk through the finished space, filmed on site after handover.</p>
           </Reveal>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className="pb-10"><Label>Project film</Label></div>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            {films.map((src) => <Reveal key={src} className="w-full max-w-sm md:w-auto md:max-w-none md:[&:has(video[data-wide=true])]:w-full"><Film src={src} poster={p.i} onShape={solo ? setTall : undefined} /></Reveal>)}
+          </div>
+        </>
+      )}
     </section>
   );
 }
 
-// One film: fills its cell edge to edge; tall clips are trimmed to a screen-high frame on desktop, wide clips show whole
-// The film only starts downloading when it's about to scroll into view, plays while on screen
+// One film at its own shape: tall clips are a 9:16 frame (screen-high on desktop), wide clips span their row.
+// It only starts downloading when it's about to scroll into view, plays while on screen
 // and pauses when scrolled away (saves mobile data: project pages can have three 4K films)
-export function Film({ src, poster }: { src: string; poster?: string }) {
+export function Film({ src, poster, onShape }: { src: string; poster?: string; onShape?: (tall: boolean) => void }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [wide, setWide] = useState(false);
   const near = useInView(ref, { margin: "300px 0px", once: true });
   const onScreen = useInView(ref, { amount: 0.35 });
-  const check = () => { const v = ref.current; if (v?.videoWidth) setWide(v.videoWidth > v.videoHeight); };
-  useEffect(check, []); // metadata may load before hydration, when onLoadedMetadata isn't attached yet
+  const check = () => {
+    const v = ref.current;
+    if (!v?.videoWidth) return;
+    const w = v.videoWidth > v.videoHeight;
+    setWide(w); onShape?.(!w);
+  };
+  useEffect(check, []); // eslint-disable-line react-hooks/exhaustive-deps -- metadata may load before hydration
   useEffect(() => {
     const v = ref.current;
     if (!v || !near) return;
     if (onScreen) v.play().catch(() => {}); else v.pause();
   }, [near, onScreen]);
   return (
-    <video ref={ref} src={near ? src : undefined} poster={poster} muted loop playsInline controls preload={near ? "metadata" : "none"} onLoadedMetadata={check}
-      className={`block w-full bg-ink ${wide ? "h-auto" : "aspect-[9/16] h-auto object-cover md:aspect-auto md:h-[85svh]"}`} />
+    <video ref={ref} data-wide={wide} src={near ? src : undefined} poster={poster} muted loop playsInline controls preload={near ? "metadata" : "none"} onLoadedMetadata={check}
+      className={`block bg-ink object-cover ${wide ? "h-auto w-full" : "aspect-[9/16] w-full md:h-[80svh] md:w-auto"}`} />
   );
 }
 
@@ -195,17 +178,26 @@ export function PhoneGallery({ p, onOpen }: { p: Project; onOpen: (i: number) =>
   );
 }
 
-// Big galleries (many photos): masonry columns that fade up as they scroll in
+// Tablet and desktop gallery: three photos a row. A leftover row is widened to fill the width
+// (two photos share it, one photo spans it), so there is never an empty space.
 export function GalleryGrid({ p, onOpen }: { p: Project; onOpen: (i: number) => void }) {
+  const n = p.gallery.length;
+  const four = n === 4; // four photos read best as two rows of two
+  const rest = four ? 0 : n % 3;
   return (
-    <section className="px-5 py-28 md:px-12">
+    <section className="px-5 py-24 md:px-12 md:py-32">
       <div className="pb-10"><Label>Gallery</Label></div>
-      <div className="columns-2 gap-3 md:columns-3 md:gap-5">
-        {p.gallery.map((g, i) => (
-          <Reveal key={g} delay={(i % 3) * 0.08} className="mb-3 md:mb-5">
-            <Pic src={g} alt={`${p.n}, photo ${i + 1}`} width={800} height={1200} sizes="(min-width: 768px) 33vw, 50vw" data-cursor="Expand" onClick={() => onOpen(i)} className="aspect-[2/3] w-full cursor-zoom-in bg-sand object-cover" />
-          </Reveal>
-        ))}
+      <div className="grid grid-cols-6 gap-3 md:gap-5">
+        {p.gallery.map((g, i) => {
+          const tail = i >= n - rest;
+          const shape = four || (tail && rest === 2) ? "col-span-3 aspect-square" : tail && rest === 1 ? "col-span-6 aspect-[2/1]" : "col-span-2 aspect-[2/3]";
+          return (
+            <Reveal key={g + i} delay={(i % 3) * 0.08} className={shape}>
+              <Pic src={g} alt={`${p.n}, photo ${i + 1}`} width={1200} height={1200} sizes={shape.includes("col-span-2") ? "33vw" : shape.includes("col-span-3") ? "50vw" : "100vw"}
+                data-cursor="Expand" onClick={() => onOpen(i)} className="h-full w-full cursor-zoom-in bg-sand object-cover" />
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );
@@ -216,14 +208,14 @@ export function WorksFilter() {
   const [cat, setCat] = useState("All");
   const shown = projects.filter((p) => cat === "All" || p.cat === cat);
   return (
-        <section className="px-5 pb-28 md:px-12">
+        <section className="px-5 pb-24 md:px-12 md:pb-32">
           <Reveal>
             <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0" role="tablist" aria-label="Filter projects" data-lenis-prevent>
               {workCats.map(({ c, n }) => (
                 <button key={c} role="tab" aria-selected={cat === c} onClick={() => setCat(c)}
                   className={`relative shrink-0 rounded-full border px-5 py-2 text-sm font-medium transition-colors ${cat === c ? "border-ink text-ivory" : "border-ink/15 hover:border-ink/40"}`}>
                   {cat === c && <motion.span layoutId="work-tab" className="absolute inset-0 rounded-full bg-ink" transition={{ duration: 0.5, ease }} />}
-                  <span className="relative">{c} <span className={cat === c ? "text-ivory/60" : "text-ink/40"}>{n}</span></span>
+                  <span className="relative">{c} <span className={cat === c ? "text-ivory/70" : "text-ink/65"}>{n}</span></span>
                 </button>
               ))}
             </div>
@@ -244,14 +236,14 @@ export function WorksFilter() {
   );
 }
 
-// Gallery (scroll strip or masonry grid) plus the full-screen photo viewer it opens
+// Gallery grid (phone and larger versions) plus the full-screen photo viewer it opens
 export function ProjectGallery({ p }: { p: Project }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <>
       <PhoneGallery p={p} onOpen={setOpen} />
       <div className="hidden md:block">
-        {p.gallery.length > 6 ? <GalleryGrid p={p} onOpen={setOpen} /> : <Gallery p={p} onOpen={setOpen} />}
+        <GalleryGrid p={p} onOpen={setOpen} />
       </div>
       <Lightbox images={p.gallery} name={p.n} index={open} onIndex={setOpen} />
     </>

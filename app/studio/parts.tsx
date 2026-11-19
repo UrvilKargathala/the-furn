@@ -12,7 +12,7 @@ const numbers = [
   { n: `${STATS.homes}+`, k: "Homes delivered", d: "From compact city apartments to four-bedroom villas, every one designed around the family living in it." },
   { n: `${STATS.years}+`, k: "Years of craft", d: `${STATS.years} years of designing, building and refining, and learning something from every home.` },
   { n: String(STATS.cities.length), k: "Cities served", d: `${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}, with our own install teams.` },
-  { n: "98%", k: "Clients refer us", d: "Most of our new projects come from families we've already worked with, and their friends." },
+  { n: `${STATS.warrantyYears} yr`, k: "Hardware warranty", d: "Every hinge, channel and fitting we install is covered, and we come back if anything needs attention." },
 ];
 
 const journey = [
@@ -34,7 +34,7 @@ export function Numbers() {
     <section ref={ref} className="relative" style={{ height: `${numbers.length * 90}vh` }}>
       <div className="sticky top-0 h-svh overflow-hidden bg-ink text-ivory">
         { }
-        <MotionPic preload src={img("1600566753190-17f0baa2a6c3", 2400)} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
+        <MotionPic preload src={"/works/avadh-ayuska/02.jpg"} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
         <div className="relative flex h-full flex-col justify-between p-6 pt-28 md:p-12 md:pt-32">
           
           <Label dark>In numbers</Label>
@@ -92,10 +92,10 @@ export function Milestone({ j, i, p }: { j: (typeof journey)[number]; i: number;
 // Photos rise and tilt over a giant wordmark while the CTA stays pinned (raumora)
 export const risers = [
   // x = desktop lane; xs = phone/tablet lane. Photos pass behind the heading, never over it
-  { i: "1556912173-3bb406ef7e77", x: "8%", xs: "4%", r: -8 },
-  { i: "1616486338812-3dadae4b4ace", x: "62%", xs: "62%", r: 6 },
-  { i: "1618221195710-dd6b41faaea6", x: "30%", xs: "32%", r: -4 },
-  { i: "1600210492486-724fe5c67fb0", x: "78%", xs: "70%", r: 9 },
+  { i: "/works/atmosphere/02.jpg", x: "8%", xs: "4%", r: -8 },
+  { i: "/works/casa-rivera/05.jpg", x: "62%", xs: "62%", r: 6 },
+  { i: "/works/palladium/10.jpg", x: "30%", xs: "32%", r: -4 },
+  { i: "/works/globcon/11.jpg", x: "78%", xs: "70%", r: 9 },
 ];
 
 export function FinalCta() {
@@ -108,7 +108,7 @@ export function FinalCta() {
         {risers.map((r, k) => <Riser key={r.i} r={r} k={k} p={scrollYProgress} />)}
         <div className="relative z-20 text-center">
           <h2 className="mx-auto max-w-3xl text-5xl leading-[1] font-bold tracking-tight md:text-8xl">
-            <SplitText text="Ready to transform" /><SplitText text="your space?" className="text-[#a7a5a1]" delay={0.2} />
+            <span className="block"><SplitText text="Ready to transform" /></span><span className="block"><SplitText text="your space?" className="text-[#92908c]" delay={0.2} /></span>
           </h2>
           <Reveal delay={0.3} className="mt-10 flex flex-wrap justify-center gap-3">
             <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></Link>
