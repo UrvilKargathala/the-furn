@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   experimental: { agentUpgrade: "security" },
   async redirects() {
-    return [{ source: "/about", destination: "/studio", permanent: true }];
+    return [
+      { source: "/about", destination: "/studio", permanent: true },
+      // Old Framer project names that were duplicates of the Drive projects
+      { source: "/works/aestra", destination: "/works/snowera", permanent: true },
+      { source: "/works/noir-arc", destination: "/works/casa-rivera", permanent: true },
+      { source: "/works/ivory", destination: "/works/atmosphere", permanent: true },
+    ];
   },
   turbopack: {
     rules: {

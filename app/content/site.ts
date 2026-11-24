@@ -13,13 +13,13 @@ export const BUSINESS = {
   name: "The Furn",
   tagline: "Tailored modular furniture and interiors in Surat",
   description: "The Furn is a design-and-build studio in Surat, Gujarat. We design, manufacture in our own workshop and install modular kitchens, wardrobes, TV units, bedroom furniture and complete home interiors, made to measure.",
-  founded: "2014",
+  founded: "2021",
   street: "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam",
   city: "Surat",
   region: "Gujarat",
   postalCode: "394510",
   country: "IN",
-  social: ["https://www.instagram.com/thefurn.co/", "https://in.pinterest.com/thefurnprojects/", "https://www.linkedin.com/company/the-furn-projects/"],
+  social: ["https://www.instagram.com/thefurn.co/", "https://in.pinterest.com/thefurnprojects/", "https://www.linkedin.com/company/the-furn-projects/", "https://business.google.com/n/4210206919015963812/searchprofile?hl=en-GB"],
 };
 
 const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city}, ${BUSINESS.region} ${BUSINESS.postalCode}`;
@@ -34,12 +34,12 @@ export const CONTACT = {
   hours: "Monday to Saturday, 10 am to 7 pm",
 };
 
-// Headline numbers shown on the Services and Studio pages
+// Headline numbers shown on the Home, Services and Studio pages
 export const STATS = {
-  years: 12,
+  years: 20, // team experience; the studio itself was founded in 2021 (BUSINESS.founded)
   homes: 250,
-  cities: ["Surat", "Vadodara", "Rajkot", "Gandhinagar", "Bhavnagar"],
-  warrantyYears: 10,
+  cities: ["Surat", "Mumbai", "Navi Mumbai", "Ahmedabad", "Hyderabad", "Pune"],
+  warrantyYears: 15,
 };
 
 export const links = [["Home", "/"], ["Services", "/services"], ["Works", "/works"], ["Studio", "/studio"], ["Process", "/process"], ["Contact us", "/contact"]];

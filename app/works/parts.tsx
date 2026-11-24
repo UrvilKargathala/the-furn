@@ -60,58 +60,40 @@ export function Spotlight({ p }: { p: Project }) {
   );
 }
 
-// Project films keep their real shape. A single tall (phone) film sits beside the project summary;
-// several films line up in a centred row; wide films span the page.
 export function ProjectVideo({ p }: { p: Project }) {
-  const films = [p.video, ...(p.moreVideos ?? [])];
-  const [tall, setTall] = useState(true);
-  const solo = films.length === 1;
   return (
-    <section className="px-5 pt-24 md:px-12 md:pt-32">
-      {solo && tall ? (
-        <div className="grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-20">
-          <Reveal className="mx-auto w-full max-w-sm md:w-auto md:max-w-none"><Film src={films[0]} poster={p.i} onShape={setTall} /></Reveal>
-          <Reveal delay={0.15}>
-            <Label>Project film</Label>
-            <p className="mt-6 max-w-xl text-3xl leading-tight font-semibold tracking-tight md:text-5xl">{p.d}</p>
-            <p className="mt-6 max-w-md text-lg text-ink/70">A walk through the finished space, filmed on site after handover.</p>
+    <section className="px-3 pt-28 md:px-12 md:pt-40">
+      <div className="px-2 pb-10 md:px-0"><Label>Project film</Label></div>
+      {/* Films fill the full width with no black bars: one film spans the row, two or more share it */}
+      <div className={`grid gap-4 md:gap-6 ${p.moreVideos?.length ? "md:grid-cols-2" : ""}`}>
+        {[p.video, ...(p.moreVideos ?? [])].map((src, i, all) => (
+          <Reveal key={src} className={all.length % 2 === 1 && i === all.length - 1 && all.length > 1 ? "md:col-span-2" : ""}>
+            <Film src={src} poster={p.i} />
           </Reveal>
-        </div>
-      ) : (
-        <>
-          <div className="pb-10"><Label>Project film</Label></div>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-            {films.map((src) => <Reveal key={src} className="w-full max-w-sm md:w-auto md:max-w-none md:[&:has(video[data-wide=true])]:w-full"><Film src={src} poster={p.i} onShape={solo ? setTall : undefined} /></Reveal>)}
-          </div>
-        </>
-      )}
+        ))}
+      </div>
     </section>
   );
 }
 
-// One film at its own shape: tall clips are a 9:16 frame (screen-high on desktop), wide clips span their row.
-// It only starts downloading when it's about to scroll into view, plays while on screen
+// One film: fills its cell edge to edge; tall clips are trimmed to a screen-high frame on desktop, wide clips show whole
+// The film only starts downloading when it's about to scroll into view, plays while on screen
 // and pauses when scrolled away (saves mobile data: project pages can have three 4K films)
-export function Film({ src, poster, onShape }: { src: string; poster?: string; onShape?: (tall: boolean) => void }) {
+export function Film({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [wide, setWide] = useState(false);
   const near = useInView(ref, { margin: "300px 0px", once: true });
   const onScreen = useInView(ref, { amount: 0.35 });
-  const check = () => {
-    const v = ref.current;
-    if (!v?.videoWidth) return;
-    const w = v.videoWidth > v.videoHeight;
-    setWide(w); onShape?.(!w);
-  };
-  useEffect(check, []); // eslint-disable-line react-hooks/exhaustive-deps -- metadata may load before hydration
+  const check = () => { const v = ref.current; if (v?.videoWidth) setWide(v.videoWidth > v.videoHeight); };
+  useEffect(check, []); // metadata may load before hydration, when onLoadedMetadata isn't attached yet
   useEffect(() => {
     const v = ref.current;
     if (!v || !near) return;
     if (onScreen) v.play().catch(() => {}); else v.pause();
   }, [near, onScreen]);
   return (
-    <video ref={ref} data-wide={wide} src={near ? src : undefined} poster={poster} muted loop playsInline controls preload={near ? "metadata" : "none"} onLoadedMetadata={check}
-      className={`block bg-ink object-cover ${wide ? "h-auto w-full" : "aspect-[9/16] w-full md:h-[80svh] md:w-auto"}`} />
+    <video ref={ref} src={near ? src : undefined} poster={poster} muted loop playsInline controls preload={near ? "metadata" : "none"} onLoadedMetadata={check}
+      className={`block w-full bg-ink ${wide ? "h-auto" : "aspect-[9/16] h-auto object-cover md:aspect-auto md:h-[85svh]"}`} />
   );
 }
 

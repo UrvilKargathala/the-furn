@@ -52,7 +52,7 @@ export function ServicesView() {
         <div className="mt-20">
           <StatsRow stats={[
             { n: STATS.years, s: "+", t: "Years of design & build experience", href: "/studio" },
-            { n: STATS.homes, s: "+", t: "Homes delivered across Gujarat", href: "/works" },
+            { n: STATS.homes, s: "+", t: "Homes delivered across India", href: "/works" },
             { n: STATS.cities.length, s: "", t: "Cities served by our own install teams", href: "/contact" },
             { n: STATS.warrantyYears, s: " yr", t: "Hardware warranty on every project", href: "/process" },
           ]} />

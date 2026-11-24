@@ -10,17 +10,15 @@ import { Pic } from "../pic";
 // ponytail: placeholder studio content, replace with real team, awards and history
 const numbers = [
   { n: `${STATS.homes}+`, k: "Homes delivered", d: "From compact city apartments to four-bedroom villas, every one designed around the family living in it." },
-  { n: `${STATS.years}+`, k: "Years of craft", d: `${STATS.years} years of designing, building and refining, and learning something from every home.` },
+  { n: `${STATS.years}+`, k: "Years of craft", d: `${STATS.years}+ years of designing, building and refining, and learning something from every home.` },
   { n: String(STATS.cities.length), k: "Cities served", d: `${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}, with our own install teams.` },
   { n: `${STATS.warrantyYears} yr`, k: "Hardware warranty", d: "Every hinge, channel and fitting we install is covered, and we come back if anything needs attention." },
 ];
 
 const journey = [
-  { y: "2014", t: "The first workshop", d: "Two carpenters and a designer start building kitchens in a 1,200 sq ft shed in Surat." },
-  { y: "2017", t: "Modular, in-house", d: "We invest in CNC cutting and edge-banding machines and bring all production under one roof." },
-  { y: "2020", t: "Complete interiors", d: "Clients ask for whole homes, so we grow a design team to plan every room together." },
-  { y: "2023", t: "Across Gujarat", d: `Dedicated install teams take The Furn to ${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}.` },
-  { y: "2026", t: "The Furn studio", d: "A new design studio and material library where clients can touch every finish before choosing." },
+  { y: "Before", t: "Two decades at the bench", d: `Our founders spend ${STATS.years}+ years designing and building kitchens, wardrobes and interiors.` },
+  { y: "2021", t: "The Furn is founded", d: "A design-and-build studio opens in Surat, with its own workshop behind every module." },
+  { y: "Today", t: "Across India", d: `Our own install teams work in ${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}.` },
 ];
 
 // Full-screen pinned photo; the big number swaps as you scroll through (primedecor)

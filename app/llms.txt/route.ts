@@ -14,11 +14,11 @@ export function GET() {
 - Business: design-and-build studio for modular furniture and home interiors
 - Location: ${CONTACT.address}, India
 - Founded: ${BUSINESS.founded}
-- Cities served: ${STATS.cities.join(", ")} (Gujarat, India)
+- Cities served: ${STATS.cities.join(", ")} (India)
 - Phone / WhatsApp: ${CONTACT.phone.label}
 - Email: ${CONTACT.email}
 - Hours: ${CONTACT.hours}
-- Experience: ${STATS.years}+ years, ${STATS.homes}+ homes delivered
+- Experience: ${STATS.years}+ years of team experience, ${STATS.homes}+ homes delivered
 - Hardware warranty: ${STATS.warrantyYears} years
 - Everything is designed in-house, manufactured in our own workshop and installed by our own team (no subcontractors)
 - Free site visit and measurement; itemised, fixed quote before production

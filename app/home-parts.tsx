@@ -19,10 +19,10 @@ export const HERO_REMIX = `${MEDIA}/hero/remix.mp4`;
 export const heroReel = [
   { slug: "serene-art", at: 0 },
   { slug: "island-axis", at: 3.5 },
-  { slug: "aestra", at: 7 },
-  { slug: "noir-arc", at: 10.5 },
+  { slug: "snowera", at: 7 },
+  { slug: "casa-rivera", at: 10.5 },
   { slug: "beige-bailey", at: 14 },
-  { slug: "ivory", at: 17.5 },
+  { slug: "atmosphere", at: 17.5 },
   { slug: "concrete-canvas", at: 21 },
   { slug: "avadh-ayuska", at: 24.5 },
   { slug: "studio-furn", at: 32 },

@@ -6,7 +6,7 @@ import { motion, useTransform, MotionPic, useSmoothScroll } from "./fx";
 // Story chapters: photos swap and copy changes as the section scrolls (pinned, like prismae / pietra)
 export const chapters = [
   { n: "01", t: "We start on site", d: "Before a single sketch, we measure the room, study the light and learn how your family moves through it. Every module begins with your space, not a catalogue.", img: "/works/serene-art/cover.webp" },
-  { n: "02", t: "We design around you", d: "Layouts, finishes and hardware are chosen with you, then shown in 3D so you can walk through the plan before anything is cut.", img: "/works/noir-arc/cover.webp" },
+  { n: "02", t: "We design around you", d: "Layouts, finishes and hardware are chosen with you, then shown in 3D so you can walk through the plan before anything is cut.", img: "/works/casa-rivera/01.jpg" },
   { n: "03", t: "We build it ourselves", d: "Every shutter is cut, edge-banded and assembled in our own workshop in Surat, then installed by the same team that made it.", img: "/works/island-axis/cover.webp" },
 ];
 

@@ -13,11 +13,11 @@ const info: [string, string, string?][] = [
   ["Hours", CONTACT.hours],
 ];
 
-// Reassurance right above the form. TODO: put the real warranty length here once confirmed (e.g. "10-year warranty").
+// Reassurance right above the form.
 const trust: [string, string][] = [
   ["We reply within 24 hours", "A real person calls you back, Monday to Saturday."],
-  ["Written warranty", "Every module is covered, with care guidance at handover."],
-  ["Surat and across Gujarat", "Free site visit and measurement in our service area."],
+  ["15-year hardware warranty", "Every module is covered, with care guidance at handover."],
+  ["Surat, Mumbai, Pune and more", "Free site visit and measurement in our service cities."],
 ];
 
 function Trust() {

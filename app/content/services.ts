@@ -33,7 +33,7 @@ export const services: Service[] = [
       { h: "Planned around the way you cook", p: ["We map the work triangle between hob, sink and fridge, then plan tall units, corner solutions and appliance garages so nothing is wasted.", "Heights are set to you, not to a catalogue, so the counter, wall units and chimney all sit at a comfortable reach."] },
       { h: "Materials that handle daily life", p: ["BWP plywood carcasses, moisture-resistant boards near the sink, and shutters in acrylic, PU, laminate or veneer that stay true for years.", "Quartz and granite tops, soft-close hinges and branded channels come standard, not as upgrades."] },
     ],
-    deliverables: ["Site measurement and appliance plan", "2D layout and 3D kitchen views", "Shutter, finish and hardware selection", "Countertop, sink and backsplash coordination", "Factory-made modules with edge banding", "Installation, alignment and cleanup", "10-year warranty on hardware"],
+    deliverables: ["Site measurement and appliance plan", "2D layout and 3D kitchen views", "Shutter, finish and hardware selection", "Countertop, sink and backsplash coordination", "Factory-made modules with edge banding", "Installation, alignment and cleanup", "15-year warranty on hardware"],
     options: [
       { t: "L-shape", d: "Two connected walls with an open end, ideal for medium kitchens and easy movement.", i: "1556912173-3bb406ef7e77" },
       { t: "U-shape", d: "Three walls of storage and counter for serious cooks who want everything within reach.", i: "1556909114-f6e7ad7d3136" },
@@ -56,7 +56,7 @@ export const services: Service[] = [
       { h: "Inside first, outside second", p: ["Long and short hanging, pull-out trays, trouser racks, jewellery drawers and shoe pull-outs are planned to your actual collection.", "Lofts above take seasonal items, so everyday clothes stay at eye level."] },
       { h: "Shutters that suit the room", p: ["Sliding shutters save floor space in compact bedrooms; hinged doors give full access in larger rooms.", "Choose from laminate, acrylic, fluted glass, mirror or veneer, with profile or concealed handles."] },
     ],
-    deliverables: ["Storage audit of your clothes and accessories", "Internal layout with hanging, drawers and trays", "3D views with shutter options", "Loft and overhead storage planning", "Soft-close hardware and lighting", "Installation and alignment", "10-year warranty on hardware"],
+    deliverables: ["Storage audit of your clothes and accessories", "Internal layout with hanging, drawers and trays", "3D views with shutter options", "Loft and overhead storage planning", "Soft-close hardware and lighting", "Installation and alignment", "15-year warranty on hardware"],
     options: [
       { t: "Sliding", d: "Space-saving shutters on smooth tracks, perfect where door swing is tight.", i: "1558997519-83ea9252edf8" },
       { t: "Hinged", d: "Classic doors that open fully for complete access to every shelf.", i: "1595428774223-ef52624120d2" },
@@ -79,7 +79,7 @@ export const services: Service[] = [
       { h: "A feature wall, not just a TV stand", p: ["Fluted panels, stone finishes and floating consoles turn the TV wall into the centrepiece of the room.", "Concealed wiring channels and ventilated cabinets keep electronics tidy and cool."] },
       { h: "Storage that doesn't look like storage", p: ["Closed drawers for everyday clutter, open niches for books and art, and lit display shelves for collectibles.", "Every unit is sized to your sofa and viewing distance."] },
     ],
-    deliverables: ["Wall measurement and viewing-distance plan", "3D feature wall design", "Concealed wiring and point planning", "Panelling, stone and finish selection", "Display lighting layout", "Installation and cleanup", "10-year warranty on hardware"],
+    deliverables: ["Wall measurement and viewing-distance plan", "3D feature wall design", "Concealed wiring and point planning", "Panelling, stone and finish selection", "Display lighting layout", "Installation and cleanup", "15-year warranty on hardware"],
     options: [
       { t: "TV wall", d: "Full-height panelled walls with a floating console and hidden wiring.", i: "1600607687939-ce8a6c25118c" },
       { t: "Panelling", d: "Fluted, slatted or upholstered panels that add warmth and texture.", i: "1586023492125-27b2c045efd7" },
@@ -102,7 +102,7 @@ export const services: Service[] = [
       { h: "Rest and storage in one", p: ["Hydraulic and drawer-storage beds hold bedding and luggage out of sight.", "Upholstered or panelled headboards add comfort and character."] },
       { h: "Room for every routine", p: ["Dressers with mirrors and lighting, compact study units and bedside tables with charging points.", "Kids' rooms grow with the child, with modular desks, bunks and storage."] },
     ],
-    deliverables: ["Room layout and furniture plan", "3D bedroom design", "Bed, headboard and storage selection", "Dresser and study unit design", "Lighting and charging point planning", "Installation and cleanup", "10-year warranty on hardware"],
+    deliverables: ["Room layout and furniture plan", "3D bedroom design", "Bed, headboard and storage selection", "Dresser and study unit design", "Lighting and charging point planning", "Installation and cleanup", "15-year warranty on hardware"],
     options: [
       { t: "Storage beds", d: "Hydraulic and drawer beds that hide bedding, luggage and more.", i: "1505693416388-ac5ce068fe85" },
       { t: "Dressers", d: "Lit mirrors and drawers sized for your daily essentials.", i: "1513694203232-719a280e022f" },
@@ -125,7 +125,7 @@ export const services: Service[] = [
       { h: "Made for gathering", p: ["Solid wood and stone-top tables sized to your room, with matching benches or chairs.", "Crockery units with glass shutters and lighting keep your best pieces on display."] },
       { h: "Thoughtful corners", p: ["Pooja units with jaali shutters, bell hooks and storage for essentials.", "Bar units with wine racks, glass holders and concealed storage."] },
     ],
-    deliverables: ["Space and seating plan", "3D dining area design", "Table, crockery and pooja unit design", "Glass, stone and finish selection", "Display lighting layout", "Installation and cleanup", "10-year warranty on hardware"],
+    deliverables: ["Space and seating plan", "3D dining area design", "Table, crockery and pooja unit design", "Glass, stone and finish selection", "Display lighting layout", "Installation and cleanup", "15-year warranty on hardware"],
     options: [
       { t: "Dining tables", d: "Wood, stone and glass tables sized to your family and your room.", i: "1617806118233-18e1de247200" },
       { t: "Crockery units", d: "Glass-front cabinets with lighting for your best dinnerware.", i: "1600121848594-d8644e57abab" },

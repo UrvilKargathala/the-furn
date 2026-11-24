@@ -17,7 +17,7 @@ export function WorksView() {
         
         <PageHero label="Our Works" lines={["Homes we've", "brought to life"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
-          <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across Gujarat, each one designed around the family that lives in it.</p></Reveal>
+          <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across India, each one designed around the family that lives in it.</p></Reveal>
           <Reveal delay={0.5}><p className="text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">{String(projects.length).padStart(2, "0")} projects</p></Reveal>
         </div>
       </section>

@@ -34,7 +34,7 @@ export const businessLd = {
     addressCountry: BUSINESS.country,
   },
   hasMap: CONTACT.maps,
-  areaServed: STATS.cities.map((name) => ({ "@type": "City", name, containedInPlace: { "@type": "State", name: BUSINESS.region } })),
+  areaServed: STATS.cities.map((name) => ({ "@type": "City", name })),
   openingHoursSpecification: [{
     "@type": "OpeningHoursSpecification",
     dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],

@@ -9,7 +9,7 @@ const principles = [
   { t: "Made to measure", d: "No catalogue sizes. Every module is drawn for your wall, your ceiling and your appliances." },
   { t: "Honest pricing", d: "An itemised quote you sign off before production, with no surprise add-ons at handover." },
   { t: "Built in-house", d: "Our own workshop cuts, edges and assembles every module, so quality never leaves our hands." },
-  { t: "Here after handover", d: "A 10-year hardware warranty and a team that picks up the phone when you call." },
+  { t: "Here after handover", d: "A 15-year hardware warranty and a team that picks up the phone when you call." },
 ];
 
 export function StudioView() {
@@ -50,11 +50,11 @@ export function StudioView() {
             
             <Label>Who we are</Label>
             <Reveal><p className="text-ink/60">Based in</p><p className="font-semibold">Surat, India</p></Reveal>
-            <Reveal delay={0.1}><p className="text-ink/60">Since</p><p className="font-semibold">2014 – Present</p></Reveal>
+            <Reveal delay={0.1}><p className="text-ink/60">Since</p><p className="font-semibold">2021 – Present</p></Reveal>
           </div>
           <div>
             <ScrollWords className="text-3xl leading-tight font-semibold tracking-tight md:text-5xl"
-              text="We believe a home should be felt, not just seen. For over a decade we've helped families build kitchens they love cooking in, wardrobes that hold everything, and rooms that balance beauty with real life. No showroom sizes, no shortcuts, no compromise." />
+              text="We believe a home should be felt, not just seen. With over 20 years of experience, we've helped families build kitchens they love cooking in, wardrobes that hold everything, and rooms that balance beauty with real life. No showroom sizes, no shortcuts, no compromise." />
             <Reveal><Link href="/works" className="group mt-8 inline-flex min-h-11 items-center gap-2 font-semibold"><RollText>See all projects</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span></Link></Reveal>
           </div>
         </div>
