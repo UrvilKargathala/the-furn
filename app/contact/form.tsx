@@ -145,7 +145,7 @@ export function Form() {
     if (state === "sending") return;
     setState("sending");
     try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...f, state: states.find((s) => s.v === f.state)?.t ?? "", city: f.city === OTHER ? f.cityOther : f.city }) });
+      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...f, state: states.find((s) => s.v === f.state)?.t ?? "", city: f.city === OTHER ? f.cityOther : f.city, pageUrl: window.location.href }) });
       const data = await res.json().catch(() => ({}));
       if (res.ok) { setState("done"); return; }
       if (res.status === 422 && data.errors) { setErrors(data.errors); setState("idle"); return; }
@@ -163,6 +163,8 @@ export function Form() {
         <span className="grid h-14 w-14 place-items-center rounded-full bg-brass text-2xl text-ink">✓</span>
         <h2 className="mt-8 text-4xl font-semibold tracking-tight md:text-5xl">Thank you, {f.name.split(" ")[0]}.</h2>
         <p className="mt-4 max-w-md text-ivory/75">We&apos;ve received your details and will call you within one working day to plan your free site visit.</p>
+        <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-full bg-brass px-6 py-3 font-semibold text-ink">Prefer WhatsApp? Message us now</a>
+        <br />
         <button onClick={() => { setF(empty); setState("idle"); }} className="group mt-8 text-sm font-semibold underline underline-offset-4"><RollText>Send another enquiry</RollText></button>
       </motion.div>
     );
@@ -200,9 +202,10 @@ export function Form() {
         </button>
       </div>
       {state === "fail" && (
-        <p role="alert" className="bg-sand p-5 text-sm">
-          We couldn&apos;t send that just now. Please <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.
-        </p>
+        <div role="alert" className="bg-sand p-5 text-sm">
+          <p>We couldn&apos;t send that just now. Message us on WhatsApp to book your free site visit, or <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.</p>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-ivory">Book a free site visit on WhatsApp</a>
+        </div>
       )}
     </form>
   );
