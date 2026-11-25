@@ -200,13 +200,21 @@ export const projects: Project[] = [
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
 
-// Client testimonials shown on the home page. Replace the sample entries with real quotes
-// (set `slug` to the project they belong to). Entries marked `sample` are placeholders (see SHOW_SAMPLES in testimonials.tsx).
-export const testimonials: { quote: string; name: string; role: string; slug: string; sample?: boolean }[] = [
-  { quote: "From the first site visit to the last handle, everything arrived exactly as drawn. The kitchen finally works the way we cook.", name: "Sample client", role: "Modular kitchen", slug: "vapour-mist", sample: true },
-  { quote: "Every shutter and shelf was measured for our home. Nothing feels off-the-shelf, and the finish is spotless.", name: "Sample client", role: "Weekend home", slug: "amber-travertine", sample: true },
-  { quote: "They finished on the date they promised and cleaned up as if they had never been there.", name: "Sample client", role: "Modular kitchen", slug: "torrent-grey", sample: true },
+// Client testimonials, shown on the home page and the Studio page. `slug` links a quote to its project (photo and
+// link); leave it out when we don't know the project yet and one of our kitchen photos is shown instead.
+// Entries marked `sample` are placeholders (see SHOW_SAMPLES in testimonials.tsx).
+export type Testimonial = { quote: string; name: string; role: string; place: string; slug?: string; sample?: boolean };
+export const testimonials: Testimonial[] = [
+  { quote: "Honestly, our experience with The Furn was amazing, they executed our kitchen perfectly. Before planning our kitchen, everything was well explained and properly planned out for us. And mainly after the execution, we feel our kitchen feels very premium and elegant.", name: "Mrs. Rupal Shroff", role: "Modular kitchen", place: "Vesu, Surat" },
+  { quote: "Our kitchen finally feels like home – warm, inviting, and beautifully organized. The Furn really understood what we needed and turned our vision into reality. It's not just a kitchen anymore – it's our favorite space in the house. We're so happy we chose them.", name: "Mrs. Trusha Patel", role: "Modular kitchen", place: "Pal, Surat" },
+  { quote: "Choosing The Furn for our modular kitchen was the best decision we made during our home journey. The design is sleek yet warm, with a clear focus on functionality and finish. Every element – from the smooth drawers to the premium fittings – reflects quality. It's a space that feels both luxurious and effortless.", name: "Poonam Patel", role: "Interior designer", place: "Pal, Surat" },
+  { quote: "We had a fantastic experience with The Furn. Right from the design stage to the final setup, everything was handled with care and professionalism. The modular kitchen they delivered is both elegant and practical – exactly what we needed. The quality, finish, and attention to detail truly set them apart. Highly recommended!", name: "Mr. Deepak Shah", role: "Modular kitchen", place: "Vesu, Surat" },
+  { quote: "My modular kitchen has completely transformed my home! The minimal and modern design is not only stunning but also extremely functional. The use of high-quality materials and innovative solutions like hidden storage make it feel luxurious and efficient at the same time. It's exactly what I wanted, and I'm so glad I chose this team for the project!", name: "Patel Family", role: "Modular kitchen", place: "Piplod, Surat" },
 ];
+
+// The photo behind a testimonial: its project's cover, or one of our kitchen photos when the project isn't known
+const kitchenPhotos = projects.filter((p) => p.cat === "Kitchen").map((p) => p.i);
+export const testimonialPhoto = (t: Testimonial, k: number) => (t.slug && getProject(t.slug)?.i) || kitchenPhotos[(k * 3) % kitchenPhotos.length];
 
 // Works filter: every category that has at least one project, biggest first, so new categories appear on their own
 export const workCats: { c: string; n: number }[] = [

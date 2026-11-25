@@ -210,7 +210,7 @@ export function EnquiryBand({ title, text }: { title: string; text: string }) {
           <p className="mt-3 max-w-xl text-lg text-ink/70">{text}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href="/contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a free site visit</RollText><Arrow /></Link>
+          <Link href="/contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a site visit</RollText><Arrow /></Link>
           <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ink group rounded-full border border-ink/25 px-6 py-3 font-semibold"><RollText>WhatsApp us</RollText></a>
         </div>
       </Reveal>
@@ -230,7 +230,7 @@ export function Cta() {
             <span className="block"><SplitText text="Let's build your" /></span><span className="block"><SplitText text="dream space." className="text-stone" delay={0.2} /></span>
           </h2>
           <Reveal delay={0.3}>
-            <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
+            <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
               <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ivory group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>

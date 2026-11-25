@@ -83,8 +83,8 @@ export function StudioView() {
         <Heading text="What drives" accent="every project" />
         <div className="mt-16 grid gap-6 md:grid-cols-2">
           {[
-            { h: "Our mission", p: "To design and build furniture that fits each home perfectly, with honest pricing, in-house quality and a team that stays with you long after handover.", i: "/works/serene-wardrobe/02.jpg", alt: "Made-to-measure wardrobe with fitted shelves, drawers and lighting" },
-            { h: "Our vision", p: "To make made-to-measure interiors the norm, not a luxury, so every family can live in a home designed around them.", i: "/works/greenopolish/03.jpg", alt: "Double-height family living room designed by The Furn" },
+            { h: "Our mission", p: "To design and build furniture that fits each home perfectly, with honest pricing, in-house quality and a team that stays with you long after handover.", i: "1667400104764-a5fd01a919b0", alt: "Designer holding finish swatches over a floor plan" },
+            { h: "Our vision", p: "To make made-to-measure interiors the norm, not a luxury, so every family can live in a home designed around them.", i: "1605433246995-23f532d1e001", alt: "Children cooking together in a bright family kitchen" },
           ].map((c, k) => (
             <Reveal key={c.h} delay={k * 0.15} className="h-full">
               <article className="group flex h-full flex-col overflow-hidden bg-sand">
@@ -126,14 +126,22 @@ export function StudioView() {
           </div>
           <Reveal><p className="max-w-sm text-lg text-ink/70">Fittings, hardware and finishes from names we trust, so every drawer, hinge and surface lasts as long as the design.</p></Reveal>
         </div>
-        <div className="mt-16 grid grid-cols-2 gap-px overflow-hidden bg-ink/10 md:grid-cols-4">
-          {brands.map((b, i) => (
-            <Reveal key={b.n} delay={(i % 4) * 0.08} className="group flex aspect-[3/2] items-center justify-center bg-white p-8 md:p-12">
-              <Pic src={`/brands/${b.f}.png`} alt={`${b.n} logo`} width={400} height={200} sizes="(min-width: 768px) 25vw, 50vw"
-                className="h-16 w-full max-w-[200px] object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 md:h-20 md:max-w-[220px]" />
-            </Reveal>
+        {/* Two moving rows: the top one drifts left to right, the bottom one right to left. Hover pauses them. */}
+        <Reveal className="-mx-5 mt-16 space-y-3 md:-mx-12">
+          {[{ list: brands, dir: "reverse" }, { list: [...brands].reverse(), dir: "normal" }].map((row, r) => (
+            <div key={r} className="brand-row overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+              <div className="flex w-max gap-3" style={{ animation: `marquee 38s linear infinite ${row.dir}` }}>
+                {[...row.list, ...row.list].map((b, i) => (
+                  <div key={i} aria-hidden={i >= row.list.length || undefined}
+                    className="group flex h-28 w-56 shrink-0 items-center justify-center bg-white px-8 md:h-36 md:w-72 md:px-12">
+                    <Pic src={`/brands/${b.f}.png`} alt={i < row.list.length ? `${b.n} logo` : ""} width={400} height={200} sizes="18rem"
+                      className="h-12 w-full max-w-[180px] object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-110 md:h-16 md:max-w-[200px]" />
+                  </div>
+                ))}
+              </div>
+            </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       <StudioTestimonials />

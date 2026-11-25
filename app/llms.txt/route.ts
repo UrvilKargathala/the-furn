@@ -21,7 +21,7 @@ export function GET() {
 - Experience: ${STATS.years}+ years of team experience, ${STATS.homes}+ homes delivered
 - Hardware warranty: ${STATS.warrantyYears} years
 - Everything is designed in-house, precision-built on German machinery and installed by our own team
-- Free site visit and measurement; itemised, fixed quote before production
+- Site visit and measurement; itemised, fixed quote before production
 
 ## Services
 ${services.map((s) => `- [${s.t}](${url(`/services/${s.slug}`)}): ${s.short} Options: ${s.options.map((o) => o.t).join(", ")}.`).join("\n")}
@@ -38,7 +38,7 @@ ${projects.map((p) => `- [${p.n}](${url(`/works/${p.slug}`)}): ${p.c}${p.l ? `, 
 - [Our work](${url("/works")})
 - [Our process](${url("/process")})
 - [Studio / about](${url("/studio")})
-- [Contact and free site visit](${url("/contact")})
+- [Contact and site visits](${url("/contact")})
 `;
   return new Response(body, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" } });
 }

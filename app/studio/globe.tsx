@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { LAND_BITS, LAND_STEP } from "../content/world-dots";
+import { INDIA_OUTLINE } from "../content/india-outline";
 
 // Particle globe for the Studio "cities served" section, light theme. Plain canvas 2D (no WebGL, no map service).
 // - Land is a stipple of ~135,000 ink particles (finest over India), written straight into a pixel buffer, randomly placed inside each land cell, shaded so one side falls
@@ -8,7 +9,7 @@ import { LAND_BITS, LAND_STEP } from "../content/world-dots";
 // - On first view the particles fall in from a scattered cloud; a thin cloud of loose particles keeps drifting around.
 // - Scrolling drives the shot: the globe spins round to India and zooms in close, then the routes grow out of the hub.
 // - Picking or hovering a city turns the globe towards it; otherwise it drifts gently.
-// - Cities are white pill labels with a brass dot; routes from the hub are flowing dotted lines.
+// - Cities are white pill labels with a brass dot; India's border is outlined in brass at the close-up.
 
 type LatLng = [number, number];
 type Vec = readonly [number, number, number];
@@ -55,20 +56,9 @@ function landPoints(): LandPt[] {
 const SIDE: Record<string, number> = { Ahmedabad: -1, Mumbai: -1, "Navi Mumbai": -1, Surat: 1, Pune: 1, Hyderabad: 1 };
 
 const toVec = ([lat, lng]: LatLng | LandPt): Vec => [Math.cos(lat * R) * Math.sin(lng * R), Math.sin(lat * R), Math.cos(lat * R) * Math.cos(lng * R)];
+// Middle of India, where most of the falling drops land
+const INDIA_DIR = toVec([22, 79]);
 
-// Great-circle points between two places, lifted off the surface in the middle
-function arcPoints(a: LatLng, b: LatLng, n = 160) {
-  const [ax, ay, az] = toVec(a), [bx, by, bz] = toVec(b);
-  const d = Math.acos(Math.min(1, ax * bx + ay * by + az * bz));
-  const out: Vec[] = [];
-  for (let i = 0; i <= n; i++) {
-    const t = i / n, s = Math.sin(d) || 1;
-    const f1 = Math.sin((1 - t) * d) / s, f2 = Math.sin(t * d) / s;
-    const lift = 1 + Math.sin(Math.PI * t) * Math.min(0.5, 0.05 + d * 2.4); // tall arcs that leave the surface, like the reference
-    out.push([(f1 * ax + f2 * bx) * lift, (f1 * ay + f2 * by) * lift, (f1 * az + f2 * bz) * lift]);
-  }
-  return out;
-}
 
 // Light comes from the upper left and slightly in front, so the lower right falls into shadow
 const LIGHT: Vec = (() => { const v = [-0.55, 0.5, 0.67]; const m = Math.hypot(...v); return [v[0] / m, v[1] / m, v[2] / m] as const; })();
@@ -98,7 +88,7 @@ export function Globe({ cities, coords, hub, active, onSelect, label }: {
       coast[i] = p[2] ? 1 : 0;
       vx[i] = v[0]; vy[i] = v[1]; vz[i] = v[2];
       fx[i] = f[0] * d; fy[i] = f[1] * d; fz[i] = f[2] * d;
-      delay[i] = Math.random() * 0.9; psize[i] = rnd(0.55, 1.25);
+      delay[i] = Math.random() * 0.9; psize[i] = rnd(0.75, 1.5);
     });
     // Land is written straight into a pixel buffer (much faster than one fillRect per particle)
     let img: ImageData | null = null, px32: Uint32Array | null = null;
@@ -106,10 +96,18 @@ export function Globe({ cities, coords, hub, active, onSelect, label }: {
     const inkShade = Array.from({ length: 256 }, (_, a) => pack(INK, a / 255));
     const brassShade = Array.from({ length: 256 }, (_, a) => pack(BRASS, a / 255));
     // Loose dust drifting in a shell around the globe
-    const dust = Array.from({ length: 1600 }, () => ({ dir: randDir(), r: 1.03 + Math.pow(Math.random(), 1.6) * 1.4, speed: rnd(-0.05, 0.05), phase: rnd(0, 6.28), size: rnd(0.5, 1.5) }));
+    const dust = Array.from({ length: 2200 }, () => ({ dir: randDir(), r: 1.03 + Math.pow(Math.random(), 1.6) * 1.4, speed: rnd(-0.05, 0.05), phase: rnd(0, 6.28), size: rnd(0.7, 1.9) }));
     // "Comets": particles that keep falling in from the cloud and landing on the earth, then start again far out
-    const comets = Array.from({ length: 260 }, () => ({ dir: randDir(), from: rnd(1.5, 2.6), life: rnd(2.8, 5), t0: -rnd(0, 5), swirl: rnd(-0.6, 0.6), size: rnd(0.7, 1.5) }));
-    const arcs = Object.fromEntries(cities.filter((c) => c !== hub).map((c) => [c, arcPoints(coords[hub], coords[c])]));
+    // Most of them land around India, so they stay in frame at the close-up; the rest fall anywhere
+    const nearIndia = (): Vec => {
+      if (Math.random() < 0.25) return randDir();
+      const d = randDir(), k = rnd(0.15, 0.75);
+      const v: Vec = [INDIA_DIR[0] + d[0] * k, INDIA_DIR[1] + d[1] * k, INDIA_DIR[2] + d[2] * k], m = Math.hypot(...v);
+      return [v[0] / m, v[1] / m, v[2] / m];
+    };
+    const comets = Array.from({ length: 560 }, () => ({ dir: nearIndia(), from: rnd(1.5, 2.6), life: rnd(2.6, 4.6), t0: -rnd(0, 5), swirl: rnd(-0.6, 0.6), size: rnd(1.1, 2.3), brass: Math.random() < 0.18 }));
+    // India's border as points on the sphere, ready to rotate each frame
+    const outline = INDIA_OUTLINE.map((r) => { const ring: Vec[] = []; for (let i = 0; i < r.length; i += 2) ring.push(toVec([r[i + 1], r[i]])); return ring; });
 
     // Rotation: yaw (around the vertical axis) and pitch (tilt). Start facing India.
     const view = { yaw: -76 * R, pitch: 16 * R, targetYaw: -76 * R, targetPitch: 16 * R };
@@ -181,10 +179,10 @@ export function Globe({ cities, coords, hub, active, onSelect, label }: {
       }
 
       // Final framing is a "horizon" shot: the globe grows and drops so India sits large in the middle while the
-      // glowing edge of the Earth curves across the top of the frame
-      pitchOff = 22 * R * ze;
+      // glowing edge of the Earth curves across the top of the frame (closer in than before, so India reads bigger)
+      pitchOff = 44 * R * ze;
       updateRot();
-      const scale = size * (0.44 + 0.41 * ze), cx = size / 2, cy = size * (0.5 + 0.42 * ze);
+      const scale = size * (0.44 + 1.16 * ze), cx = size / 2, cy = size * (0.5 + 1.13 * ze);
       const dot = Math.pow(scale / (size * 0.44), 0.42); // particles grow a little as we zoom so the land stays solid
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, size, size);
@@ -279,7 +277,7 @@ export function Globe({ cities, coords, hub, active, onSelect, label }: {
         const [x, y, z] = rot(dx * d.r, dy * d.r, dz * d.r);
         if (z < 0 && Math.hypot(x, y) < 1) continue; // hidden behind the globe
         const fade = Math.max(0, 1 - (d.r - 1) / 1.5) * Math.min(1, fall * 1.5);
-        ctx.fillStyle = `rgba(${INK},${0.35 * fade})`;
+        ctx.fillStyle = `rgba(${INK},${0.5 * fade})`;
         ctx.fillRect(cx + x * scale - d.size / 2, cy - y * scale - d.size / 2, d.size, d.size);
       }
       // Comets falling onto the earth: ease in from far out, swirl slightly, fade as they touch down, then respawn
@@ -287,50 +285,48 @@ export function Globe({ cities, coords, hub, active, onSelect, label }: {
         const ts = now / 1000;
         for (const c of comets) {
           let u = (ts - c.t0) / c.life;
-          if (u >= 1) { c.t0 = ts; c.dir = randDir(); c.from = rnd(1.5, 2.6); c.life = rnd(2.8, 5); u = 0; }
-          const e = u * u * (3 - 2 * u), r = c.from + (1 - c.from) * e, a = c.swirl * (1 - e);
-          const ca = Math.cos(a), sa = Math.sin(a);
-          const [x, y, z] = rot((c.dir[0] * ca + c.dir[2] * sa) * r, c.dir[1] * r, (-c.dir[0] * sa + c.dir[2] * ca) * r);
-          if (z < 0 && x * x + y * y < 1) continue;
-          const alpha = Math.min(1, u * 4) * (1 - Math.max(0, (u - 0.85) / 0.15)) * 0.7;
-          ctx.fillStyle = `rgba(${INK},${alpha})`;
-          ctx.fillRect(cx + x * scale - c.size / 2, cy - y * scale - c.size / 2, c.size, c.size);
+          if (u >= 1) { c.t0 = ts; c.dir = nearIndia(); c.from = rnd(1.5, 2.6); c.life = rnd(2.6, 4.6); u = 0; }
+          const alpha = Math.min(1, u * 4) * (1 - Math.max(0, (u - 0.85) / 0.15)) * 0.9;
+          const col = c.brass ? BRASS : INK;
+          // The drop plus a short fading trail behind it
+          for (let tr = 0; tr < 3; tr++) {
+            const uu = Math.max(0, u - tr * 0.025);
+            const e = uu * uu * (3 - 2 * uu), r = c.from + (1 - c.from) * e, a = c.swirl * (1 - e);
+            const ca = Math.cos(a), sa = Math.sin(a);
+            const [x, y, z] = rot((c.dir[0] * ca + c.dir[2] * sa) * r, c.dir[1] * r, (-c.dir[0] * sa + c.dir[2] * ca) * r);
+            if (z < 0 && x * x + y * y < 1) break;
+            const sz = c.size * (1 - tr * 0.28);
+            ctx.fillStyle = `rgba(${col},${alpha * (1 - tr * 0.35)})`;
+            ctx.beginPath(); ctx.arc(cx + x * scale, cy - y * scale, sz / 2 + 0.3, 0, Math.PI * 2); ctx.fill();
+          }
         }
       }
       if (fall < 1) { raf = requestAnimationFrame(frame); return; }
 
-      // Routes grow out of the hub dot by dot as you scroll the globe into place, each led by a glowing head;
-      // once drawn, a brighter pulse keeps running along them
-      const grown = reduce ? 1 : Math.max(0, Math.min(1, (scrollP - 0.45) / 0.4)) * Math.min(1, (t - 2.4) / 0.6);
-      const flow = reduce ? 0 : (now / 1100) % 1;
-      Object.entries(arcs).forEach(([c, pts], k) => {
-        const on = state.current.active === c || hover === c;
-        const draw = Math.max(0, Math.min(1, grown * 1.6 - k * 0.12)); // routes start one after another
-        if (draw <= 0) return;
-        const end = Math.max(1, Math.floor((pts.length - 1) * draw));
-        let lx = -1e9, ly = -1e9, head: [number, number] | null = null;
-        const spacing = on ? 11 : 12;
-        for (let i = 0; i <= end; i++) {
-          const [x, y, z] = rot(...pts[i]);
-          if (z < 0) continue;
-          const sx = cx + x * scale, sy = cy - y * scale;
-          head = [sx, sy];
-          if (Math.hypot(sx - lx, sy - ly) < spacing) continue;
-          lx = sx; ly = sy;
-          const pulse = draw >= 1 ? Math.max(0, 1 - Math.abs(i / pts.length - flow) * 6) : 0;
-          // Brass dot on a light ring so the route reads clearly over the dark stipple
-          const r = (on ? 3 : 2.4) * (1 + pulse * 0.45);
-          ctx.fillStyle = "rgba(243,241,237,0.9)";
-          ctx.beginPath(); ctx.arc(sx, sy, r + 1.6, 0, Math.PI * 2); ctx.fill();
-          ctx.fillStyle = `rgba(${BRASS},${on ? 1 : 0.75 + 0.25 * pulse})`;
-          ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+      // India's border, drawn once India has turned to the front: a brass outline with a soft glow so the eye
+      // goes straight to the country (official India view)
+      const edge = reduce ? 1 : Math.max(0, Math.min(1, (ze - 0.55) / 0.35)) * Math.min(1, Math.max(0, (t - 2.4) / 0.8));
+      if (edge > 0) {
+        ctx.save();
+        ctx.lineJoin = "round"; ctx.lineCap = "round";
+        for (const pass of [0, 1]) {
+          ctx.strokeStyle = pass ? `rgba(${BRASS},${0.95 * edge})` : `rgba(${BRASS},${0.22 * edge})`;
+          ctx.lineWidth = pass ? 1.6 : 7;
+          if (pass) { ctx.shadowColor = `rgba(${BRASS},${0.5 * edge})`; ctx.shadowBlur = 10; }
+          for (const ring of outline) {
+            ctx.beginPath();
+            let pen = false;
+            for (const v of ring) {
+              const [x, y, z] = rot(...v);
+              if (z < 0) { pen = false; continue; }
+              const sx = cx + x * scale, sy = cy - y * scale;
+              if (pen) ctx.lineTo(sx, sy); else { ctx.moveTo(sx, sy); pen = true; }
+            }
+            ctx.stroke();
+          }
         }
-        if (head && draw < 1) {
-          const g = ctx.createRadialGradient(head[0], head[1], 0, head[0], head[1], 9);
-          g.addColorStop(0, `rgba(${BRASS},0.9)`); g.addColorStop(1, `rgba(${BRASS},0)`);
-          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(head[0], head[1], 9, 0, Math.PI * 2); ctx.fill();
-        }
-      });
+        ctx.restore();
+      }
 
       // City beacons
       shown = [];

@@ -68,3 +68,6 @@ body { background: var(--color-ivory); color: var(--color-ink); }
 }
 .group:focus-visible > .btn-fill::before { transform: translateX(0); }
 .group:focus-visible > .btn-fill { color: var(--btn-fill-text); }
+/* Studio brands: moving rows pause while hovered */
+.brand-row:hover > div { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) { .brand-row > div { animation: none !important; } }
