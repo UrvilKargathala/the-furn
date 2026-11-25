@@ -23,7 +23,7 @@ export function WorksView() {
       </section>
 
       <WorksFilter />
-      <EnquiryBand title="Planning your own space?" text="Tell us about your home and we'll visit, measure and quote at no cost." />
+      <EnquiryBand title="Planning your own space?" text="Tell us about your home and we'll visit, measure and give you a fixed quote." />
 
       <section>
         <div className="px-5 pb-14 md:px-12"><Label>Spotlight</Label><Heading text="Stories worth" accent="a closer look" /></div>

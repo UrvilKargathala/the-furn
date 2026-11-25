@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence } from "motion/react";
 import { Reveal, SplitText, RollText, motion, ease } from "./fx";
-import { getProject, testimonials } from "./content/projects";
+import { getProject, testimonials, testimonialPhoto } from "./content/projects";
 import { Pic } from "./pic";
 import { Label } from "./ui";
 
@@ -26,7 +26,8 @@ export function Testimonials() {
   if (n === 0) return null;
 
   const t = list[i];
-  const p = getProject(t.slug);
+  const p = t.slug ? getProject(t.slug) : undefined;
+  const photo = testimonialPhoto(t, list.indexOf(t));
   const go = (d: number) => setI((x) => (x + d + n) % n);
 
   return (
@@ -47,11 +48,11 @@ export function Testimonials() {
           <div className="relative">
             <span aria-hidden className="absolute -top-10 -left-1 text-[9rem] leading-none text-brass/30 select-none md:-top-16 md:text-[14rem]">“</span>
             <AnimatePresence mode="wait">
-              <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.7, ease }} className="relative min-h-[14rem] md:min-h-[12rem] lg:min-h-[17rem]">
-                <blockquote className="pt-10 text-3xl leading-[1.12] font-medium tracking-tight md:pt-14 md:text-4xl lg:pt-16 lg:text-5xl">{t.quote}</blockquote>
+              <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.7, ease }} className="relative min-h-[16rem] md:min-h-[14rem] lg:min-h-[19rem]">
+                <blockquote className="pt-10 text-2xl leading-[1.25] font-medium tracking-tight md:pt-14 md:text-3xl lg:pt-16 lg:text-[2.1rem]">{t.quote}</blockquote>
                 <figcaption className="mt-8 flex items-center gap-4">
                   <span className="h-px w-10 bg-brass" />
-                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/65">{t.role}{p ? <> · <Link href={`/works/${p.slug}`} className="group inline-flex min-h-11 items-center underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
+                  <span><span className="block font-semibold">{t.name}</span><span className="block text-sm text-ink/65">{t.role} · {t.place}{p ? <> · <Link href={`/works/${p.slug}`} className="group inline-flex min-h-11 items-center underline-offset-4 hover:underline"><RollText>{p.n}</RollText></Link></> : null}</span></span>
                 </figcaption>
               </motion.div>
             </AnimatePresence>
@@ -73,13 +74,12 @@ export function Testimonials() {
         <Reveal delay={0.1}>
           <div className="relative mx-auto aspect-[4/5] w-full max-w-xl overflow-hidden bg-ink md:aspect-[16/10] md:max-w-none lg:aspect-[4/5] lg:max-h-[78svh] lg:justify-self-end">
             <AnimatePresence initial={false}>
-              {p && (
-                <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">
-                  <Pic src={p.i} alt={p.n} sizes="(min-width: 1024px) 40vw, 90vw" className="h-full w-full object-cover" />
-                </motion.div>
-              )}
+              <motion.div key={i} initial={{ clipPath: "inset(100% 0 0 0)" }} animate={{ clipPath: "inset(0% 0 0 0)" }} exit={{ opacity: 0 }} transition={{ duration: 1, ease }} className="absolute inset-0">
+                <Pic src={photo} alt={p ? p.n : "Modular kitchen by The Furn"} sizes="(min-width: 1024px) 40vw, 90vw" className="h-full w-full object-cover" />
+              </motion.div>
             </AnimatePresence>
             <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
+            {!p && <span className="absolute right-5 bottom-5 left-5 text-sm font-semibold tracking-[0.15em] text-ivory uppercase">{t.place}</span>}
             {p && <Link href={`/works/${p.slug}`} className="group absolute right-5 bottom-5 left-5 flex items-center justify-between text-ivory"><span className="text-sm font-semibold tracking-[0.15em] uppercase">{p.n}</span><span className="grid h-10 w-10 place-items-center rounded-full border border-ivory/40 transition-all duration-500 group-hover:rotate-45 group-hover:bg-ivory group-hover:text-ink">↗</span></Link>}
           </div>
         </Reveal>

@@ -350,7 +350,7 @@ export function Hero({ ready }: { ready: boolean }) {
               </motion.div>
             </AnimatePresence>
             <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.55 }} className="mt-7 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a free site visit</RollText><Arrow /></Link>
+              <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a site visit</RollText><Arrow /></Link>
               <Link href="/works" className="btn-fill btn-fill-ivory group rounded-full border border-ivory/40 px-6 py-3 font-semibold backdrop-blur-md"><RollText>See our work</RollText></Link>
             </motion.div>
           </div>

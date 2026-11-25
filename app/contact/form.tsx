@@ -162,7 +162,7 @@ export function Form() {
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease }} className=" bg-ink p-8 text-ivory md:p-12">
         <span className="grid h-14 w-14 place-items-center rounded-full bg-brass text-2xl text-ink">✓</span>
         <h2 className="mt-8 text-4xl font-semibold tracking-tight md:text-5xl">Thank you, {f.name.split(" ")[0]}.</h2>
-        <p className="mt-4 max-w-md text-ivory/75">We&apos;ve received your details and will call you within one working day to plan your free site visit.</p>
+        <p className="mt-4 max-w-md text-ivory/75">We&apos;ve received your details and will call you within one working day to plan your site visit.</p>
         <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ink mt-8 inline-flex items-center gap-2 rounded-full bg-brass px-6 py-3 font-semibold text-ink">Prefer WhatsApp? Message us now</a>
         <br />
         <button onClick={() => { setF(empty); setState("idle"); }} className="group mt-8 text-sm font-semibold underline underline-offset-4"><RollText>Send another enquiry</RollText></button>
@@ -196,15 +196,15 @@ export function Form() {
       {/* Honeypot: hidden from people, bots fill it in */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden value={f.company} onChange={(e) => set("company")(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
       <div className="flex flex-wrap items-center justify-between gap-6">
-        <p className="max-w-xs text-sm text-ink/60">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}Free consultation. No obligation.</p>
+        <p className="max-w-xs text-sm text-ink/60">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}No obligation.</p>
         <button type="submit" disabled={state === "sending"} className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-7 font-semibold text-ivory disabled:opacity-60">
           <RollText>{state === "sending" ? "Sending..." : "Send enquiry"}</RollText><Arrow />
         </button>
       </div>
       {state === "fail" && (
         <div role="alert" className="bg-sand p-5 text-sm">
-          <p>We couldn&apos;t send that just now. Message us on WhatsApp to book your free site visit, or <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.</p>
-          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-brass mt-4 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-ivory">Book a free site visit on WhatsApp</a>
+          <p>We couldn&apos;t send that just now. Message us on WhatsApp to book your site visit, or <a href={mailto} className="font-semibold underline underline-offset-4">email us directly</a> and we&apos;ll reply the same day.</p>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-brass mt-4 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 font-semibold text-ivory">Book a site visit on WhatsApp</a>
         </div>
       )}
     </form>

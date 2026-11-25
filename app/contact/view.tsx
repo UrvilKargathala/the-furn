@@ -1,5 +1,5 @@
 import { SmoothScroll, Reveal, HeroGrow, BlurIn } from "../fx";
-import { CONTACT } from "../content/site";
+import { CONTACT, STATS } from "../content/site";
 import { Nav, Footer, PageHero } from "../ui";
 import { Pic } from "../pic";
 import { Form, JumpTo } from "./form";
@@ -13,23 +13,28 @@ const info: [string, string, string?][] = [
   ["Hours", CONTACT.hours],
 ];
 
-// Reassurance right above the form.
-const trust: [string, string][] = [
-  ["We reply within 24 hours", "A real person calls you back, Monday to Saturday."],
-  ["15-year hardware warranty", "Every module is covered, with care guidance at handover."],
-  ["Surat, Mumbai, Pune and more", "Free site visit and measurement in our service cities."],
+// Reassurance right above the form: three quick facts as a stat strip (big figure, label, one line)
+const trust: { n: string; u: string; t: string; d: string }[] = [
+  { n: "24", u: "h", t: "Reply time", d: "A real person calls you back, Monday to Saturday." },
+  { n: String(STATS.warrantyYears), u: " yr", t: "Hardware warranty", d: "Every module is covered, with care guidance at handover." },
+  { n: String(STATS.cities.length), u: " cities", t: "Where we work", d: `${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}.` },
 ];
 
 function Trust() {
   return (
-    <ul className="mb-10 grid gap-2 sm:mb-12 sm:grid-cols-3 sm:gap-3">
-      {trust.map(([t, d]) => (
-        <li key={t} className="sm:bg-sand/60 sm:p-4">
-          <span className="flex items-center gap-2 text-sm font-semibold sm:text-base"><span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brass text-[11px] text-ink">✓</span>{t}</span>
-          <span className="mt-1 hidden text-sm text-ink/60 sm:block">{d}</span>
-        </li>
-      ))}
-    </ul>
+    <Reveal>
+      <ul className="mb-10 grid grid-cols-3 border-y border-ink/15 sm:mb-14">
+        {trust.map((x, k) => (
+          <li key={x.t} className={`group py-5 sm:py-7 ${k ? "border-l border-ink/15 pl-4 sm:pl-7" : "pr-4 sm:pr-7"} ${k === 1 ? "pr-4 sm:pr-7" : ""}`}>
+            <p className="text-[2rem] leading-none font-semibold tracking-tight sm:text-5xl">
+              {x.n}<span className="text-[0.6em] text-brass sm:text-[1em]">{x.u}</span>
+            </p>
+            <p className="mt-3 text-[10px] font-semibold tracking-[0.2em] text-ink/60 uppercase sm:text-xs">{x.t}</p>
+            <p className="mt-2 hidden max-w-[16rem] text-sm leading-relaxed text-ink/65 sm:block">{x.d}</p>
+          </li>
+        ))}
+      </ul>
+    </Reveal>
   );
 }
 
@@ -55,7 +60,7 @@ export function ContactView() {
       <section id="enquiry" className="scroll-mt-20 px-5 py-14 md:px-12 md:py-28">
         <div className="grid gap-16 lg:grid-cols-[1fr_1.7fr] lg:gap-20">
           <Reveal className="order-2 lg:order-none">
-            <p className="max-w-sm text-lg text-ink/70">Tell us about your home and your budget. We&apos;ll call you to plan a free site visit, then measure, design and quote with no obligation.</p>
+            <p className="max-w-sm text-lg text-ink/70">Tell us about your home and your budget. We&apos;ll call you to plan a site visit, then measure, design and quote with no obligation.</p>
             <dl className="mt-12">
               {info.map(([k, v, href]) => (
                 <div key={k} className="flex items-center justify-between gap-6 border-t border-ink/15 py-3">

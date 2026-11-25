@@ -27,7 +27,7 @@ const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city}, ${BUSINESS.region} ${BUSI
 export const CONTACT = {
   phone: { label: "+91 99256 18895", href: "tel:+919925618895" },
   // Every WhatsApp button opens with this message
-  whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like a free site visit."),
+  whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like to book a site visit."),
   email: "info@thefurn.co",
   address: ADDRESS,
   maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
