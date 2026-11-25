@@ -9,7 +9,7 @@ import type { Service } from "../content/types";
 
 export const reasons = [
   { t: "Made to measure", d: "Every module is sized to your wall, your ceiling and your appliances, never a catalogue size.", c: "bg-ink text-ivory", r: -5 },
-  { t: "In-house factory", d: "Cut, edge-banded and assembled under one roof for precision you can see in every joint.", c: "bg-brass text-ivory", r: 4 },
+  { t: "German machinery", d: "Cut, edge-banded and assembled on German machines for precision you can see in every joint.", c: "bg-brass text-ivory", r: 4 },
   { t: "45-day delivery", d: "A fixed timeline from design sign-off to handover, with weekly site updates.", c: "bg-sand text-ink", r: -3 },
   { t: "15-year warranty", d: "Branded hardware and BWP carcasses backed by a 15-year warranty.", c: "bg-walnut text-ivory", r: 2 },
 ];

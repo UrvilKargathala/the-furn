@@ -10,7 +10,7 @@ import { Loader, Nav, ArrowIcon, Arrow } from "./ui";
 import { Pic } from "./pic";
 
 // Featured on the home page: projects that have our own photos and videos
-export const projects = ["avadh-ayuska", "atmosphere", "casa-rivera", "snowera"].map((s) => getProject(s)!);
+export const projects = ["amber-travertine", "vapour-mist", "torrent-grey", "statuario-blanc"].map((s) => getProject(s)!);
 
 // Hero background: one remix film of our projects in the old site's order, cut from the original
 // HD/4K videos and cropped to 1920x1080 (37 s, on the media server). `at` = second each project starts.
@@ -19,12 +19,12 @@ export const HERO_REMIX = `${MEDIA}/hero/remix.mp4`;
 export const heroReel = [
   { slug: "serene-art", at: 0 },
   { slug: "island-axis", at: 3.5 },
-  { slug: "snowera", at: 7 },
-  { slug: "casa-rivera", at: 10.5 },
+  { slug: "statuario-blanc", at: 7 },
+  { slug: "torrent-grey", at: 10.5 },
   { slug: "beige-bailey", at: 14 },
-  { slug: "atmosphere", at: 17.5 },
+  { slug: "vapour-mist", at: 17.5 },
   { slug: "concrete-canvas", at: 21 },
-  { slug: "avadh-ayuska", at: 24.5 },
+  { slug: "amber-travertine", at: 24.5 },
   { slug: "studio-furn", at: 32 },
 ].map((c) => ({ ...c, p: getProject(c.slug)! }));
 
@@ -32,7 +32,7 @@ export const heroReel = [
 export const heroScenes = [
   { from: 0, h: ["Where every home", "begins with a feeling"], d: "Before the first sketch, we learn how you want to live, then build furniture that fits." },
   { from: 6, h: ["Designed for the home", "you're building"], d: "Weekend villas, apartments and complete interiors, planned around your site and your family." },
-  { from: 12, h: ["Interiors made to", "the millimetre"], d: "Modular furniture cut and finished in our own workshop, installed by our own team." },
+  { from: 12, h: ["Interiors made to", "the millimetre"], d: "Modular furniture precision-cut and finished on German machinery, installed by our own team." },
   { from: 25, h: ["Details you feel", "every single day"], d: "Honest materials, quiet finishes and storage that disappears into the room." },
 ];
 
@@ -98,25 +98,28 @@ export function StackCard({ p, i, progress }: { p: (typeof projects)[number]; i:
     <div className="sticky top-0 flex h-[85svh] items-center md:h-svh">
       <motion.a href={`/works/${p.slug}`} data-cursor="View" style={{ scale }} className="group relative block h-full w-full origin-top overflow-hidden bg-ink text-ivory">
         <Pic src={p.i} alt={p.n} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-transparent to-ink/70" />
+        {/* Dark scrims behind the text (left column and bottom stats) so it stays readable on any photo */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/20 to-ink/80" />
+        <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-ink/80 via-ink/45 to-transparent md:w-3/4" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(27,25,21,0.75),transparent_55%)]" />
         <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-ink" />
         <div className="relative flex h-full flex-col justify-between px-5 pt-20 pb-8 md:px-12 md:pt-32 md:pb-12">
-          <div className="max-w-xl">
-            <span className="text-xs font-semibold tracking-[0.2em] text-ivory/70 uppercase">0{i + 1} / 0{n} · {p.c}</span>
-            <h3 className="mt-3 text-4xl font-semibold tracking-tight md:text-7xl">{p.n}</h3>
-            <p className="mt-4 text-ivory/80 md:text-lg">{p.d}</p>
-            {p.l && <p className="mt-5 text-sm font-semibold tracking-[0.15em] uppercase">{p.l}, India</p>}
-            {p.y && <p className="mt-1 text-sm text-ivory/70">{p.y}</p>}
+          <div className="max-w-xl [text-shadow:0_1px_18px_rgba(27,25,21,0.55)]">
+            <span className="text-xs font-semibold tracking-[0.2em] text-brass uppercase">0{i + 1} / 0{n} · {p.c}</span>
+            <h3 className="mt-3 text-4xl font-semibold tracking-tight text-ivory md:text-7xl">{p.n}</h3>
+            <p className="mt-4 text-ivory md:text-lg">{p.d}</p>
+            {p.l && <p className="mt-5 text-sm font-semibold tracking-[0.15em] text-ivory uppercase">{p.l}, India</p>}
+            {p.y && <p className="mt-1 text-sm text-ivory/85">{p.y}</p>}
           </div>
           <div className="flex items-end justify-between gap-6">
             <span className="grid h-12 w-12 place-items-center rounded-full border border-ivory/40 transition-all duration-500 group-hover:rotate-45 group-hover:bg-ivory group-hover:text-ink">
               <ArrowIcon />
             </span>
             {p.area && (
-              <div className="text-right">
-                <p className="text-xs text-ivory/70">Area</p>
-                <p className="text-2xl font-semibold md:text-4xl">{p.area}</p>
-                {p.days && <><p className="mt-3 text-xs text-ivory/70">Delivered in</p><p className="text-lg font-semibold md:text-2xl">{p.days}</p></>}
+              <div className="text-right [text-shadow:0_1px_18px_rgba(27,25,21,0.55)]">
+                <p className="text-xs font-semibold tracking-[0.15em] text-brass uppercase">Area</p>
+                <p className="text-2xl font-semibold text-ivory md:text-4xl">{p.area}</p>
+                {p.days && <><p className="mt-3 text-xs font-semibold tracking-[0.15em] text-brass uppercase">Delivered in</p><p className="text-lg font-semibold text-ivory md:text-2xl">{p.days}</p></>}
               </div>
             )}
           </div>

@@ -9,7 +9,7 @@ const stats: Stat[] = [
   { n: STATS.homes, s: "+", t: "Homes delivered across India", href: "/works" },
   { n: STATS.years, s: "+", t: "Years of design & build experience", href: "/studio" },
   { n: STATS.cities.length, s: "", t: "Cities served by our own install teams", href: "/contact" },
-  { n: 100, s: "%", t: "Built in our own workshop", href: "/process" },
+  { n: 100, s: "%", t: "Built with precision & expertise", href: "/process" },
 ];
 
 export function OurStory() {
@@ -23,7 +23,7 @@ export function OurStory() {
         <div className="mt-8"><PageHero as="h2" large lines={["Furniture that", "fits your life."]} /></div>
         <div className="mt-16 md:mt-24 md:ml-[30%]">
           <ScrollWords className="text-3xl leading-[1.12] font-medium tracking-tight md:text-5xl"
-            text="A home works best when its furniture is made for it. We design modular kitchens, wardrobes and interiors around your space, your routine and the way you live." />
+            text="A home works best when its furniture is made for it. We design modular kitchens, wardrobes, beds, vanities, dressing tables and loose modular furniture around your space, your routine and the way you live." />
         </div>
       </div>
 

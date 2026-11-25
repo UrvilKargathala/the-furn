@@ -15,8 +15,8 @@ These are shown on the site today as true.
 | 2 | Years in business / founded | 12+ years, founded 2014 | |
 | 3 | Hardware warranty | 10 years | |
 | 4 | Delivery time | "45-day delivery" from design sign-off to handover | |
-| 5 | Workshop | 100% built in our own workshop | |
-| 6 | Cities served | Surat, Vadodara, Rajkot, Gandhinagar, Bhavnagar | |
+| 5 | Production | 100% built with precision & expertise on German machinery (no own workshop) | |
+| 6 | Cities served | Surat, Mumbai, Navi Mumbai, Ahmedabad, Hyderabad, Pune | |
 | 7 | Opening hours | Monday to Saturday, 10 am – 7 pm | |
 | 8 | Phone / WhatsApp | +91 99256 18895 | |
 | 9 | Email | info@thefurn.co | |
@@ -45,7 +45,7 @@ These 6 came from the old Framer site. Some details look inconsistent (marked �
 | Island Axis | Modular Kitchen | Surat | 2024 | 260 sq ft | 42 days | Private Villa | |
 | Beige Bailey | Modular Kitchen | Surat | 2024 | 2,400 sq ft | 90 days | 3BHK Apartment | ⚠ Description says a **full 3BHK interior**; should the category be "Complete Interior"? |
 | Concrete Canvas | Modular Kitchen | Surat | 2025 | 4,800 sq ft | 120 days | Private Villa | ⚠ Description says a **two-storey villa**; should the category be "Complete Interior"? |
-| Avadh Ayuska | Weekend Home | Surat | 2026 | 6,000 sq ft | 21 days | Private Residence | ⚠ 200 sq ft seems small for a weekend home; is that one room or the whole home? |
+| Amber Travertine (was Avadh Ayuska) | Weekend Home | Surat | 2026 | 6,000 sq ft | 21 days | Private Residence | ⚠ 200 sq ft seems small for a weekend home; is that one room or the whole home? |
 | Studio Furn | Studio | Surat | 2022 | — | — | The Furn | Area, timeline and story missing |
 
 Also tell me if any of the stories, key features or client quotes on these pages are not real; some were written for the old site and may be placeholders.
@@ -54,24 +54,23 @@ Also tell me if any of the stories, key features or client quotes on these pages
 
 | Project | What it shows (from photos) | City | Year | Area | Timeline | Client type | Story (2–4 lines) | Credits | Instagram |
 |---|---|---|---|---|---|---|---|---|---|
-| Atmosphere | Light modular kitchen, stone breakfast counter | | 2026 | | | | | | |
-| Casa Rivera | Dark kitchen, timber-fronted island | | | | | | | Photography: Studio Rohan Patel (correct?) | |
-| Snowera | Greige handle-less kitchen with island | | | | | | | | |
-| Palladium | Kitchen with marble wall + round dining table | | | | | | | | |
-| Globcon | Complete interior, grey and timber | | | | | | | | |
-| Globcon Oasis | Grey kitchen, reeded-glass cabinets | | | | | | | | |
-| Gokuldham | Island kitchen + walk-in wardrobe | | | | | | | | |
-| Greenopolish | Double-height complete home | | | | | | | | |
-| Setu Villa | Handle-less grey L-kitchen | | | | | | | | |
-| Pcube | Green-stone kitchen, angled island | | | | | | | | |
-| Timber Arch | Greige kitchen with walnut arch | | | | | | | | |
-| Shreepad | All-white kitchen and living | | | | | | | | |
+| Vapour Mist (was Atmosphere) | Light modular kitchen, stone breakfast counter | | 2026 | | | | | | |
+| Torrent Grey (was Casa Rivera) | Dark kitchen, timber-fronted island | | | | | | | Photography: Studio Rohan Patel (correct?) | |
+| Statuario Blanc (was Snowera) | Greige handle-less kitchen with island | | | | | | | | |
+| Titanium Marquina (was Palladium) | Kitchen with marble wall + round dining table | | | | | | | | |
+| Honed Aggregate (was Globcon) | Complete interior, grey and timber | | | | | | | | |
+| Laurent Noir (was Gokuldham) | Island kitchen + walk-in wardrobe | | | | | | | | |
+| Sage Calacatta (was Greenopolish) | Double-height complete home | | | | | | | | |
+| Ochre Plinth (was Setu Villa) | Handle-less grey L-kitchen | | | | | | | | |
+| Graphite Monolith (was Pcube) | Green-stone kitchen, angled island | | | | | | | | |
+| Cashmere Oak (was Timber Arch) | Greige kitchen with walnut arch | | | | | | | | |
+| Ivory Heritage (was Shreepad) | All-white kitchen and living | | | | | | | | |
 | Serene Wardrobe | Walk-in wardrobe, oak and smoked glass | | | | | | | | |
 | Sage Granite | Sage kitchen + marble dining table | | | | | | | | |
 
 ### 2C. Duplicates: done
 
-Merged into the Drive names: Snowera (was also Aestra), Casa Rivera (was also Noir Arc), Atmosphere (was also Ivory). Old links redirect.
+Merged into the Drive names: Snowera (was also Aestra), Casa Rivera (was also Noir Arc), Atmosphere (was also Ivory), Globcon (now includes Globcon Oasis). Old links redirect.
 
 ---
 

@@ -53,10 +53,10 @@ export function Reveal({ children, delay = 0, className = "" }: { children: Reac
   );
 }
 
-// Words slide up from a mask, staggered. The outer span is what gets observed:
+// Words slide up from a mask, staggered. Hidden at 160% so no letter tops peek through the mask's bottom padding. The outer span is what gets observed:
 // the inner words start clipped (invisible), so they can't trigger whileInView themselves.
 export function SplitText({ text, className = "", delay = 0, play }: { text: string; className?: string; delay?: number; play?: boolean }) {
-  const word = { hidden: { y: "110%" }, show: (i: number) => ({ y: 0, transition: { duration: 1, ease, delay: delay + i * 0.06 } }) };
+  const word = { hidden: { y: "160%" }, show: (i: number) => ({ y: 0, transition: { duration: 1, ease, delay: delay + i * 0.06 } }) };
   const trigger = play === undefined
     ? { whileInView: "show", viewport: { once: true } }
     : { animate: play ? "show" : "hidden" };
@@ -111,14 +111,14 @@ export function RollText({ children }: { children: string }) {
 }
 
 // Image wipes in with a clip reveal and drifts on scroll
-export function ParallaxImg({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+export function ParallaxImg({ src, alt, className = "", quality }: { src: string; alt: string; className?: string; quality?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
   return (
     <motion.div ref={ref} className={`overflow-hidden ${className}`} initial={{ clipPath: "inset(100% 0 0 0)" }}
       whileInView={{ clipPath: "inset(0% 0 0 0)" }} viewport={{ once: true }} transition={{ duration: 1.3, ease }}>
-      <motion.div style={{ y, scale: 1.18 }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} className="h-full w-full object-cover" /></motion.div>
+      <motion.div style={{ y, scale: 1.18 }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} quality={quality} className="h-full w-full object-cover" /></motion.div>
     </motion.div>
   );
 }

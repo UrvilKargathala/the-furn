@@ -32,7 +32,7 @@ function StepRow({ st, i }: { st: (typeof processDetail)[number]; i: number }) {
             </div>
           </Reveal>
         </div>
-        <ParallaxImg src={st.i} alt={st.t} className="aspect-[4/5] w-full md:aspect-[4/5]" />
+        <ParallaxImg src={st.i} alt={st.t} quality={90} className="aspect-[4/5] w-full md:aspect-[4/5]" />
       </div>
     </section>
   );
@@ -79,7 +79,7 @@ export function ProcessView() {
         <div className="mt-16 grid gap-px bg-ivory/10 md:grid-cols-3">
           {[
             ["Designed in-house", "The people who measure your room are the people who design it."],
-            ["Built in our workshop", "Every module is cut, edge-banded and assembled by us, not outsourced."],
+            ["Built on German machinery", "Every module is cut, edge-banded and assembled with high precision and a clean finish."],
             ["Installed by our own team", "No subcontractors on site. We align, clean up and hand over ourselves."],
           ].map(([t, d], i) => (
             <Reveal key={t} delay={i * 0.1} className="bg-ink p-8 md:p-10">

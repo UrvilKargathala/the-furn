@@ -2,20 +2,21 @@ import type { Service } from "./types";
 
 // Same five steps for every service unless a service overrides them
 const processSteps = [
-  { t: "Site visit & brief", d: "We measure the space, check plumbing and electrical points, and note how you use the room every day." },
   { t: "Layout & 3D design", d: "You get a scaled layout and 3D views, with storage mapped to what you actually own." },
+  { t: "Site visit & brief", d: "We measure the space, check plumbing and electrical points, and note how you use the room every day." },
   { t: "Materials & quote", d: "Pick shutters, finishes and hardware from real samples, then sign off an itemised, fixed quote." },
-  { t: "Factory production", d: "Every module is cut, edge-banded and assembled in our workshop for a precise, durable finish." },
-  { t: "Installation & handover", d: "Our own team installs, aligns and cleans up, then walks you through care and warranty." },
+  { t: "Factory production", d: "Every module is cut, edge-banded and assembled on German machines for a precise, durable finish." },
+  { t: "Installation & handover", d: "Our own team installs and aligns every module, then walks you through care and warranty." },
 ];
 
+// Process photos in public/process/: sample-room-hd.jpg was supplied by the client, layout-hd.jpg is from the Titanium Marquina project; the rest are free-licence Unsplash images. All sharpened for the process page (unsplash.com/license). Swap for own photos when available.
 // The /process page: the same five steps, with what happens at each and what you leave with
 export const processDetail = processSteps.map((st, i) => ({ ...st, ...[
-  { i: "/works/avadh-ayuska/02.jpg", tags: ["Measurements", "Plumbing & electrical points", "How you use the room"], out: "A clear brief and exact site measurements" },
-  { i: "/works/palladium/10.jpg", tags: ["Scaled layout", "3D views", "Storage planning"], out: "A layout and 3D views you can walk through" },
-  { i: "/works/atmosphere/02.jpg", tags: ["Real samples", "Shutters & finishes", "Hardware"], out: "An itemised, fixed quote you sign off" },
-  { i: "/works/casa-rivera/05.jpg", tags: ["Precision cutting", "Edge banding", "Workshop assembly"], out: "Modules built to the millimetre in our workshop" },
-  { i: "/works/globcon/11.jpg", tags: ["Installation", "Alignment & clean-up", "Care walkthrough"], out: "A finished room, handed over with warranty" },
+  { i: "/process/layout-hd.jpg", tags: ["Scaled layout", "3D views", "Storage planning"], out: "A layout and 3D views you can walk through" },
+  { i: "/process/site-visit-hd.jpg", tags: ["Measurements", "Plumbing & electrical points", "How you use the room"], out: "A clear brief and exact site measurements" },
+  { i: "/process/sample-room-hd.jpg", tags: ["Real samples", "Shutters & finishes", "Hardware"], out: "An itemised, fixed quote you sign off" },
+  { i: "/process/factory-hd.jpg", tags: ["Precision cutting", "Edge banding", "German machinery"], out: "Modules built to the millimetre" },
+  { i: "/process/installation-hd.jpg", tags: ["Installation", "Alignment", "Care walkthrough"], out: "A finished room, handed over with warranty" },
 ][i] }));
 
 export const services: Service[] = [
@@ -23,11 +24,11 @@ export const services: Service[] = [
     slug: "modular-kitchens",
     t: "Modular Kitchens",
     short: "Parallel, L-shape, island and U-shape kitchens built around how you cook.",
-    i: "/works/atmosphere/02.jpg",
+    i: "/works/gokuldham/01.jpg",
     tags: ["Layout", "Shutters", "Hardware"],
     intro: [
       "A kitchen is the hardest-working room in the house. We design it around your cooking style, your appliances and the way your family moves through the space, so every drawer lands exactly where your hand reaches for it.",
-      "From compact apartment kitchens to open island layouts, each module is built in our workshop and finished to the millimetre.",
+      "From compact apartment kitchens to open island layouts, each module is precision-built on German machinery and finished to the millimetre.",
     ],
     sections: [
       { h: "Planned around the way you cook", p: ["We map the work triangle between hob, sink and fridge, then plan tall units, corner solutions and appliance garages so nothing is wasted.", "Heights are set to you, not to a catalogue, so the counter, wall units and chimney all sit at a comfortable reach."] },
@@ -46,7 +47,7 @@ export const services: Service[] = [
     slug: "wardrobes",
     t: "Wardrobes",
     short: "Sliding, hinged and walk-in storage with fittings sized to your wardrobe.",
-    i: "/works/avadh-ayuska/07.jpg",
+    i: "/works/serene-wardrobe/01.jpg",
     tags: ["Sliding", "Walk-in", "Lofts"],
     intro: [
       "A good wardrobe starts with what goes inside it. We count your hanging, folding and accessory needs first, then design the shutters around them.",
@@ -92,7 +93,7 @@ export const services: Service[] = [
     slug: "bedroom-furniture",
     t: "Bedroom Furniture",
     short: "Storage beds, side tables, dressers and study units for restful rooms.",
-    i: "/works/avadh-ayuska/06.jpg",
+    i: "/works/globcon/01.jpg",
     tags: ["Beds", "Dressers", "Study"],
     intro: [
       "A bedroom should feel calm, not crowded. We design beds, dressers and study corners that fit together as one quiet, well-organised room.",
@@ -136,10 +137,10 @@ export const services: Service[] = [
   },
   {
     slug: "complete-interiors",
-    t: "Complete Interiors",
-    short: "End-to-end homes, from layout and material palette to handover.",
+    t: "Modular Furniture Solution",
+    short: "End-to-end modular furniture for your home: selection, sourcing, manufacture and installation.",
     i: "/works/avadh-ayuska/02.jpg",
-    tags: ["Planning", "Materials", "Turnkey"],
+    tags: ["Selection", "Sourcing", "Manufacture", "Installation"],
     intro: [
       "One team for the whole home. We plan every room together, so the kitchen, wardrobes, living and bedrooms share one consistent material palette.",
       "You get a single point of contact, a single timeline and a single warranty.",

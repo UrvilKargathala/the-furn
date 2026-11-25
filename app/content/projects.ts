@@ -1,7 +1,7 @@
 import type { Project } from "./types";
 import { MEDIA } from "./site";
 
-// Project photos live in public/works/<slug>/. Films stream from media.thefurn.co.
+// Project photos live in public/works/<folder>/ (folders keep the original project names). Films stream from media.thefurn.co.
 const work = (slug: string, f: string) => `/works/${slug}/${f}.webp`;
 const workJpg = (slug: string, f: string) => `/works/${slug}/${f}.jpg`;
 // Project films: full-quality originals from the client Drive, served from our media server
@@ -58,8 +58,8 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "avadh-ayuska", n: "Avadh Ayuska", c: "Weekend Home", cat: "Weekend Home", l: "Surat", y: "2026", area: "6,000 sq ft", days: "21 days", client: "Private Residence",
-    d: "A family dining room with a solid wood table, glass-front crockery unit and a serene pooja corner.",
+    slug: "amber-travertine", n: "Amber Travertine", c: "Weekend Home", cat: "Weekend Home", l: "Surat", y: "2026", area: "6,000 sq ft", days: "21 days", client: "Private Residence",
+    d: "A 6,000 sq ft weekend home with a book-matched marble TV wall, warm timber panelling and solid-wood lounge seating, plus a family dining room with a pooja corner.",
     i: workJpg("avadh-ayuska", "02"), gallery: [workJpg("avadh-ayuska", "01"), workJpg("avadh-ayuska", "03"), workJpg("avadh-ayuska", "04"), workJpg("avadh-ayuska", "05"), workJpg("avadh-ayuska", "06"), workJpg("avadh-ayuska", "07"), workJpg("avadh-ayuska", "08"), workJpg("avadh-ayuska", "09"), workJpg("avadh-ayuska", "10"), workJpg("avadh-ayuska", "11")],
     service: "Furniture", credits: [{ n: "Ar. Aditya Sutariya", r: "Architect" }, { n: "Tysh Marketing", r: "Visual Team" }],
     video: `${MEDIA}/works/avadh-ayuska/villa-reel.mp4`, moreVideos: [`${MEDIA}/works/avadh-ayuska/priya-01.mp4`, `${MEDIA}/works/avadh-ayuska/priyal.mp4`], insta: "https://www.instagram.com/p/DWyeI2QPAbW/",
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     solution: "We designed an extendable wood table, a lit crockery unit and a pooja unit with jaali shutters on the same wall.",
     features: ["Extendable solid wood table", "Lit glass crockery unit", "Pooja unit with jaali shutters", "Hidden storage for festival items"],
     result: "Ten people sit comfortably for festivals, and the room stays calm on ordinary days.",
-    quote: { t: "Diwali dinner for twelve, and nobody felt squeezed.", by: "Homeowner, Avadh Ayuska" },
+    quote: { t: "Diwali dinner for twelve, and nobody felt squeezed.", by: "Homeowner, Amber Travertine" },
   },
   {
     slug: "studio-furn", n: "Studio Furn", c: "Studio", cat: "Studio", l: "Surat", y: "2022", area: "", days: "", client: "The Furn",
@@ -80,7 +80,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "atmosphere", n: "Atmosphere", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "2026", area: "", days: "", client: "",
+    slug: "vapour-mist", n: "Vapour Mist", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "2026", area: "", days: "", client: "",
     d: "A calm, light-toned modular kitchen with a stone breakfast counter, glass-front display units and a concealed shutter appliance wall.",
     i: workJpg("atmosphere", "02"), gallery: [workJpg("atmosphere", "03"), workJpg("atmosphere", "05"), workJpg("atmosphere", "06"), workJpg("atmosphere", "08"), workJpg("atmosphere", "10"), workJpg("atmosphere", "12"), workJpg("atmosphere", "13"), workJpg("atmosphere", "15"), workJpg("atmosphere", "17"), workJpg("atmosphere", "19")],
     service: "Furniture", credits: [],
@@ -89,7 +89,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "casa-rivera", n: "Casa Rivera", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "torrent-grey", n: "Torrent Grey", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A dark, refined modular kitchen with a timber-fronted island, glass display units and terrazzo flooring.",
     i: workJpg("casa-rivera", "01"), gallery: [workJpg("casa-rivera", "02"), workJpg("casa-rivera", "03"), workJpg("casa-rivera", "04"), workJpg("casa-rivera", "05"), workJpg("casa-rivera", "06"), workJpg("casa-rivera", "07"), workJpg("casa-rivera", "08"), workJpg("casa-rivera", "09"), workJpg("casa-rivera", "10"), workJpg("casa-rivera", "11")],
     service: "Furniture", credits: [{ n: "Pravaah Design Studio", r: "Architect" }, { n: "Studio Rohan Patel", r: "Photography" }],
@@ -98,7 +98,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "snowera", n: "Snowera", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "statuario-blanc", n: "Statuario Blanc", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A quiet greige modular kitchen with a long run of handle-less units, a central island and a tall appliance wall.",
     i: workJpg("snowera", "01"), gallery: [workJpg("snowera", "02"), workJpg("snowera", "03"), workJpg("snowera", "04"), workJpg("snowera", "05"), workJpg("snowera", "06"), workJpg("snowera", "07")],
     service: "Furniture", credits: [{ n: "Ar. Ajay Panchal", r: "Architect" }, { n: "Manan Surti", r: "Visual Team" }],
@@ -107,7 +107,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "palladium", n: "Palladium", c: "Modular Kitchen & Dining", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "titanium-marquina", n: "Titanium Marquina", c: "Modular Kitchen & Dining", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A soft-toned modular kitchen with a marble feature wall and a round marble-top dining table beside it.",
     i: workJpg("palladium", "10"), gallery: [workJpg("palladium", "01"), workJpg("palladium", "02"), workJpg("palladium", "03"), workJpg("palladium", "04"), workJpg("palladium", "05"), workJpg("palladium", "06"), workJpg("palladium", "07"), workJpg("palladium", "08"), workJpg("palladium", "09"), workJpg("palladium", "11")],
     service: "Furniture", credits: [],
@@ -116,25 +116,16 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "globcon", n: "Globcon", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
-    d: "A calm, grey-and-timber home interior with a panelled bedroom headboard and a black-topped modular kitchen.",
-    i: workJpg("globcon", "11"), gallery: [workJpg("globcon", "01"), workJpg("globcon", "07"), workJpg("globcon", "08"), workJpg("globcon", "09"), workJpg("globcon", "10")],
-    service: "Furniture", credits: [],
-    video: "", insta: "",
-    overview: "", challenge: "", solution: "", features: [], result: "",
-    quote: { t: "", by: "" },
-  },
-  {
-    slug: "globcon-oasis", n: "Globcon Oasis", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
-    d: "A grey modular kitchen with black granite tops, reeded-glass wall cabinets in black frames and a breakfast counter under a timber ceiling.",
-    i: workJpg("globcon-oasis", "01"), gallery: [workJpg("globcon-oasis", "02"), workJpg("globcon-oasis", "03"), workJpg("globcon-oasis", "04"), workJpg("globcon-oasis", "05"), workJpg("globcon-oasis", "06"), workJpg("globcon-oasis", "07")],
+    slug: "honed-aggregate", n: "Honed Aggregate", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
+    d: "A calm, grey-and-timber home interior with a panelled bedroom headboard and a grey modular kitchen with black granite tops, reeded-glass wall cabinets and a breakfast counter.",
+    i: workJpg("globcon", "11"), gallery: [workJpg("globcon", "01"), workJpg("globcon", "07"), workJpg("globcon", "08"), workJpg("globcon", "09"), workJpg("globcon", "10"), ...["01", "02", "03", "04", "05", "06", "07"].map((n) => workJpg("globcon-oasis", n))],
     service: "Furniture", credits: [],
     video: `${MEDIA}/works/globcon-oasis/furn3-1.mp4`, insta: "",
     overview: "", challenge: "", solution: "", features: [], result: "",
     quote: { t: "", by: "" },
   },
   {
-    slug: "gokuldham", n: "Gokuldham", c: "Kitchen & Wardrobes", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "laurent-noir", n: "Laurent Noir", c: "Kitchen & Wardrobes", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A dark-stone island kitchen with a floating hood and tall handle-less units, paired with a walk-in wardrobe of fluted glass, slate-blue panels and brass trims.",
     i: workJpg("gokuldham", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08", "09", "10", "11"].map((n) => workJpg("gokuldham", n)),
     service: "Furniture", credits: [],
@@ -143,7 +134,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "greenopolish", n: "Greenopolish", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
+    slug: "sage-calacatta", n: "Sage Calacatta", c: "Complete Interior", cat: "Complete Interior", l: "", y: "", area: "", days: "", client: "",
     d: "A double-height home in warm greys and bronze: a sunken living room, dining, a grey modular kitchen, walnut wardrobes and calm, textured bedrooms.",
     i: workJpg("greenopolish", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08", "09", "10", "11"].map((n) => workJpg("greenopolish", n)),
     service: "Furniture", credits: [],
@@ -152,7 +143,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "setu-villa", n: "Setu Villa", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "ochre-plinth", n: "Ochre Plinth", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A handle-less grey L-kitchen against concrete-finish walls, with a black chimney hood, a tall appliance wall and a lit glass display cabinet.",
     i: workJpg("setu-villa", "01"), gallery: ["02", "03", "04", "05", "06", "07"].map((n) => workJpg("setu-villa", n)),
     service: "Furniture", credits: [],
@@ -161,7 +152,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "pcube", n: "Pcube", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "graphite-monolith", n: "Graphite Monolith", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A green-stone kitchen built around a sculpted angled island, with a black island hood, grey base units and tall glass-fronted storage.",
     i: workJpg("pcube", "01"), gallery: ["02", "03", "04"].map((n) => workJpg("pcube", n)),
     service: "Furniture", credits: [],
@@ -170,7 +161,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "timber-arch", n: "Timber Arch", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "cashmere-oak", n: "Cashmere Oak", c: "Modular Kitchen", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A warm greige kitchen framed by a rounded walnut arch, with black granite tops, reeded-glass uppers, pendant lights and a breakfast counter.",
     i: workJpg("timber-arch", "01"), gallery: ["02", "03", "04"].map((n) => workJpg("timber-arch", n)),
     service: "Furniture", credits: [],
@@ -179,7 +170,7 @@ export const projects: Project[] = [
     quote: { t: "", by: "" },
   },
   {
-    slug: "shreepad", n: "Shreepad", c: "Kitchen & Living", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
+    slug: "ivory-heritage", n: "Ivory Heritage", c: "Kitchen & Living", cat: "Kitchen", l: "", y: "", area: "", days: "", client: "",
     d: "A bright all-white open kitchen and living space on marble floors, with shaker-style units, a lit glass display tower, a mobile glass trolley and a slim TV wall.",
     i: workJpg("shreepad", "01"), gallery: ["02", "03", "04", "05", "06", "07", "08"].map((n) => workJpg("shreepad", n)),
     service: "Furniture", credits: [],
@@ -212,9 +203,9 @@ export const getProject = (slug: string) => projects.find((p) => p.slug === slug
 // Client testimonials shown on the home page. Replace the sample entries with real quotes
 // (set `slug` to the project they belong to). Entries marked `sample` are placeholders (see SHOW_SAMPLES in testimonials.tsx).
 export const testimonials: { quote: string; name: string; role: string; slug: string; sample?: boolean }[] = [
-  { quote: "From the first site visit to the last handle, everything arrived exactly as drawn. The kitchen finally works the way we cook.", name: "Sample client", role: "Modular kitchen", slug: "atmosphere", sample: true },
-  { quote: "Every shutter and shelf was measured for our home. Nothing feels off-the-shelf, and the finish is spotless.", name: "Sample client", role: "Weekend home", slug: "avadh-ayuska", sample: true },
-  { quote: "They finished on the date they promised and cleaned up as if they had never been there.", name: "Sample client", role: "Modular kitchen", slug: "casa-rivera", sample: true },
+  { quote: "From the first site visit to the last handle, everything arrived exactly as drawn. The kitchen finally works the way we cook.", name: "Sample client", role: "Modular kitchen", slug: "vapour-mist", sample: true },
+  { quote: "Every shutter and shelf was measured for our home. Nothing feels off-the-shelf, and the finish is spotless.", name: "Sample client", role: "Weekend home", slug: "amber-travertine", sample: true },
+  { quote: "They finished on the date they promised and cleaned up as if they had never been there.", name: "Sample client", role: "Modular kitchen", slug: "torrent-grey", sample: true },
 ];
 
 // Works filter: every category that has at least one project, biggest first, so new categories appear on their own
