@@ -14,8 +14,8 @@ export default function Error({ error, retry }: { error: unknown; retry: () => v
         <h1 className="mt-4 text-5xl leading-[1] font-bold tracking-tight md:text-7xl">A hinge came loose.<br /><span className="text-stone">We&apos;re on it.</span></h1>
         <p className="mx-auto mt-6 max-w-md text-ivory/75">This page didn&apos;t load properly. Try again, or reach us directly on WhatsApp.</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <button onClick={() => retry()} className="rounded-full bg-brass px-6 py-3 font-semibold">Try again</button>
-          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="rounded-full border border-ivory/30 px-6 py-3 font-semibold">WhatsApp us</a>
+          <button onClick={() => retry()} className="btn-fill btn-fill-ivory rounded-full bg-brass px-6 py-3 font-semibold">Try again</button>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ivory rounded-full border border-ivory/30 px-6 py-3 font-semibold">WhatsApp us</a>
         </div>
       </div>
     </main>

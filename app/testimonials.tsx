@@ -11,7 +11,7 @@ const SLIDE_MS = 8000;
 // Sample quotes are hidden on the live site (they still show in development). Add real quotes in content/projects.ts
 // without `sample` and the section appears on its own.
 const SHOW_SAMPLES = false;
-const list = SHOW_SAMPLES || process.env.NODE_ENV === "development" ? testimonials : testimonials.filter((t) => !t.sample);
+export const list = SHOW_SAMPLES || process.env.NODE_ENV === "development" ? testimonials : testimonials.filter((t) => !t.sample);
 
 export function Testimonials() {
   const [i, setI] = useState(0);

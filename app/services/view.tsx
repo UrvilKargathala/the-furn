@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, BlurIn } from "../fx";
 import { img, STATS } from "../content/site";
 import { services } from "../content/services";
 import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "../ui";
@@ -44,10 +44,10 @@ export function ServicesView() {
         
         <PageHero label="Our Services" lines={["Tailored furniture", "for every room"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-8">
-          <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">From the kitchen to the wardrobe, every piece is designed in-house and built to your exact measurements, with one team taking you from first sketch to handover.</p></Reveal>
-          <Reveal delay={0.5}>
-            <a href="#contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></a>
-          </Reveal>
+          <BlurIn delay={0.45}><p className="max-w-lg text-lg text-ink/70">From the kitchen to the wardrobe, every piece is designed in-house and built to your exact measurements, with one team taking you from first sketch to handover.</p></BlurIn>
+          <BlurIn delay={0.6}>
+            <a href="#contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></a>
+          </BlurIn>
         </div>
         <div className="mt-20">
           <StatsRow stats={[
@@ -88,22 +88,22 @@ export function ServiceDetailView({ s }: { s: Service }) {
 
       {/* Hero: breadcrumb, title, actions (lunarch) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
-        <Reveal>
+        <BlurIn>
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
             <Link href="/services" className="inline-flex min-h-11 items-center hover:text-ink">Services</Link><span>/</span><span className="text-ink">{s.t}</span>
           </nav>
-        </Reveal>
+        </BlurIn>
         <h1 className="mt-6 text-[14vw] leading-[0.9] font-bold tracking-[-0.04em] md:text-[9vw]"><SplitText text={s.t} /></h1>
         <div className="mt-10 flex flex-wrap items-end justify-between gap-8">
-          <Reveal delay={0.3}>
+          <BlurIn delay={0.4}>
             <p className="max-w-lg text-lg text-ink/70">{s.short}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {s.tags.map((t) => <span key={t} className="rounded-full border border-ink/15 px-4 py-1.5 text-sm">{t}</span>)}
             </div>
-          </Reveal>
-          <Reveal delay={0.4}>
-            <a href="#contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Get a free quote</RollText><Arrow /></a>
-          </Reveal>
+          </BlurIn>
+          <BlurIn delay={0.55}>
+            <a href="#contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Get a free quote</RollText><Arrow /></a>
+          </BlurIn>
         </div>
       </section>
 
@@ -179,7 +179,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       <section className="px-5 pb-24 md:px-12 md:pb-32">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div><Label>Explore more</Label><Heading text="Other" accent="services" /></div>
-          <Reveal><Link href="/services" className="group flex items-center gap-3 rounded-full bg-ink py-1.5 pr-1.5 pl-5 text-sm font-semibold text-ivory"><RollText>All services</RollText><Arrow /></Link></Reveal>
+          <Reveal><Link href="/services" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-1.5 pr-1.5 pl-5 text-sm font-semibold text-ivory"><RollText>All services</RollText><Arrow /></Link></Reveal>
         </div>
         <div className="mt-14 grid gap-8 md:grid-cols-3">
           {others.map((o) => (

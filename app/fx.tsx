@@ -173,6 +173,30 @@ export function Appear({ children, className, initial, animate, transition }: {
   return <motion.div className={className} initial={initial} animate={animate} transition={transition}>{children}</motion.div>;
 }
 
+// Hero media intro: starts as a small rounded frame in the centre and opens out to fill the hero,
+// while the photo or film inside settles from a slight zoom. Usable from server components.
+export function HeroGrow({ children, className = "" }: { children?: React.ReactNode; className?: string }) {
+  return (
+    <motion.div className={`absolute inset-0 ${className}`}
+      initial={{ clipPath: "inset(34% 30% 34% 30% round 20px)" }} animate={{ clipPath: "inset(0% 0% 0% 0% round 0px)" }}
+      transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}>
+      <motion.div className="h-full w-full" initial={{ scale: 1.35 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease, delay: 0.2 }}>
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// Hero copy and buttons: rise out of a soft blur, one after another via `delay`
+export function BlurIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+  return (
+    <motion.div className={className} initial={{ opacity: 0, y: 24, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 1, ease, delay }}>
+      {children}
+    </motion.div>
+  );
+}
+
 // next/image that motion can animate (scale, y, opacity)
 export const MotionPic = motion.create(Pic);
 

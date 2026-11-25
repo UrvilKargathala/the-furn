@@ -20,3 +20,51 @@ body { background: var(--color-ivory); color: var(--color-ink); }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 .animate-marquee { animation: marquee 12s linear infinite; }
+
+/* Page transitions (app/template.tsx): old page blurs out, new page comes into focus.
+   The nav is anchored so it stays put while the content changes underneath it. */
+::view-transition { pointer-events: none; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-old(.page-out) { animation: 380ms cubic-bezier(0.4, 0, 1, 1) both page-out; }
+::view-transition-new(.page-in) { animation: 900ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both page-in; }
+::view-transition-group(site-header) { animation: none; z-index: 100; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+@keyframes page-out { to { opacity: 0; filter: blur(12px); scale: 0.985; } }
+@keyframes page-in { from { opacity: 0; filter: blur(20px); scale: 1.02; } }
+/* Phones: a lighter blur keeps the change smooth on slower GPUs */
+@media (max-width: 767px) {
+  @keyframes page-out { to { opacity: 0; filter: blur(6px); } }
+  @keyframes page-in { from { opacity: 0; filter: blur(10px); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*) { animation-duration: 0s !important; animation-delay: 0s !important; }
+}
+
+/* Button hover: a fill sweeps in from the left and the text colour flips with it.
+   Pick the fill that contrasts with the button: btn-fill-ink (brass or light outline buttons),
+   btn-fill-brass (dark or ivory buttons), btn-fill-ivory (outline buttons on dark backgrounds). */
+.btn-fill { position: relative; isolation: isolate; overflow: hidden; transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s; }
+.btn-fill::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--btn-fill);
+  transform: translateX(-101%); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-fill-ink { --btn-fill: var(--color-ink); --btn-fill-text: var(--color-ivory); }
+.btn-fill-brass { --btn-fill: var(--color-brass); --btn-fill-text: var(--color-ink); }
+.btn-fill-ivory { --btn-fill: var(--color-ivory); --btn-fill-text: var(--color-ink); }
+@media (hover: hover) {
+  .btn-fill:hover::before { transform: translateX(0); }
+  .btn-fill:hover { color: var(--btn-fill-text); border-color: transparent; }
+}
+.btn-fill:focus-visible::before { transform: translateX(0); }
+.btn-fill:focus-visible { color: var(--btn-fill-text); }
+@media (prefers-reduced-motion: reduce) { .btn-fill::before { transition: none; } }
+/* On ivory fills the ivory arrow circle turns dark so it stays visible */
+@media (hover: hover) { .btn-fill-ivory:hover .arrow-dot { background: var(--color-ink); color: var(--color-ivory); } }
+/* Split buttons (a pill and a circle inside one link): hovering the link fills each part */
+@media (hover: hover) {
+  .group:hover > .btn-fill::before { transform: translateX(0); }
+  .group:hover > .btn-fill { color: var(--btn-fill-text); }
+}
+.group:focus-visible > .btn-fill::before { transform: translateX(0); }
+.group:focus-visible > .btn-fill { color: var(--btn-fill-text); }

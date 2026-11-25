@@ -149,8 +149,8 @@ export function FinalCta() {
             <span className="block"><SplitText text="Ready to transform" /></span><span className="block"><SplitText text="your space?" className="text-[#92908c]" delay={0.2} /></span>
           </h2>
           <Reveal delay={0.3} className="mt-10 flex flex-wrap justify-center gap-3">
-            <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></Link>
-            <Link href="/works" className="group rounded-full border border-ink/20 bg-ivory/80 px-6 py-3 font-semibold backdrop-blur"><RollText>See our work</RollText></Link>
+            <Link href="/contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a consultation</RollText><Arrow /></Link>
+            <Link href="/works" className="btn-fill btn-fill-ink group rounded-full border border-ink/20 bg-ivory/80 px-6 py-3 font-semibold backdrop-blur"><RollText>See our work</RollText></Link>
           </Reveal>
         </div>
       </div>

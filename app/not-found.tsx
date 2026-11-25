@@ -14,8 +14,8 @@ export default function NotFound() {
         <h1 className="mt-4 text-5xl leading-[1] font-bold tracking-tight md:text-8xl">This room<br /><span className="text-stone">isn&apos;t built yet.</span></h1>
         <p className="mx-auto mt-6 max-w-md text-ivory/75">The page you&apos;re looking for has moved or never existed. Let&apos;s get you back to something we have finished.</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Link href="/" className="rounded-full bg-brass px-6 py-3 font-semibold">Back to home</Link>
-          <Link href="/works" className="rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md">See our works</Link>
+          <Link href="/" className="btn-fill btn-fill-ivory rounded-full bg-brass px-6 py-3 font-semibold">Back to home</Link>
+          <Link href="/works" className="btn-fill btn-fill-ivory rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md">See our works</Link>
         </div>
       </div>
     </main>
