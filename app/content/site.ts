@@ -12,7 +12,7 @@ export const SITE_URL = "https://www.thefurn.co";
 export const BUSINESS = {
   name: "The Furn",
   tagline: "Tailored modular furniture and interiors in Surat",
-  description: "The Furn is a design-and-build studio in Surat, Gujarat. We design, manufacture in our own workshop and install modular kitchens, wardrobes, TV units, bedroom furniture and complete home interiors, made to measure.",
+  description: "The Furn is a design-and-build studio in Surat, Gujarat. We design, precision-build on German machinery and install modular kitchens, wardrobes, TV units, bedroom furniture and complete home interiors, made to measure.",
   founded: "2021",
   street: "220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam",
   city: "Surat",

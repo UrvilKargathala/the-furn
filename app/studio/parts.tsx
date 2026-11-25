@@ -1,58 +1,98 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, useMotionValueEvent, type MotionValue } from "motion/react";
-import { Reveal, SplitText, RollText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "../fx";
+import type { MotionValue } from "motion/react";
+import { Reveal, SplitText, RollText, motion, useTransform, MotionPic, useSmoothScroll } from "../fx";
 import { img, STATS } from "../content/site";
+import { Globe } from "./globe";
 import { Label, Arrow } from "../ui";
 import { Pic } from "../pic";
 
 // ponytail: placeholder studio content, replace with real team, awards and history
-const numbers = [
-  { n: `${STATS.homes}+`, k: "Homes delivered", d: "From compact city apartments to four-bedroom villas, every one designed around the family living in it." },
-  { n: `${STATS.years}+`, k: "Years of craft", d: `${STATS.years}+ years of designing, building and refining, and learning something from every home.` },
-  { n: String(STATS.cities.length), k: "Cities served", d: `${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}, with our own install teams.` },
-  { n: `${STATS.warrantyYears} yr`, k: "Hardware warranty", d: "Every hinge, channel and fitting we install is covered, and we come back if anything needs attention." },
-];
 
 const journey = [
   { y: "Before", t: "Two decades at the bench", d: `Our founders spend ${STATS.years}+ years designing and building kitchens, wardrobes and interiors.` },
-  { y: "2021", t: "The Furn is founded", d: "A design-and-build studio opens in Surat, with its own workshop behind every module." },
+  { y: "2021", t: "The Furn is founded", d: "A design-and-build studio opens in Surat, with every module precision-built on German machinery." },
   { y: "Today", t: "Across India", d: `Our own install teams work in ${STATS.cities.slice(0, -1).join(", ")} and ${STATS.cities.at(-1)}.` },
 ];
 
-// Full-screen pinned photo; the big number swaps as you scroll through (primedecor)
-export function Numbers() {
+// Three stand-alone sections replace the old pinned "in numbers" scroller
+
+// 1. Homes delivered: full-bleed photo with the big number
+export function HomesStat() {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
-  const [i, setI] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (v) => setI(Math.max(0, Math.min(numbers.length - 1, Math.floor(v * numbers.length)))));
+  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start end", "end start"] });
   const scale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
   return (
-    <section ref={ref} className="relative" style={{ height: `${numbers.length * 90}vh` }}>
-      <div className="sticky top-0 h-svh overflow-hidden bg-ink text-ivory">
-        { }
-        <MotionPic preload src={"/works/avadh-ayuska/02.jpg"} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
-        <div className="relative flex h-full flex-col justify-between p-6 pt-28 md:p-12 md:pt-32">
-          
-          <Label dark>In numbers</Label>
-          <div className="grid items-end gap-8 md:grid-cols-[1.4fr_1fr]">
-            <AnimatePresence mode="wait">
-              <motion.div key={i} initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -80, opacity: 0 }} transition={{ duration: 0.6, ease }}>
-                <p className="text-[28vw] leading-[0.8] font-bold tracking-[-0.05em] md:text-[17vw]">{numbers[i].n}</p>
-                <p className="mt-4 text-sm font-semibold tracking-[0.2em] uppercase">({numbers[i].k})</p>
-              </motion.div>
-            </AnimatePresence>
-            <div>
-              <AnimatePresence mode="wait">
-                <motion.p key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}
-                  className="max-w-sm text-lg text-ivory/80">{numbers[i].d}</motion.p>
-              </AnimatePresence>
-              <div className="mt-8 flex gap-2">
-                {numbers.map((x, k) => <span key={x.k} className={`h-1 rounded-full transition-all duration-500 ${k === i ? "w-12 bg-brass" : "w-5 bg-ivory/30"}`} />)}
-              </div>
-            </div>
-          </div>
+    <section ref={ref} className="relative overflow-hidden bg-ink text-ivory">
+      <MotionPic src={"/works/avadh-ayuska/02.jpg"} alt="" style={{ scale }} className="absolute inset-0 h-full w-full object-cover opacity-35" />
+      <div className="relative flex min-h-svh flex-col justify-between p-6 pt-28 md:p-12 md:pt-32">
+        <Label dark>In numbers</Label>
+        <div className="grid items-end gap-8 md:grid-cols-[1.4fr_1fr]">
+          <Reveal>
+            <p className="text-[28vw] leading-[0.8] font-bold tracking-[-0.05em] md:text-[17vw]">{STATS.homes}+</p>
+            <p className="mt-4 text-sm font-semibold tracking-[0.2em] uppercase">(Homes delivered)</p>
+          </Reveal>
+          <Reveal delay={0.15}><p className="max-w-sm text-lg text-ivory/80">From compact city apartments to four-bedroom villas, every one designed around the family living in it.</p></Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// 2. Years of craft + hardware warranty, side by side
+export function CraftStats() {
+  const items = [
+    { n: `${STATS.years}+`, k: "Years of craft", d: `${STATS.years}+ years of designing, building and refining, and learning something from every home.` },
+    { n: `${STATS.warrantyYears} yr`, k: "Hardware warranty", d: "Every hinge, channel and fitting we install is covered, and we come back if anything needs attention." },
+  ];
+  return (
+    <section className="grid border-b border-ink/10 md:grid-cols-2">
+      {items.map((x, k) => (
+        <Reveal key={x.k} delay={k * 0.15} className={`px-5 py-20 md:px-12 md:py-28 ${k ? "border-t border-ink/10 md:border-t-0 md:border-l" : ""}`}>
+          <p className="text-[22vw] leading-[0.85] font-bold tracking-[-0.05em] md:text-[9vw]">{x.n.replace(/(\+| yr)$/, "")}<span className="text-brass">{x.n.match(/(\+| yr)$/)?.[0]}</span></p>
+          <p className="mt-5 text-sm font-semibold tracking-[0.2em] uppercase text-ink/60">({x.k})</p>
+          <p className="mt-5 max-w-md text-lg text-ink/70">{x.d}</p>
+        </Reveal>
+      ))}
+    </section>
+  );
+}
+
+// 3. Cities served: light particle globe with city labels and dotted routes from the hub (see globe.tsx)
+const CITY_COORDS: Record<string, [number, number]> = {
+  Surat: [21.17, 72.83], Mumbai: [19.08, 72.88], "Navi Mumbai": [19.03, 73.03], Ahmedabad: [23.02, 72.57],
+  Hyderabad: [17.39, 78.49], Pune: [18.52, 73.86], Vadodara: [22.31, 73.18], Rajkot: [22.3, 70.8],
+  Gandhinagar: [23.22, 72.65], Bhavnagar: [21.76, 72.15], Navsari: [20.95, 72.93], Vapi: [20.37, 72.9], Bharuch: [21.7, 72.98],
+};
+const HUB = "Surat";
+
+const SERVED = STATS.cities.filter((c) => CITY_COORDS[c]);
+
+export function CitiesMap() {
+  const cities = SERVED;
+  const [active, setActive] = useState(HUB);
+  return (
+    <section className="overflow-hidden border-b border-ink/10 px-5 py-24 md:px-12 md:py-32">
+      <Label>Cities served</Label>
+      <div className="mt-6 grid gap-12 md:grid-cols-[1fr_1.4fr] md:items-center">
+        <div>
+          <Reveal><p className="text-[22vw] leading-[0.85] font-bold tracking-[-0.05em] md:text-[9vw]">{cities.length}<span className="text-brass"> cities</span></p></Reveal>
+          <Reveal delay={0.1}><p className="mt-6 max-w-md text-lg text-ink/70">Designed in {HUB}, installed by our own teams. Pick a city to see where we work.</p></Reveal>
+          <ul className="mt-10 flex flex-wrap gap-2">
+            {cities.map((c) => (
+              <li key={c}>
+                <button type="button" onMouseEnter={() => setActive(c)} onFocus={() => setActive(c)} onClick={() => setActive(c)} aria-pressed={active === c}
+                  className={`min-h-11 rounded-full border px-5 text-sm font-semibold transition-colors duration-300 ${active === c ? "border-brass bg-brass text-ivory" : "border-ink/15 text-ink/75 hover:border-ink/40"}`}>
+                  {c}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mx-auto w-full max-w-3xl md:-my-20">
+          <Globe cities={cities} coords={CITY_COORDS} hub={HUB} active={active} onSelect={setActive}
+            label={`Globe showing the cities we serve: ${cities.join(", ")}. Drag to spin.`} />
         </div>
       </div>
     </section>

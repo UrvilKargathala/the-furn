@@ -20,7 +20,7 @@ export default function Image() {
           <span style={{ color: "#b9a88f" }}>made to measure.</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, color: "#f3f1edb0" }}>
-          <span>Designed in-house · Built in our workshop · Installed by our team</span>
+          <span>Designed in-house · Built on German machinery · Installed by our team</span>
           <span>thefurn.co</span>
         </div>
       </div>

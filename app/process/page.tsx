@@ -4,7 +4,7 @@ import { ProcessView } from "./view";
 
 export const metadata: Metadata = pageMeta({
   title: "Our Process: From Site Visit to Handover",
-  description: "How The Furn works in five steps: free site visit, layout and 3D design, fixed itemised quote, workshop production, and installation by our own team.",
+  description: "How The Furn works in five steps: free site visit, layout and 3D design, fixed itemised quote, precision production, and installation by our own team.",
   path: "/process",
 });
 

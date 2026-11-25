@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: "The Furn | Modular Kitchens, Wardrobes & Interiors in Surat",
     template: "%s | The Furn",
   },
-  description: "Modular kitchens, wardrobes, TV units and complete home interiors in Surat, designed in-house, built in our own workshop and installed by our team. Free site visit and fixed quote.",
+  description: "Modular kitchens, wardrobes, TV units and complete home interiors in Surat, designed in-house, precision-built on German machinery and installed by our team. Free site visit and fixed quote.",
   applicationName: BUSINESS.name,
   keywords: ["modular kitchen Surat", "wardrobe Surat", "interior designer Surat", "modular furniture Surat", "TV unit design", "custom furniture Gujarat", "home interiors Surat"],
   authors: [{ name: BUSINESS.name, url: SITE_URL }],

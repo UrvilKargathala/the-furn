@@ -20,7 +20,7 @@ export function GET() {
 - Hours: ${CONTACT.hours}
 - Experience: ${STATS.years}+ years of team experience, ${STATS.homes}+ homes delivered
 - Hardware warranty: ${STATS.warrantyYears} years
-- Everything is designed in-house, manufactured in our own workshop and installed by our own team (no subcontractors)
+- Everything is designed in-house, precision-built on German machinery and installed by our own team
 - Free site visit and measurement; itemised, fixed quote before production
 
 ## Services
