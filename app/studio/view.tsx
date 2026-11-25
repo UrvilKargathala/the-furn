@@ -1,15 +1,27 @@
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, ease, Appear } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, HeroGrow, BlurIn } from "../fx";
 import { img, MEDIA } from "../content/site";
 import { Label, Heading, Arrow, Nav, Footer } from "../ui";
 import { Pic } from "../pic";
 import { HomesStat, CraftStats, CitiesMap, Journey, FinalCta } from "./parts";
+import { StudioTestimonials } from "./testimonials";
 
 const principles = [
   { t: "Made to measure", d: "No catalogue sizes. Every module is drawn for your wall, your ceiling and your appliances." },
   { t: "Honest pricing", d: "An itemised quote you sign off before production, with no surprise add-ons at handover." },
   { t: "Precision-built", d: "Every module is cut, edge-banded and assembled on German machinery for a precise, lasting finish." },
   { t: "Here after handover", d: "A 15-year hardware warranty and a team that picks up the phone when you call." },
+];
+
+const brands = [
+  { n: "Blum", f: "blum" },
+  { n: "Kesseböhmer", f: "kessebohmer" },
+  { n: "Hettich", f: "hettich" },
+  { n: "Häfele", f: "hafele" },
+  { n: "Grass", f: "grass" },
+  { n: "Higold", f: "higold" },
+  { n: "Fenix", f: "fenix" },
+  { n: "Rehau", f: "rehau" },
 ];
 
 export function StudioView() {
@@ -20,25 +32,25 @@ export function StudioView() {
 
       {/* Full-screen hero: a film of our own studio behind the same heading and copy */}
       <section className="relative h-svh overflow-hidden bg-ink text-ivory">
-        <Appear className="absolute inset-0" initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease }}>
+        <HeroGrow>
           <video src={`${MEDIA}/hero/studio.mp4`} poster="/works/studio-furn/cover.webp" autoPlay muted loop playsInline preload="auto"
             className="absolute inset-0 h-full w-full object-cover" />
-        </Appear>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/25 to-ink/40" />
+        </HeroGrow>
         <div className="relative z-10 flex h-full flex-col justify-end px-5 pb-12 md:px-12 md:pb-16">
           
-          <Label dark>Our Studio</Label>
+          <BlurIn delay={0.9}><Label dark>Our Studio</Label></BlurIn>
           <h1 className="mt-6 text-[12vw] leading-[0.92] font-bold tracking-[-0.04em] md:text-[6.5vw]">
-            <span className="block"><SplitText text="Crafting homes" /></span>
-            <span className="block text-stone"><SplitText text="that fit your life" delay={0.2} /></span>
+            <span className="block"><SplitText text="Crafting homes" delay={1} /></span>
+            <span className="block text-stone"><SplitText text="that fit your life" delay={1.2} /></span>
           </h1>
           <div className="mt-8 flex flex-wrap items-end justify-between gap-6">
-            <Appear initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.4 }}>
+            <BlurIn delay={1.45}>
               <p className="max-w-md text-lg text-ivory/80">The Furn is a design-and-build studio for modular kitchens, wardrobes and complete interiors, with precision manufacturing on German machinery and our own install teams.</p>
-            </Appear>
-            <Appear initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.55 }}>
-              <Link href="/works" className="group inline-flex items-center gap-3 rounded-full bg-ivory py-2 pr-2 pl-6 font-semibold text-ink"><RollText>View our work</RollText><Arrow /></Link>
-            </Appear>
+            </BlurIn>
+            <BlurIn delay={1.6}>
+              <Link href="/works" className="btn-fill btn-fill-brass group inline-flex items-center gap-3 rounded-full bg-ivory py-2 pr-2 pl-6 font-semibold text-ink"><RollText>View our work</RollText><Arrow /></Link>
+            </BlurIn>
           </div>
         </div>
       </section>
@@ -104,6 +116,27 @@ export function StudioView() {
           ))}
         </div>
       </section>
+
+      {/* Hardware and material brands we build with */}
+      <section className="px-5 py-24 md:px-12 md:py-32">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <div>
+            <Label>Our partners</Label>
+            <Heading text="Brands we" accent="build with" />
+          </div>
+          <Reveal><p className="max-w-sm text-lg text-ink/70">Fittings, hardware and finishes from names we trust, so every drawer, hinge and surface lasts as long as the design.</p></Reveal>
+        </div>
+        <div className="mt-16 grid grid-cols-2 gap-px overflow-hidden bg-ink/10 md:grid-cols-4">
+          {brands.map((b, i) => (
+            <Reveal key={b.n} delay={(i % 4) * 0.08} className="group flex aspect-[3/2] items-center justify-center bg-white p-8 md:p-12">
+              <Pic src={`/brands/${b.f}.png`} alt={`${b.n} logo`} width={400} height={200} sizes="(min-width: 768px) 25vw, 50vw"
+                className="h-16 w-full max-w-[200px] object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105 md:h-20 md:max-w-[220px]" />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <StudioTestimonials />
 
       {/* Journey timeline (lunarch) */}
       <section className="px-5 py-24 md:px-12 md:py-32">

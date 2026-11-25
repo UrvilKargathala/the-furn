@@ -93,7 +93,7 @@ export const services: Service[] = [
     slug: "bedroom-furniture",
     t: "Bedroom Furniture",
     short: "Storage beds, side tables, dressers and study units for restful rooms.",
-    i: "/works/globcon/01.jpg",
+    i: "/service-photos/bedroom.jpg",
     tags: ["Beds", "Dressers", "Study"],
     intro: [
       "A bedroom should feel calm, not crowded. We design beds, dressers and study corners that fit together as one quiet, well-organised room.",

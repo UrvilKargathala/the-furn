@@ -1,4 +1,4 @@
-import { SmoothScroll, Reveal, ease, Appear } from "../fx";
+import { SmoothScroll, Reveal, HeroGrow, BlurIn } from "../fx";
 import { CONTACT } from "../content/site";
 import { Nav, Footer, PageHero } from "../ui";
 import { Pic } from "../pic";
@@ -41,13 +41,13 @@ export function ContactView() {
 
       {/* Photo first: one of our own projects behind the heading */}
       <section className="relative h-[56svh] overflow-hidden bg-ink text-ivory md:h-[80svh]">
-        <Appear className="absolute inset-0" initial={{ scale: 1.25 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease }}>
+        <HeroGrow>
           <Pic preload src="/works/avadh-ayuska/02.jpg" alt="Living room designed and built by The Furn" className="h-full w-full object-cover" />
-        </Appear>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-ink/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-ink/45" />
+        </HeroGrow>
         <div className="relative z-10 flex h-full flex-col justify-end p-6 pb-12 md:p-12 md:pb-16">
           
-          <PageHero label="Contact us" lines={["Let's talk about", "your space."]} dark />
+          <BlurIn delay={0.9}><PageHero label="Contact us" lines={["Let's talk about", "your space."]} dark delay={1} /></BlurIn>
           <JumpTo target="enquiry" className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-brass px-5 py-2.5 text-sm font-semibold text-ink md:hidden">Fill the form <span aria-hidden>↓</span></JumpTo>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage } from "../fx";
+import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, BlurIn } from "../fx";
 import { projects } from "../content/projects";
 import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero, EnquiryBand } from "../ui";
 import { Pic } from "../pic";
@@ -17,8 +17,8 @@ export function WorksView() {
         
         <PageHero label="Our Works" lines={["Homes we've", "brought to life"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
-          <Reveal delay={0.4}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across India, each one designed around the family that lives in it.</p></Reveal>
-          <Reveal delay={0.5}><p className="text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">{String(projects.length).padStart(2, "0")} projects</p></Reveal>
+          <BlurIn delay={0.45}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across India, each one designed around the family that lives in it.</p></BlurIn>
+          <BlurIn delay={0.6}><p className="text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">{String(projects.length).padStart(2, "0")} projects</p></BlurIn>
         </div>
       </section>
 
@@ -50,14 +50,14 @@ export function WorkDetailView({ p }: { p: Project }) {
 
       {/* Title + tagline (primedecor) and spec table (homespaceid) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
-        <Reveal>
+        <BlurIn>
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
             <Link href="/works" className="inline-flex min-h-11 items-center hover:text-ink">Works</Link><span>/</span><span className="text-ink">{p.n}</span>
           </nav>
-        </Reveal>
+        </BlurIn>
         <div className="mt-6 grid items-end gap-8 md:grid-cols-[1.5fr_1fr]">
           <h1 className="text-[15vw] leading-[0.88] font-bold tracking-[-0.04em] md:text-[9vw]"><SplitText text={p.n} /></h1>
-          <Reveal delay={0.3}><p className="max-w-md text-lg text-ink/70 md:pb-4">{p.d}</p></Reveal>
+          <BlurIn delay={0.4}><p className="max-w-md text-lg text-ink/70 md:pb-4">{p.d}</p></BlurIn>
         </div>
         <dl className="mt-16 grid grid-cols-2 md:grid-cols-6">
           {meta.map(([k, v], i) => (

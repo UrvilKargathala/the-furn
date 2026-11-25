@@ -4,7 +4,7 @@ import { SmoothScroll, Reveal, RollText } from "./fx";
 import { Label, Heading, Cta, Footer, ArrowIcon } from "./ui";
 import { OurStory } from "./story";
 import { Testimonials } from "./testimonials";
-import { Services, FeaturedProjects, Process, HomeIntro } from "./home-parts";
+import { ServicesSection, FeaturedProjects, Process, HomeIntro } from "./home-parts";
 
 export default function Home() {
   return (
@@ -14,14 +14,8 @@ export default function Home() {
 
       <OurStory />
 
-      {/* Services: click-to-open accordion */}
-      <section id="services" className=" bg-sand px-5 py-24 md:px-12 md:py-32">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div><Label>Services</Label><Heading text="Complete solutions" accent="for every room" /></div>
-          <Reveal><p className="max-w-xs text-ink/70">Every module is designed in-house and built to your exact measurements.</p></Reveal>
-        </div>
-        <Services />
-      </section>
+      {/* Services: the made-to-measure switch, then one row of photo cards */}
+      <ServicesSection />
 
       <Testimonials />
 
@@ -33,9 +27,11 @@ export default function Home() {
         <FeaturedProjects />
         <Reveal className="mt-12 flex justify-center">
           <Link href="/works" className="group flex items-center gap-1 font-semibold text-ivory">
-            <span className="rounded-full bg-ink px-7 py-4"><RollText>View All Projects</RollText></span>
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-brass transition-transform duration-500 group-hover:rotate-45">
-              <ArrowIcon size={14} />
+            <span className="btn-fill btn-fill-brass rounded-full bg-ink px-7 py-4"><RollText>View All Projects</RollText></span>
+            {/* Circle fills dark while the arrow flies out and a fresh one slides in, like the other buttons */}
+            <span className="btn-fill btn-fill-ink relative grid h-14 w-14 place-items-center rounded-full bg-brass text-ink">
+              <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-[220%] group-hover:-translate-y-[220%]"><ArrowIcon size={14} /></span>
+              <span aria-hidden className="absolute -translate-x-[220%] translate-y-[220%] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0 group-hover:translate-y-0"><ArrowIcon size={14} /></span>
             </span>
           </Link>
         </Reveal>

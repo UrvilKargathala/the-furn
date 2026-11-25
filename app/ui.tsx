@@ -1,8 +1,9 @@
 "use client";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { useMotionValueEvent } from "motion/react";
-import { Reveal, SplitText, RollText, ParallaxImg, motion, useScroll, ease } from "./fx";
+import { usePathname } from "next/navigation";
+import { useMotionValueEvent, useMotionTemplate, useReducedMotion } from "motion/react";
+import { Reveal, SplitText, RollText, ParallaxImg, motion, useScroll, useTransform, useSmoothScroll, ease } from "./fx";
 import { links, CONTACT } from "./content/site";
 import { services } from "./content/services";
 
@@ -53,23 +54,25 @@ export function ArrowIcon({ size = 12 }: { size?: number }) {
 // Arrow in a small ivory circle (button end-caps)
 export function Arrow({ className = "" }: { className?: string }) {
   return (
-    <span className={`grid h-8 w-8 place-items-center rounded-full bg-ivory text-ink transition-transform duration-500 group-hover:rotate-45 ${className}`}>
-      <ArrowIcon />
+    <span className={`arrow-dot relative grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-ivory text-ink transition-colors duration-500 ${className}`}>
+      {/* On hover the arrow flies out to the top right and a fresh one slides in from the bottom left */}
+      <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-[180%] group-hover:-translate-y-[180%]"><ArrowIcon /></span>
+      <span aria-hidden className="absolute -translate-x-[180%] translate-y-[180%] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0 group-hover:translate-y-0"><ArrowIcon /></span>
     </span>
   );
 }
 
 // Big two-line page title (second line muted) with an optional section tag above it.
 // One component so every page hero keeps the same size, spacing and animation.
-export function PageHero({ label, lines, dark = false, as: Tag = "h1", large = false }: {
-  label?: string; lines: [string, string]; dark?: boolean; as?: "h1" | "h2"; large?: boolean;
+export function PageHero({ label, lines, dark = false, as: Tag = "h1", large = false, delay = 0 }: {
+  label?: string; lines: [string, string]; dark?: boolean; as?: "h1" | "h2"; large?: boolean; delay?: number;
 }) {
   return (
     <>
       {label && <Label dark={dark}>{label}</Label>}
       <Tag className={`${label ? "mt-6" : ""} text-[13vw] leading-[0.9] font-bold tracking-[-0.04em] ${large ? "md:text-[9vw]" : "md:text-[8vw]"}`}>
-        <span className="block"><SplitText text={lines[0]} /></span>
-        <span className={`block ${dark ? "text-stone" : "text-ink/45"}`}><SplitText text={lines[1]} delay={0.2} /></span>
+        <span className="block"><SplitText text={lines[0]} delay={delay} /></span>
+        <span className={`block ${dark ? "text-stone" : "text-ink/45"}`}><SplitText text={lines[1]} delay={delay + 0.2} /></span>
       </Tag>
     </>
   );
@@ -97,11 +100,17 @@ function Logo({ compact = false }: { compact?: boolean }) {
 }
 
 // Black intro: logo sweeps in, brand letters fade in, then the curtain lifts
-export function Loader({ onDone }: { onDone: () => void }) {
+// Intro: logo and name, then the whole layer dissolves (no slide) so the hero's small film frame
+// shows through and opens out at once. `onReveal` fires as the dissolve starts, `onDone` when it ends.
+export function Loader({ onReveal, onDone }: { onReveal: () => void; onDone: () => void }) {
   const letters = "THE FURN".split("");
+  useEffect(() => {
+    const t = setTimeout(onReveal, 1900);
+    return () => clearTimeout(t);
+  }, [onReveal]);
   return (
-    <motion.div className="fixed inset-0 z-[100] grid place-items-center bg-black text-ivory"
-      initial={{ y: 0 }} animate={{ y: "-100%" }} transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 2 }}
+    <motion.div className="pointer-events-none fixed inset-0 z-[100] grid place-items-center bg-ink text-ivory"
+      initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 0.7, ease: "easeOut", delay: 1.9 }}
       onAnimationComplete={onDone}>
       <div className="flex items-center gap-4">
         <motion.div initial={{ opacity: 0, clipPath: "inset(0 100% 0 0)" }} animate={{ opacity: 1, clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1, ease }}>
@@ -117,6 +126,9 @@ export function Loader({ onDone }: { onDone: () => void }) {
     </motion.div>
   );
 }
+
+// The nav slides in on the first page of a visit only; after that it stays anchored through page changes
+let navIntroPlayed = false;
 
 // `light` = page starts on a light background, so the bar needs its dark fill even at the top
 export function Nav({ show = true, light = false }: { show?: boolean; light?: boolean }) {
@@ -135,15 +147,33 @@ export function Nav({ show = true, light = false }: { show?: boolean; light?: bo
     else if ((hidden && y > anchor.current) || (!hidden && y < anchor.current)) anchor.current = y;
   });
   const clear = atTop && !light;
+  const path = usePathname();
+  const current = links.map(([, h]) => h).find((h) => h !== "/contact" && (h === "/" ? path === "/" : path.startsWith(h)));
+  const [hover, setHover] = useState<string | null>(null);
+  const pill = hover ?? current;
+  const [intro] = useState(() => !navIntroPlayed);
+  useEffect(() => { if (show) navIntroPlayed = true; }, [show]);
   return (
-    <motion.header initial={{ y: -100, opacity: 0 }} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
-      className="pointer-events-none fixed inset-x-0 top-0 z-50">
+    <motion.header initial={intro ? { y: -100, opacity: 0 } : false} animate={show ? { y: 0, opacity: 1 } : {}} transition={{ duration: 1, ease, delay: 0.2 }}
+      style={{ viewTransitionName: "site-header" }} className="pointer-events-none fixed inset-x-0 top-0 z-50">
       <div className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${hidden ? "-translate-y-[150%]" : "translate-y-0"}`}>
       <nav className={`pointer-events-auto flex w-full items-center justify-between gap-10 border-b px-5 text-ivory transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:px-12 ${clear ? "border-transparent bg-transparent py-4" : "border-ivory/10 bg-ink/80 py-3 backdrop-blur-xl"}`}>
         <Logo />
-        <ul className={`hidden items-center gap-1 transition-all duration-500 lg:flex text-[17px]`}>
+        {/* One pill glides behind whichever link is hovered, and rests on the current page otherwise */}
+        <ul onMouseLeave={() => setHover(null)} className={`hidden items-center gap-1 transition-all duration-500 lg:flex text-[17px]`}>
           {links.map(([t, h]) => (
-            <li key={t}><Link href={h} className={`group block rounded-full transition-colors ${h === "/contact" ? "ml-2 bg-brass px-5 py-2 font-semibold text-ink hover:bg-ivory" : "px-4 py-2 hover:bg-ivory/10"}`}><RollText>{t}</RollText></Link></li>
+            <li key={t}>
+              {h === "/contact"
+                ? <Link href={h} className="btn-fill btn-fill-ivory group ml-2 block rounded-full bg-brass px-5 py-2 font-semibold text-ink"><RollText>{t}</RollText></Link>
+                : <Link href={h} onMouseEnter={() => setHover(h)} onFocus={() => setHover(h)} aria-current={current === h ? "page" : undefined}
+                    className="group relative isolate block rounded-full px-4 py-2">
+                    {pill === h && (
+                      <motion.span layoutId="nav-pill" aria-hidden className={`absolute inset-0 -z-10 rounded-full ${hover ? "bg-ivory/20" : "bg-ivory/12"}`}
+                        transition={{ type: "spring", stiffness: 380, damping: 34, mass: 0.8 }} />
+                    )}
+                    <RollText>{t}</RollText>
+                  </Link>}
+            </li>
           ))}
         </ul>
         <a href={CONTACT.phone.href} aria-label={`Call us on ${CONTACT.phone.label}`} className="ml-auto hidden h-11 w-11 place-items-center rounded-full border border-ivory/25 md:grid lg:hidden">{phoneIcon}</a>
@@ -180,8 +210,8 @@ export function EnquiryBand({ title, text }: { title: string; text: string }) {
           <p className="mt-3 max-w-xl text-lg text-ink/70">{text}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a free site visit</RollText><Arrow /></Link>
-          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="group rounded-full border border-ink/25 px-6 py-3 font-semibold"><RollText>WhatsApp us</RollText></a>
+          <Link href="/contact" className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-6 font-semibold text-ivory"><RollText>Book a free site visit</RollText><Arrow /></Link>
+          <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ink group rounded-full border border-ink/25 px-6 py-3 font-semibold"><RollText>WhatsApp us</RollText></a>
         </div>
       </Reveal>
     </section>
@@ -202,8 +232,8 @@ export function Cta() {
           <Reveal delay={0.3}>
             <p className="mx-auto mt-6 max-w-md text-ivory/75">Book a free consultation. We&apos;ll measure, plan and quote, with no obligation.</p>
             <div className="mt-10 flex flex-wrap justify-center gap-3">
-              <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
-              <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
+              <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold"><RollText>Book a consultation</RollText><Arrow /></Link>
+              <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className="btn-fill btn-fill-ivory group rounded-full border border-ivory/30 px-6 py-3 font-semibold backdrop-blur-md"><RollText>WhatsApp us</RollText></a>
             </div>
           </Reveal>
         </div>
@@ -232,9 +262,16 @@ export function Footer() {
     ["Email", CONTACT.email, `mailto:${CONTACT.email}`],
     ["Address", CONTACT.address, CONTACT.maps],
   ];
+  // Arch reveal: the panel's top starts as a dome and flattens into a full-width block as it scrolls in
+  const ref = useRef<HTMLElement>(null);
+  const still = useReducedMotion();
+  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start end", "start 25%"] });
+  const side = useTransform(scrollYProgress, [0, 1], [still ? 0 : 7, 0]);
+  const dome = useTransform(scrollYProgress, [0, 1], [still ? 0 : 46, 0]);
+  const clipPath = useMotionTemplate`inset(0 ${side}% 0 ${side}% round ${dome}vw ${dome}vw 0 0)`;
   return (
-    <footer>
-      <div className="relative overflow-hidden bg-ink px-5 pt-16 pb-24 text-ivory md:px-12 md:pt-20 md:pb-6">
+    <footer ref={ref}>
+      <motion.div style={{ clipPath }} className="relative overflow-hidden bg-ink px-5 pt-16 pb-24 text-ivory md:px-12 md:pt-20 md:pb-6">
         <Pic src="/works/globcon/11.jpg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-ink via-ink/85 to-ink/35" />
         <div className="relative">
@@ -282,9 +319,17 @@ export function Footer() {
             <span>© <CurrentYear /> The Furn. All rights reserved.</span>
             <span>Tailored Modular Furniture · Surat, India</span>
           </div>
-          <p aria-hidden className="mt-8 bg-gradient-to-b from-ivory via-ivory/70 to-transparent bg-clip-text text-center text-[17vw] leading-[0.82] font-bold tracking-[-0.05em] whitespace-nowrap text-transparent select-none">THE FURN</p>
+          {/* Giant wordmark: letters rise one after another when the bottom of the page comes into view */}
+          {/* The row is what's observed: the letters start clipped below it, so they can't trigger themselves */}
+          <motion.p aria-hidden initial="hidden" whileInView="show" viewport={{ once: true, margin: "0px 0px -5% 0px" }}
+            className="mt-8 flex justify-center overflow-hidden text-center text-[17vw] leading-[0.82] font-bold tracking-[-0.05em] whitespace-nowrap select-none">
+            {"THE FURN".split("").map((l, i) => (
+              <motion.span key={i} variants={{ hidden: { y: "105%" }, show: { y: 0, transition: { duration: 1.1, ease, delay: i * 0.05 } } }}
+                className="inline-block bg-gradient-to-b from-ivory via-ivory/70 to-transparent bg-clip-text text-transparent">{l === " " ? "\u00a0" : l}</motion.span>
+            ))}
+          </motion.p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

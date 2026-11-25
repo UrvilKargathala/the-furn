@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, useInView, type MotionValue } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, useInView, useMotionValueEvent, type MotionValue } from "motion/react";
 import Link from "next/link";
 import { SplitText, RollText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "./fx";
 import { MEDIA } from "./content/site";
@@ -39,43 +39,158 @@ export const heroScenes = [
 // Same five steps as the /process page
 const steps = processDetail;
 
-export function Services() {
-  const [open, setOpen] = useState(0);
+// Services (after clearpath). Desktop is one pinned sequence with no dead space:
+//  1. a warm screen with a "Made to measure" toggle in the off position: "If only the perfect home came off a shelf."
+//  2. scrolling flips it on, the gradient clears and the line answers itself
+//  3. the headline glides up and the row of cards rises in beneath it
+//  4. further scrolling moves through the services one card at a time, the card in focus in full colour.
+// Phones get the same story without pinning: the switch flips once it's on screen, then the cards swipe.
+const CARD_VW = 36;
+const GAP_VW = 2.5;
+const FLIP = 0.1; // progress where the switch turns on
+const RISE = [0.12, 0.24] as const; // headline moves up, cards rise in
+const ROW = [0.28, 0.97] as const; // the row moves one card at a time
+
+const switchLines = {
+  off: { a: "If only the perfect home", b: "came off a shelf.", d: "Standard sizes mean standard compromises." },
+  on: { a: "It doesn't. So we build", b: "every piece to fit yours.", d: "Six ways we work, each one designed in-house and built to your exact measurements." },
+};
+
+function SwitchHeadline({ on, onToggle, compact = false }: { on: boolean; onToggle: () => void; compact?: boolean }) {
+  const line = on ? switchLines.on : switchLines.off;
   return (
-    <div className="mt-16 border-t border-ink/15">
-      {services.map((s, i) => (
-        <div key={s.t} className="border-b border-ink/15">
-          <button onClick={() => setOpen(open === i ? -1 : i)} onMouseEnter={() => setOpen(i)} aria-expanded={open === i}
-            className="group flex w-full items-center justify-between gap-6 py-6 text-left md:py-8">
-            <span className="text-sm font-semibold text-ink/65">0{i + 1}</span>
-            <span className={`flex-1 text-2xl font-semibold tracking-tight transition-all duration-500 md:text-5xl ${open === i ? "" : "text-ink/60 group-hover:translate-x-3 group-hover:text-ink"}`}>{s.t}</span>
-            <span className={`grid h-10 w-10 place-items-center rounded-full border border-ink/20 text-xl transition-transform duration-500 ${open === i ? "rotate-45 bg-ink text-ivory" : ""}`}>+</span>
-          </button>
-          <AnimatePresence initial={false}>
-            {open === i && (
-              <motion.div key="body" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.7, ease }} className="overflow-hidden">
-                <div className="grid gap-6 pb-8 md:grid-cols-[1fr_2fr]">
-                  <div>
-                    <p className="max-w-sm text-ink/70">{s.short}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {s.tags.map((t) => <span key={t} className="rounded-full border border-ink/15 px-3 py-1 text-xs">{t}</span>)}
-                    </div>
-                    <Link href={`/services/${s.slug}`} className="group mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold">
-                      <RollText>View service</RollText><span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-                    </Link>
-                  </div>
-                  <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }} animate={{ clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 0.9, ease, delay: 0.1 }}
-                    className="aspect-[16/8] max-h-[min(52svh,34rem)] w-full overflow-hidden">
-                    <MotionPic src={s.i} alt={s.t} sizes="(min-width: 768px) 50vw, 100vw" initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.2, ease }} className="h-full w-full object-cover" />
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ))}
+    <div className="flex flex-col items-center text-center">
+      <button type="button" onClick={onToggle} aria-pressed={on} aria-label="Made to measure"
+        className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.25em] text-ink/60 uppercase">
+        Made to measure
+        <span className={`relative h-7 w-12 rounded-full transition-colors duration-500 ${on ? "bg-brass" : "bg-ink/15"}`}>
+          <motion.span layout transition={{ type: "spring", stiffness: 500, damping: 32 }}
+            className={`absolute top-1 h-5 w-5 rounded-full bg-ivory shadow ${on ? "right-1" : "left-1"}`} />
+        </span>
+      </button>
+      <AnimatePresence mode="wait">
+        <motion.div key={on ? "on" : "off"} initial={{ opacity: 0, y: 18, filter: "blur(10px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -14, filter: "blur(10px)" }} transition={{ duration: 0.6, ease }}>
+          <h2 className={`mt-6 leading-[1.08] font-medium tracking-tight ${compact ? "text-[8.2vw]" : "text-[4.4vw]"}`}>
+            <span className="block">{line.a}</span>
+            <span className={`block ${on ? "text-brass" : "text-ink/50"}`}>{line.b}</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-ink/70">{line.d}</p>
+        </motion.div>
+      </AnimatePresence>
     </div>
+  );
+}
+
+export function ServicesSection() {
+  return (
+    <section id="services" className="relative">
+      <ServicesPinned />
+      <ServicesPhone />
+    </section>
+  );
+}
+
+function ServicesPinned() {
+  const ref = useRef<HTMLDivElement>(null);
+  const n = services.length;
+  const { scrollYProgress: p } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
+  const [auto, setAuto] = useState(false);
+  const [manual, setManual] = useState<boolean | null>(null);
+  const [active, setActive] = useState(0);
+  useMotionValueEvent(p, "change", (v) => {
+    setAuto(v > FLIP);
+    if (v < 0.02 || v > RISE[1]) setManual(null);
+    const k = Math.min(n - 1, Math.max(0, Math.round(((v - ROW[0]) / (ROW[1] - ROW[0])) * (n - 1))));
+    setActive((a) => (a === k ? a : k));
+  });
+  const on = manual ?? auto;
+  const glow = useTransform(p, [FLIP - 0.04, FLIP + 0.06], [1, 0]);
+  const headY = useTransform(p, [...RISE], ["0svh", "-31svh"]);
+  const headScale = useTransform(p, [...RISE], [1, 0.66]);
+  const rowY = useTransform(p, [...RISE], ["75svh", "0svh"]);
+  const rowX = useTransform(p, [...ROW], ["0vw", `-${(n - 1) * (CARD_VW + GAP_VW)}vw`]);
+  const bar = useTransform(p, [...ROW], [1 / n, 1]);
+
+  return (
+    <div ref={ref} className="relative hidden md:block" style={{ height: `${120 + n * 50}svh` }}>
+      <div className="sticky top-0 h-svh overflow-hidden">
+        {/* Warm gradient that clears as the switch flips */}
+        <motion.div aria-hidden style={{ opacity: glow }} className="absolute inset-0">
+          <div className="absolute inset-0" style={{ background: "radial-gradient(90% 70% at 18% 12%, #d8b98c 0%, transparent 60%), radial-gradient(80% 70% at 88% 88%, #bfa98d 0%, transparent 62%), linear-gradient(180deg, #e9dfcf, #e3d5c1)" }} />
+          <div className="absolute top-1/2 left-1/2 h-[90vmin] w-[90vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ivory/40" />
+          <div className="absolute top-1/2 left-1/2 h-[130vmin] w-[130vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ivory/25" />
+        </motion.div>
+
+        {/* Headline: centred at first, then glides up to make room for the cards */}
+        <motion.div style={{ y: headY, scale: headScale }} className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-12">
+          <SwitchHeadline on={on} onToggle={() => setManual(!on)} />
+        </motion.div>
+
+        {/* The row: rises in under the headline, then moves one card at a time */}
+        <motion.div style={{ y: rowY }} className="absolute inset-x-0 bottom-[9svh]">
+          <motion.div style={{ x: rowX, paddingLeft: `${(100 - CARD_VW) / 2}vw`, gap: `${GAP_VW}vw` }} className="flex h-[52svh]">
+            {services.map((s, k) => (
+              <div key={s.slug} className="h-full shrink-0" style={{ width: `${CARD_VW}vw` }}><ServiceCard x={s} k={k} on={k === active} /></div>
+            ))}
+          </motion.div>
+          <div className="mx-auto mt-5 flex w-[min(24rem,60vw)] items-center gap-4 text-sm font-semibold">
+            <span className="w-6 text-ink">0{active + 1}</span>
+            <span className="h-px flex-1 bg-ink/15"><motion.span style={{ scaleX: bar }} className="block h-full origin-left bg-brass" /></span>
+            <span className="w-6 text-right text-ink/45">0{n}</span>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Phones: no pinning. The switch flips by itself a moment after it comes into view, then the cards swipe.
+function ServicesPhone() {
+  const ref = useRef<HTMLDivElement>(null);
+  const seen = useInView(ref, { once: true, margin: "-35% 0px" });
+  const [flipped, setFlipped] = useState(false);
+  const [manual, setManual] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (!seen) return;
+    const t = setTimeout(() => setFlipped(true), 1400);
+    return () => clearTimeout(t);
+  }, [seen]);
+  const on = manual ?? flipped;
+  return (
+    <div className="px-5 py-20 md:hidden">
+      <div ref={ref}><SwitchHeadline on={on} onToggle={() => setManual(!on)} compact /></div>
+      <div className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none]">
+        {services.map((s, k) => (
+          <div key={s.slug} className="aspect-[3/4.2] w-[80vw] shrink-0 snap-start"><ServiceCard x={s} k={k} on /></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// A single service card. `on` = in focus: full height and real colours; otherwise tinted and slightly shorter.
+function ServiceCard({ x, k, on }: { x: (typeof services)[number]; k: number; on: boolean }) {
+  return (
+    <Link href={`/services/${x.slug}`} tabIndex={on ? 0 : -1}
+      style={{ clipPath: on ? "inset(0% 0 0% 0)" : "inset(7% 0 7% 0)" }}
+      className="group relative flex h-full w-full flex-col justify-between overflow-hidden bg-ink p-6 text-ivory transition-[clip-path] duration-700 ease-[cubic-bezier(.22,1,.36,1)] md:p-9">
+      <Pic src={x.i} alt={x.t} sizes="(min-width: 768px) 38vw, 80vw"
+        className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(.22,1,.36,1)] ${on ? "scale-100" : "scale-110"}`} />
+      <div className={`absolute inset-0 bg-[#9c7a52] mix-blend-color transition-opacity duration-700 ${on ? "opacity-0" : "opacity-60"}`} />
+      <div className={`absolute inset-0 bg-ink transition-opacity duration-700 ${on ? "opacity-0" : "opacity-30"}`} />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-transparent via-40% to-ink/85" />
+      <div className="relative flex items-start justify-between gap-6">
+        <h3 className="text-3xl leading-[1.02] font-semibold tracking-tight md:text-4xl lg:text-5xl">{x.t}</h3>
+        <span className="pt-2 text-sm font-semibold text-ivory/70">0{k + 1}</span>
+      </div>
+      <div className={`relative transition-all duration-700 ${on ? "translate-y-0 opacity-100" : "translate-y-4 opacity-60"}`}>
+        <p className="max-w-sm text-base text-ivory/90 md:text-lg">{x.short}</p>
+        <span className="btn-fill btn-fill-ivory mt-5 inline-flex items-center gap-3 rounded-full border border-ivory/40 px-5 py-2.5 text-sm font-semibold">
+          View service <span aria-hidden>→</span>
+        </span>
+      </div>
+    </Link>
   );
 }
 
@@ -190,6 +305,14 @@ export function Hero({ ready }: { ready: boolean }) {
   useEffect(() => {
     if (ready) video.current?.play().catch(() => {});
   }, [ready]);
+  // The first headline waits for the film to open out; later scene changes swap straight away
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    if (!ready) return;
+    const t = setTimeout(() => setSettled(true), 2600);
+    return () => clearTimeout(t);
+  }, [ready]);
+  const base = settled ? 0.1 : 1;
   // Follow the project on screen as the remix plays
   const onTime = () => {
     const t = video.current?.currentTime ?? 0;
@@ -204,49 +327,61 @@ export function Hero({ ready }: { ready: boolean }) {
   return (
     <section ref={ref} className="h-svh">
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
-        <motion.div className="absolute inset-0" initial={{ scale: 1.25 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease }}>
-          <video ref={video} src={HERO_REMIX} poster={heroReel[0].p.i} muted loop playsInline preload="auto" onTimeUpdate={onTime}
-            className="absolute inset-0 h-full w-full object-cover" />
+        {/* The film opens out from a small frame in the centre, then settles from a slight zoom */}
+        <motion.div className="absolute inset-0" initial={{ clipPath: "inset(34% 30% 34% 30% round 20px)" }}
+          animate={ready ? { clipPath: "inset(0% 0% 0% 0% round 0px)" } : {}} transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1], delay: 0.35 }}>
+          <motion.div className="absolute inset-0" initial={{ scale: 1.35 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease, delay: 0.35 }}>
+            <video ref={video} src={HERO_REMIX} poster={heroReel[0].p.i} muted loop playsInline preload="auto" onTimeUpdate={onTime}
+              className="absolute inset-0 h-full w-full object-cover" />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/30" />
         <motion.div style={{ y }} className="relative z-10 flex h-full flex-col justify-end gap-8 p-6 md:flex-row md:items-end md:justify-between md:p-12">
           <div>
             <AnimatePresence mode="wait">
               <motion.div key={active} exit={{ opacity: 0, y: -30, filter: "blur(6px)" }} transition={{ duration: 0.5, ease }}>
                 <h1 className="text-[9vw] leading-[0.95] font-bold tracking-[-0.04em] md:text-[6vw]">
                   {scene.h.map((line, j) => (
-                    <span key={line} className="block whitespace-nowrap"><SplitText text={line} play={ready} delay={0.1 + j * 0.15} /></span>
+                    <span key={line} className="block whitespace-nowrap"><SplitText text={line} play={ready} delay={base + j * 0.15} /></span>
                   ))}
                 </h1>
-                <motion.p initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease, delay: 0.5 }}
+                <motion.p initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: base + 0.4 }}
                   className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{scene.d}</motion.p>
               </motion.div>
             </AnimatePresence>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease, delay: 0.7 }} className="mt-7 flex flex-wrap gap-3">
-              <Link href="/contact" className="group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a free site visit</RollText><Arrow /></Link>
-              <Link href="/works" className="group rounded-full border border-ivory/40 px-6 py-3 font-semibold backdrop-blur-md"><RollText>See our work</RollText></Link>
+            <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.55 }} className="mt-7 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a free site visit</RollText><Arrow /></Link>
+              <Link href="/works" className="btn-fill btn-fill-ivory group rounded-full border border-ivory/40 px-6 py-3 font-semibold backdrop-blur-md"><RollText>See our work</RollText></Link>
             </motion.div>
           </div>
           {/* Which project is on screen right now */}
-          <Link href={`/works/${now.slug}`} className="group flex min-h-11 items-center gap-3 self-start text-sm text-ivory/80 hover:text-ivory md:self-end">
+          <motion.div initial={{ opacity: 0, filter: "blur(10px)" }} animate={ready ? { opacity: 1, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.7 }} className="self-start md:self-end">
+          <Link href={`/works/${now.slug}`} className="group flex min-h-11 items-center gap-3 text-sm text-ivory/80 hover:text-ivory">
             <span className="font-mono tracking-[0.2em] whitespace-nowrap">{String(clip + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
             <span className="h-px w-8 bg-ivory/40" />
             <AnimatePresence mode="wait">
               <motion.span key={now.slug} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.4, ease }} className="font-semibold">{now.n}</motion.span>
             </AnimatePresence>
           </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>
   );
 }
 
+// The loader plays once per visit; coming back to Home from another page goes straight to the hero
+let loaderPlayed = false;
+
 // Intro loader, nav and hero share one "ready" flag: the nav and hero animate in once the loader lifts
 export function HomeIntro() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(() => loaderPlayed);
+  const [gone, setGone] = useState(() => loaderPlayed);
+  const reveal = useCallback(() => { loaderPlayed = true; setReady(true); }, []);
+  const done = useCallback(() => setGone(true), []);
   return (
     <>
-      {!ready && <Loader onDone={() => setReady(true)} />}
+      {!gone && <Loader onReveal={reveal} onDone={done} />}
       <Nav show={ready} />
       <Hero ready={ready} />
     </>
