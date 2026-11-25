@@ -26,14 +26,13 @@ const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city}, ${BUSINESS.region} ${BUSI
 
 export const CONTACT = {
   phone: { label: "+91 99256 18895", href: "tel:+919925618895" },
-  whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi The Furn, I'd like to talk about my home."),
+  // Every WhatsApp button opens with this message
+  whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like a free site visit."),
   email: "info@thefurn.co",
   address: ADDRESS,
   maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
   instagram: { label: "@thefurn.co", href: "https://www.instagram.com/thefurn.co/" },
   hours: "Monday to Saturday, 10 am to 7 pm",
-  // Pre-filled WhatsApp message for booking a free site visit (contact form fallback and thank-you)
-  siteVisit: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like a free site visit."),
 };
 
 // Headline numbers shown on the Home, Services and Studio pages
