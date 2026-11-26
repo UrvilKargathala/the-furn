@@ -15,7 +15,7 @@ function StepRow({ st, i }: { st: (typeof processDetail)[number]; i: number }) {
           <Reveal>
             <p className="flex items-baseline gap-4">
               <span className="text-7xl leading-none font-bold tracking-tighter text-brass md:text-9xl">{pad(i + 1)}</span>
-              <span className="text-sm font-semibold text-ink/60">of {pad(processDetail.length)}</span>
+              <span className="text-sm font-semibold text-ink/65">of {pad(processDetail.length)}</span>
             </p>
           </Reveal>
           <h2 className="mt-6 text-4xl leading-[1.05] font-semibold tracking-tight md:text-6xl"><SplitText text={st.t} /></h2>
@@ -26,7 +26,7 @@ function StepRow({ st, i }: { st: (typeof processDetail)[number]; i: number }) {
             </ul>
             <div className="mt-10 flex items-start gap-4 border-l-2 border-brass pl-5">
               <div>
-                <p className="text-xs font-semibold tracking-[0.25em] text-ink/60 uppercase">You get</p>
+                <p className="text-xs font-semibold tracking-[0.25em] text-ink/65 uppercase">You get</p>
                 <p className="mt-1 text-lg font-semibold">{st.out}</p>
               </div>
             </div>

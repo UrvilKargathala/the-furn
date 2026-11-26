@@ -11,6 +11,8 @@ export type Service = {
   deliverables: string[];
   options: { t: string; d: string; i: string }[];
   process: { t: string; d: string }[];
+  // Search result title (before " | The Furn", keep under ~50 characters) and description (140-160 characters)
+  seo: { title: string; description: string };
 };
 
 export type Project = {

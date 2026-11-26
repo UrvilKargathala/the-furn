@@ -22,6 +22,7 @@ export const processDetail = processSteps.map((st, i) => ({ ...st, ...[
 export const services: Service[] = [
   {
     slug: "modular-kitchens",
+    seo: { title: "Modular Kitchens in Surat: L, U, Parallel & Island", description: "L-shape, U-shape, parallel and island modular kitchens in Surat, designed in-house and built on German machinery with Hettich and Blum hardware. Fixed quote." },
     t: "Modular Kitchens",
     short: "Parallel, L-shape, island and U-shape kitchens built around how you cook.",
     i: "/works/gokuldham/01.jpg",
@@ -45,6 +46,7 @@ export const services: Service[] = [
   },
   {
     slug: "wardrobes",
+    seo: { title: "Custom Wardrobes in Surat: Sliding, Hinged & Walk-in", description: "Sliding, hinged and walk-in wardrobes in Surat with lofts and fittings sized to what you own. Designed in-house, built on German machinery, fixed quote." },
     t: "Wardrobes",
     short: "Sliding, hinged and walk-in storage with fittings sized to your wardrobe.",
     i: "/works/serene-wardrobe/01.jpg",
@@ -68,6 +70,7 @@ export const services: Service[] = [
   },
   {
     slug: "living-tv-units",
+    seo: { title: "TV Units & Living Room Furniture in Surat", description: "Custom TV units, wall panelling, consoles and display units for living rooms in Surat. Designed in-house, built to measure and installed by our own team." },
     t: "Living & TV Units",
     short: "Panelling, consoles and display units that anchor the room.",
     i: "/works/avadh-ayuska/10.jpg",
@@ -91,6 +94,7 @@ export const services: Service[] = [
   },
   {
     slug: "bedroom-furniture",
+    seo: { title: "Bedroom Furniture in Surat: Beds, Dressers & Study", description: "Storage beds, side tables, dressers and study units made to measure for bedrooms in Surat. Designed in-house, built on German machinery, with a fixed quote." },
     t: "Bedroom Furniture",
     short: "Storage beds, side tables, dressers and study units for restful rooms.",
     i: "/service-photos/bedroom.jpg",
@@ -114,6 +118,7 @@ export const services: Service[] = [
   },
   {
     slug: "dining-crockery",
+    seo: { title: "Dining, Crockery & Pooja Units in Surat", description: "Made-to-measure dining tables, crockery units, bar cabinets and pooja units in Surat. Designed in-house, precision-built and installed by our own team." },
     t: "Dining & Crockery",
     short: "Dining tables, crockery units, bar and pooja units made to measure.",
     i: "/works/palladium/06.jpg",
@@ -137,6 +142,7 @@ export const services: Service[] = [
   },
   {
     slug: "complete-interiors",
+    seo: { title: "Complete Home Interiors in Surat", description: "End-to-end home interiors in Surat: kitchens, wardrobes, TV units and bedrooms, designed, manufactured and installed by one team on one fixed quote." },
     t: "Modular Furniture Solution",
     short: "End-to-end modular furniture for your home: selection, sourcing, manufacture and installation.",
     i: "/works/avadh-ayuska/02.jpg",

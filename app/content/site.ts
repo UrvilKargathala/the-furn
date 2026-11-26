@@ -11,6 +11,8 @@ export const SITE_URL = "https://www.thefurn.co";
 // Business facts used by page metadata, structured data (schema.org) and llms.txt
 export const BUSINESS = {
   name: "The Furn",
+  legalName: "The Furn Projects LLP",
+  alternateName: "THE FURN",
   tagline: "Tailored modular furniture and interiors in Surat",
   description: "The Furn is a design-and-build studio in Surat, Gujarat. We design, precision-build on German machinery and install modular kitchens, wardrobes, TV units, bedroom furniture and complete home interiors, made to measure.",
   founded: "2021",

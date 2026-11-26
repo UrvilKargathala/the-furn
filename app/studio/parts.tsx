@@ -51,7 +51,7 @@ export function CraftStats() {
       {items.map((x, k) => (
         <Reveal key={x.k} delay={k * 0.15} className={`px-5 py-20 md:px-12 md:py-28 ${k ? "border-t border-ink/10 md:border-t-0 md:border-l" : ""}`}>
           <p className="text-[22vw] leading-[0.85] font-bold tracking-[-0.05em] md:text-[9vw]">{x.n.replace(/(\+| yr)$/, "")}<span className="text-brass">{x.n.match(/(\+| yr)$/)?.[0]}</span></p>
-          <p className="mt-5 text-sm font-semibold tracking-[0.2em] uppercase text-ink/60">({x.k})</p>
+          <p className="mt-5 text-sm font-semibold tracking-[0.2em] uppercase text-ink/65">({x.k})</p>
           <p className="mt-5 max-w-md text-lg text-ink/70">{x.d}</p>
         </Reveal>
       ))}

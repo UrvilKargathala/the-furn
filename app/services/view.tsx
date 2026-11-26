@@ -89,7 +89,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
       {/* Hero: breadcrumb, title, actions (lunarch) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <BlurIn>
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/65">
             <Link href="/services" className="inline-flex min-h-11 items-center hover:text-ink">Services</Link><span>/</span><span className="text-ink">{s.t}</span>
           </nav>
         </BlurIn>
@@ -136,12 +136,12 @@ export function ServiceDetailView({ s }: { s: Service }) {
           <div><Label dark>Deliverables</Label><Heading text="What you" accent="get" dark /></div>
           <ul className="grid gap-x-10 sm:grid-cols-2">
             {s.deliverables.map((d, i) => (
-              <Reveal key={d} delay={i * 0.06}>
-                <li className="flex items-start gap-4 border-b border-ivory/15 py-5">
-                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brass text-xs">✓</span>
+              <li key={d} className="border-b border-ivory/15">
+                <Reveal delay={i * 0.06} className="flex items-start gap-4 py-5">
+                  <span aria-hidden className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brass text-xs">✓</span>
                   <span className="text-lg">{d}</span>
-                </li>
-              </Reveal>
+                </Reveal>
+              </li>
             ))}
           </ul>
         </div>

@@ -86,7 +86,7 @@ export function Select({ label, value, onChange, options, placeholder, error, re
             <ul ref={list} id={listId} role="listbox" aria-labelledby={id} tabIndex={-1}
               aria-activedescendant={!search && shown[active] ? optId(active) : undefined}
               className="max-h-72 overflow-y-auto overscroll-contain outline-none">
-              {shown.length === 0 && <li role="presentation" className="px-4 py-3 text-sm text-ink/60">No match</li>}
+              {shown.length === 0 && <li role="presentation" className="px-4 py-3 text-sm text-ink/65">No match</li>}
               {shown.map((o, i) => (
                 <li key={o.v} id={optId(i)} role="option" aria-selected={o.v === value}
                   onMouseEnter={() => setActive(i)} onMouseDown={(e) => e.preventDefault()} onClick={() => pick(o)}
@@ -174,7 +174,7 @@ export function Form() {
   return (
     <form onSubmit={submit} noValidate className="grid gap-8">
       <fieldset className="grid gap-8">
-        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">1</span>About you</legend>
+        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/65 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">1</span>About you</legend>
         <div className="grid gap-8 md:grid-cols-2">
           <Field label="Full name" name="name" value={f.name} onChange={set("name")} error={errors.name} required autoComplete="name" />
           <Field label="Phone" name="phone" type="tel" value={f.phone} onChange={set("phone")} error={errors.phone} required autoComplete="tel" />
@@ -186,7 +186,7 @@ export function Form() {
         </div>
       </fieldset>
       <fieldset className="mt-4 grid gap-8">
-        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">2</span>About your project</legend>
+        <legend className="mb-2 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-ink/65 uppercase"><span className="grid h-6 w-6 place-items-center rounded-full bg-ink text-xs tracking-normal text-ivory">2</span>About your project</legend>
         <div className="grid gap-8 md:grid-cols-2">
           <Select label="What are you looking for?" value={f.type} onChange={set("type")} placeholder="Select a service" options={enquiryTypes.map((t) => ({ v: t, t }))} error={errors.type} />
           <Select label="Your budget" required value={f.budget} onChange={set("budget")} placeholder="Select a budget range" error={errors.budget}
@@ -197,7 +197,7 @@ export function Form() {
       {/* Honeypot: hidden from people, bots fill it in */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden value={f.company} onChange={(e) => set("company")(e.target.value)} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
       <div className="flex flex-wrap items-center justify-between gap-6">
-        <p className="max-w-xs text-sm text-ink/60">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}No obligation.</p>
+        <p className="max-w-xs text-sm text-ink/65">{tier ? <>Enquiry category: <strong className="font-semibold text-ink">{tier}</strong>. </> : null}No obligation.</p>
         <button type="submit" disabled={state === "sending"} className="btn-fill btn-fill-brass group flex items-center gap-3 rounded-full bg-ink py-2 pr-2 pl-7 font-semibold text-ivory disabled:opacity-60">
           <RollText>{state === "sending" ? "Sending..." : "Send enquiry"}</RollText><Arrow />
         </button>

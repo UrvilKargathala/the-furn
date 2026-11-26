@@ -5,7 +5,7 @@ import { WorksView } from "./view";
 
 export const metadata: Metadata = pageMeta({
   title: "Our Work: Kitchens, Wardrobes & Home Interiors",
-  description: `${projects.length} real kitchens, wardrobes, villas and complete interiors designed and built by The Furn from Surat to Mumbai, Pune and Hyderabad, with photos and project films.`,
+  description: `${projects.length} real kitchens, wardrobes and full home interiors by The Furn, from Surat to Mumbai, Pune and Hyderabad, with photos and project films.`,
   path: "/works",
 });
 

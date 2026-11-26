@@ -27,7 +27,7 @@ import { Pic } from "./pic";
 export function Label({ children, dark = false }: { children: string; dark?: boolean }) {
   return (
     <Reveal>
-      <span className={`inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] ${dark ? "text-ivory/75" : "text-ink/60"}`}>
+      <span className={`inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] ${dark ? "text-ivory/75" : "text-ink/65"}`}>
         <Mark className="h-3 w-auto shrink-0 text-brass" />
         <span>{children}</span>
         <motion.span aria-hidden className="h-px w-14 origin-left bg-brass/70"
