@@ -1,7 +1,8 @@
 // Structured data (schema.org JSON-LD) for search engines and AI assistants.
 // Everything is built from the site's own content, so it stays in sync with the pages.
 import { BUSINESS, CONTACT, SITE_URL, STATS } from "./content/site";
-import type { Project, Service } from "./content/types";
+import type { Guide, Project, Service } from "./content/types";
+import { getProject } from "./content/projects";
 import { testimonials } from "./content/projects";
 
 const ORG_ID = `${SITE_URL}/#business`;
@@ -110,6 +111,29 @@ export function projectLd(p: Project) {
     ...(p.l && { locationCreated: { "@type": "Place", name: `${p.l}, ${BUSINESS.region}, India` } }),
     creator: { "@id": ORG_ID },
     ...(p.video && { video: { "@type": "VideoObject", name: `${p.n} project film`, description: p.d, contentUrl: p.video, thumbnailUrl: abs(p.i), uploadDate: p.y ? `${p.y}-01-01` : undefined } }),
+  };
+}
+
+// A guide article: who wrote it, when, and what it's about
+export function articleLd(g: Guide) {
+  const photo = getProject(g.photo)?.i;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${SITE_URL}/guides/${g.slug}#article`,
+    headline: g.t,
+    description: g.seo.description,
+    abstract: g.answer,
+    url: abs(`/guides/${g.slug}`),
+    mainEntityOfPage: abs(`/guides/${g.slug}`),
+    ...(photo && { image: abs(photo) }),
+    datePublished: g.updated,
+    dateModified: g.updated,
+    inLanguage: "en-IN",
+    author: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+    articleSection: "Guides",
+    timeRequired: `PT${g.read}M`,
   };
 }
 

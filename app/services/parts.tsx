@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useInView } from "motion/react";
 import { motion, ease, Reveal } from "../fx";
@@ -73,17 +74,25 @@ export function OptionCard({ o, i, active, onActive }: { o: Service["options"][n
 
 // Common questions: native <details> so every answer is in the page HTML for search engines and
 // AI assistants, while visitors open one at a time. The first is open so the format is obvious.
-export function Faqs({ s }: { s: Service }) {
+export function Faqs({ name, faqs, links = [] }: { name: string; faqs: { q: string; a: string }[]; links?: { t: string; href: string }[] }) {
   return (
     <section id="faq" className="px-5 pb-24 md:px-12 md:pb-32">
       <div className="grid gap-12 md:grid-cols-[1fr_1.6fr] md:gap-20">
         <div className="md:sticky md:top-32 md:self-start">
           <Label>FAQ</Label>
-          <Heading text="Questions about" accent={s.t.toLowerCase()} />
+          <Heading text="Questions about" accent={name.toLowerCase()} />
           <Reveal><p className="mt-6 max-w-sm text-lg text-ink/70">Still unsure? Message us on WhatsApp or book a site visit and we&apos;ll answer for your space.</p></Reveal>
+          {links.length > 0 && (
+            <Reveal delay={0.1}>
+              <p className="mt-10 text-xs font-semibold tracking-[0.2em] text-ink/65 uppercase">Read our guides</p>
+              <ul className="mt-3 space-y-1">
+                {links.map((l) => <li key={l.href}><Link href={l.href} className="group inline-flex min-h-11 items-center gap-2 text-lg font-semibold underline-offset-4 hover:underline"><span>{l.t}</span><span aria-hidden className="text-brass">↗</span></Link></li>)}
+              </ul>
+            </Reveal>
+          )}
         </div>
         <div className="border-t border-ink/15">
-          {s.faqs.map((f, i) => (
+          {faqs.map((f, i) => (
             <Reveal key={f.q} delay={Math.min(i, 4) * 0.05}>
               <details open={i === 0} className="group border-b border-ink/15">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 text-xl font-semibold tracking-tight md:text-2xl [&::-webkit-details-marker]:hidden">

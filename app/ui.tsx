@@ -292,7 +292,7 @@ export function Footer() {
               <Reveal delay={0.1}>
                 <p className="mb-5 text-xs font-semibold tracking-[0.2em] text-ivory/65 uppercase">Menu</p>
                 <ul className="space-y-0.5 text-base md:text-lg">
-                  {links.map(([t, h]) => <li key={t}><Link href={h} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
+                  {[...links, ["Guides", "/guides"]].map(([t, h]) => <li key={t}><Link href={h} className="group inline-flex min-h-11 items-center text-ivory/85 hover:text-ivory"><RollText>{t}</RollText></Link></li>)}
                 </ul>
               </Reveal>
               <Reveal delay={0.2}>

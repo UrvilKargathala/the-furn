@@ -24,3 +24,21 @@ export type Project = {
   overview: string; challenge: string; solution: string; features: string[]; result: string;
   quote: { t: string; by: string };
 };
+
+// A guide article (content/guides.ts). `photo` and `projects` are project slugs; `services` are service slugs.
+export type Guide = {
+  slug: string;
+  t: string;
+  // Search result title (before " | The Furn") and description (140-160 characters)
+  seo: { title: string; description: string };
+  short: string;
+  // The direct answer, shown first: what search engines and AI assistants quote
+  answer: string;
+  photo: string;
+  read: number;
+  updated: string;
+  sections: { h: string; p: string[]; list?: string[] }[];
+  faqs: { q: string; a: string }[];
+  services: string[];
+  projects: string[];
+};
