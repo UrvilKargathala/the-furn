@@ -33,7 +33,7 @@ How we know whether the SEO and AI-visibility work (phases 0–4) is paying off.
 | | Visits from AI assistants | _starts 26 Nov_ | GA4 → Traffic acquisition → AI assistants channel |
 | AI answers | Test questions where The Furn is named (of 16) | _to fill_ | docs/ai-visibility-plan.md |
 
-Claude's browser can read Search Console (access given 26 Nov 2026). For GA4, add the same account as a **Viewer** (Admin → Property access management → **+**) so Claude can fill in the GA4 rows too.
+Claude's browser can read Search Console, Bing Webmaster Tools and GA4 (Viewer), all given 26 Nov 2026, so Claude can fill in every row of the monthly log. GA4 has a custom channel group **Channels with AI**: in Traffic acquisition, switch the channel column to it to see the **AI assistants** row.
 
 ## Monthly routine (first week of each month, about 30 minutes)
 
