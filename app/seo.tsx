@@ -2,6 +2,7 @@
 // Everything is built from the site's own content, so it stays in sync with the pages.
 import { BUSINESS, CONTACT, SITE_URL, STATS } from "./content/site";
 import type { Project, Service } from "./content/types";
+import { testimonials } from "./content/projects";
 
 const ORG_ID = `${SITE_URL}/#business`;
 const abs = (path: string) => (path.startsWith("http") ? path : `${SITE_URL}${path}`);
@@ -44,6 +45,13 @@ export const businessLd = {
     closes: "19:00",
   }],
   sameAs: BUSINESS.social,
+  // Real client testimonials (no star ratings: clients gave words, not scores)
+  review: testimonials.filter((t) => !t.sample).map((t) => ({
+    "@type": "Review",
+    author: { "@type": "Person", name: t.name },
+    reviewBody: t.quote,
+    description: `${t.role}, ${t.place}`,
+  })),
   knowsAbout: ["Modular kitchens", "Wardrobes", "TV units", "Bedroom furniture", "Interior design", "Custom furniture manufacturing"],
 };
 
