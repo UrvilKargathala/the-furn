@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
-import { pageMeta } from "../seo";
+import { pageMeta, webPageLd, JsonLd } from "../seo";
+import { services } from "../content/services";
 import { ServicesView } from "./view";
 
-export const metadata: Metadata = pageMeta({
+const page = {
   title: "Modular Kitchens, Wardrobes & Interior Services in Surat",
   description: "Modular kitchens, wardrobes, TV units, bedroom and dining furniture and complete interiors in Surat, designed in-house and installed by our own team.",
   path: "/services",
-});
+};
+export const metadata: Metadata = pageMeta(page);
 
 export default function Page() {
-  return <ServicesView />;
+  return (
+    <>
+      <JsonLd data={webPageLd({ ...page, type: "CollectionPage", items: services.map((s) => ({ name: s.t, path: `/services/${s.slug}` })) })} />
+      <ServicesView />
+    </>
+  );
 }

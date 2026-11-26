@@ -123,6 +123,23 @@ export function faqLd(faqs: { q: string; a: string }[], path: string) {
   };
 }
 
+// What kind of page this is (about, contact, a collection...), linked to the business and site.
+// List pages also name each item, so assistants can see every service or project at a glance.
+export function webPageLd({ type, title, description, path, items }: { type: string; title: string; description: string; path: string; items?: { name: string; path: string }[] }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": type,
+    "@id": `${abs(path)}#webpage`,
+    url: abs(path),
+    name: title,
+    description,
+    inLanguage: "en-IN",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": ORG_ID },
+    ...(items && { mainEntity: { "@type": "ItemList", numberOfItems: items.length, itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, url: abs(it.path) })) } }),
+  };
+}
+
 // Per-page metadata: title, description, canonical URL and social preview.
 // (A page's openGraph replaces the layout's, so the shared fields are repeated here.)
 export function pageMeta({ title, description, path, image }: { title: string; description: string; path: string; image?: string }) {
