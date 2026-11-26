@@ -32,7 +32,7 @@ Goal: when someone asks ChatGPT, Perplexity, Gemini, Copilot or Google's AI Over
 6. **Builders and architects you work with:** ask them to credit "Interiors by The Furn" with a link on their project pages and social posts.
 7. **Instagram, Pinterest and LinkedIn:** keep the name "The Furn", the website and the phone identical, and use project names that match the website.
 
-**One fix needed from you:** the Google profile link in the site's business data is the management link (business.google.com/n/…), which only you can open. In your Google profile, click **Share** and send me the public link (it looks like `maps.app.goo.gl/…` or `g.page/…`). I'll swap it in so AI tools can connect the website to the Maps listing.
+**Google profile link:** done. The site now links to the public profile (https://maps.app.goo.gl/4Uj64GrYCCQEvjfF9), and the business data lists "The Furn Modular Furniture" as another name, so AI tools can match the website to the Maps listing (5.0 stars, 11 reviews on 26 Nov 2026).
 
 ## Monthly test questions
 

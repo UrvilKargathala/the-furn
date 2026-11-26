@@ -12,7 +12,8 @@ export const SITE_URL = "https://www.thefurn.co";
 export const BUSINESS = {
   name: "The Furn",
   legalName: "The Furn Projects LLP",
-  alternateName: "THE FURN",
+  // Other names people and Google use: the logo form, and the name on the Google Business Profile
+  alternateName: ["THE FURN", "The Furn Modular Furniture"],
   tagline: "Tailored modular furniture and interiors in Surat",
   description: "The Furn is a design-and-build studio in Surat, Gujarat. We design, precision-build on German machinery and install modular kitchens, wardrobes, TV units, bedroom furniture and complete home interiors, made to measure.",
   founded: "2021",
@@ -21,9 +22,11 @@ export const BUSINESS = {
   region: "Gujarat",
   postalCode: "394510",
   country: "IN",
-  // Exact studio pin, from the owner's Google Maps link
-  geo: { lat: 21.187098, lng: 72.785846 },
-  social: ["https://www.instagram.com/thefurn.co/", "https://in.pinterest.com/thefurnprojects/", "https://www.linkedin.com/company/the-furn-projects/", "https://business.google.com/n/4210206919015963812/searchprofile?hl=en-GB"],
+  // Exact studio pin, from the Google Business Profile
+  geo: { lat: 21.1870885, lng: 72.7858475 },
+  // Public link to the Google Business Profile (Maps listing with reviews)
+  googleProfile: "https://maps.app.goo.gl/4Uj64GrYCCQEvjfF9",
+  social: ["https://www.instagram.com/thefurn.co/", "https://in.pinterest.com/thefurnprojects/", "https://www.linkedin.com/company/the-furn-projects/", "https://maps.app.goo.gl/4Uj64GrYCCQEvjfF9"],
 };
 
 const ADDRESS = `${BUSINESS.street}, ${BUSINESS.city}, ${BUSINESS.region} ${BUSINESS.postalCode}`;
@@ -34,7 +37,8 @@ export const CONTACT = {
   whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like to book a site visit."),
   email: "info@thefurn.co",
   address: ADDRESS,
-  maps: `https://www.google.com/maps/search/?api=1&query=${BUSINESS.geo.lat},${BUSINESS.geo.lng}`,
+  // "Open in Google Maps" opens the business listing itself (address, hours, reviews)
+  maps: BUSINESS.googleProfile,
   instagram: { label: "@thefurn.co", href: "https://www.instagram.com/thefurn.co/" },
   hours: "Monday to Saturday, 10 am to 7 pm",
 };
