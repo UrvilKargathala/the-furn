@@ -312,10 +312,10 @@ export function Hero({ ready }: { ready: boolean }) {
   const [settled, setSettled] = useState(false);
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => setSettled(true), 2600);
+    const t = setTimeout(() => setSettled(true), 1900);
     return () => clearTimeout(t);
   }, [ready]);
-  const base = settled ? 0.1 : 1;
+  const base = settled ? 0.1 : 0.6;
   // Follow the project on screen as the remix plays
   const onTime = () => {
     const t = video.current?.currentTime ?? 0;
@@ -332,8 +332,8 @@ export function Hero({ ready }: { ready: boolean }) {
       <div className="relative h-full overflow-hidden bg-ink text-ivory">
         {/* The film opens out from a small frame in the centre, then settles from a slight zoom */}
         <motion.div className="absolute inset-0" initial={{ clipPath: "inset(34% 30% 34% 30% round 20px)" }}
-          animate={ready ? { clipPath: "inset(0% 0% 0% 0% round 0px)" } : {}} transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1], delay: 0.35 }}>
-          <motion.div className="absolute inset-0" initial={{ scale: 1.35 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 2.2, ease, delay: 0.35 }}>
+          animate={ready ? { clipPath: "inset(0% 0% 0% 0% round 0px)" } : {}} transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}>
+          <motion.div className="absolute inset-0" initial={{ scale: 1.35 }} animate={ready ? { scale: 1 } : {}} transition={{ duration: 1.8, ease, delay: 0.1 }}>
             <video ref={video} src={HERO_REMIX} poster={heroReel[0].p.i} muted loop playsInline preload="auto" onTimeUpdate={onTime}
               className="absolute inset-0 h-full w-full object-cover" />
           </motion.div>
@@ -352,13 +352,13 @@ export function Hero({ ready }: { ready: boolean }) {
                   className="mt-5 max-w-md text-base text-ivory/80 md:text-lg">{scene.d}</motion.p>
               </motion.div>
             </AnimatePresence>
-            <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.55 }} className="mt-7 flex flex-wrap gap-3">
+            <motion.div initial={{ opacity: 0, y: 20, filter: "blur(10px)" }} animate={ready ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.1 }} className="mt-7 flex flex-wrap gap-3">
               <Link href="/contact" className="btn-fill btn-fill-ivory group flex items-center gap-3 rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink"><RollText>Book a site visit</RollText><Arrow /></Link>
               <Link href="/works" className="btn-fill btn-fill-ivory group rounded-full border border-ivory/40 px-6 py-3 font-semibold backdrop-blur-md"><RollText>See our work</RollText></Link>
             </motion.div>
           </div>
           {/* Which project is on screen right now */}
-          <motion.div initial={{ opacity: 0, filter: "blur(10px)" }} animate={ready ? { opacity: 1, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.7 }} className="self-start md:self-end">
+          <motion.div initial={{ opacity: 0, filter: "blur(10px)" }} animate={ready ? { opacity: 1, filter: "blur(0px)" } : {}} transition={{ duration: 1, ease, delay: 1.2 }} className="self-start md:self-end">
           <Link href={`/works/${now.slug}`} className="group flex min-h-11 items-center gap-3 text-sm text-ivory/80 hover:text-ivory">
             <span className="font-mono tracking-[0.2em] whitespace-nowrap">{String(clip + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
             <span className="h-px w-8 bg-ivory/40" />

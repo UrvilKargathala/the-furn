@@ -102,24 +102,26 @@ function Logo({ compact = false }: { compact?: boolean }) {
 // Black intro: logo sweeps in, brand letters fade in, then the curtain lifts
 // Intro: logo and name, then the whole layer dissolves (no slide) so the hero's small film frame
 // shows through and opens out at once. `onReveal` fires as the dissolve starts, `onDone` when it ends.
+// Kept short (logo in, then a quick fade) so the hero, the page's main content, shows within about a second
+const LOADER_HOLD = 0.8;
 export function Loader({ onReveal, onDone }: { onReveal: () => void; onDone: () => void }) {
   const letters = "THE FURN".split("");
   useEffect(() => {
-    const t = setTimeout(onReveal, 1900);
+    const t = setTimeout(onReveal, LOADER_HOLD * 1000);
     return () => clearTimeout(t);
   }, [onReveal]);
   return (
     <motion.div className="pointer-events-none fixed inset-0 z-[100] grid place-items-center bg-ink text-ivory"
-      initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 0.7, ease: "easeOut", delay: 1.9 }}
+      initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 0.45, ease: "easeOut", delay: LOADER_HOLD }}
       onAnimationComplete={onDone}>
       <div className="flex items-center gap-4">
-        <motion.div initial={{ opacity: 0, clipPath: "inset(0 100% 0 0)" }} animate={{ opacity: 1, clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 1, ease }}>
+        <motion.div initial={{ opacity: 0, clipPath: "inset(0 100% 0 0)" }} animate={{ opacity: 1, clipPath: "inset(0 0% 0 0)" }} transition={{ duration: 0.55, ease }}>
           <Mark className="h-10 w-auto md:h-12" />
         </motion.div>
         <div className="flex text-2xl font-semibold tracking-[0.35em] md:text-3xl">
           {letters.map((l, i) => (
             <motion.span key={i} initial={{ opacity: 0, filter: "blur(8px)" }} animate={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}>{l === " " ? " " : l}</motion.span>
+              transition={{ duration: 0.35, delay: 0.12 + i * 0.045 }}>{l === " " ? " " : l}</motion.span>
           ))}
         </div>
       </div>
