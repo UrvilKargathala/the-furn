@@ -1,5 +1,5 @@
 import { SmoothScroll, Reveal, HeroGrow, BlurIn } from "../fx";
-import { CONTACT, STATS } from "../content/site";
+import { BUSINESS, CONTACT, STATS } from "../content/site";
 import { Nav, Footer, PageHero } from "../ui";
 import { Pic } from "../pic";
 import { Form, JumpTo } from "./form";
@@ -71,7 +71,7 @@ export function ContactView() {
             </dl>
             <a href={CONTACT.maps} target="_blank" rel="noreferrer" aria-label="Open our studio in Google Maps" className="group relative mt-8 block aspect-[4/3] overflow-hidden bg-sand">
               <iframe title="Map showing The Furn studio in Pal Gam, Surat" loading="lazy" referrerPolicy="no-referrer-when-downgrade" tabIndex={-1}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(CONTACT.address)}&z=15&output=embed`} className="pointer-events-none h-full w-full border-0 grayscale-[35%]" />
+                src={`https://www.google.com/maps?q=${BUSINESS.geo.lat},${BUSINESS.geo.lng}&z=16&output=embed`} className="pointer-events-none h-full w-full border-0 grayscale-[35%]" />
               <span className="absolute right-4 bottom-4 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-ivory transition-colors group-hover:bg-brass group-hover:text-ink">Open in Google Maps ↗</span>
             </a>
           </Reveal>
