@@ -72,20 +72,29 @@ export function SplitText({ text, className = "", delay = 0, play }: { text: str
   );
 }
 
-// Paragraph whose words light up as you scroll through it
-export function ScrollWords({ text, className = "" }: { text: string; className?: string }) {
+// Paragraph whose words light up as you scroll through it; `blur` also brings each word into focus
+export function ScrollWords({ text, className = "", blur = false }: { text: string; className?: string; blur?: boolean }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start 85%", "end 45%"] });
   const words = text.split(" ");
   return (
     <p ref={ref} className={className}>
-      {words.map((w, i) => <Word key={i} p={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>{w}</Word>)}
+      {words.map((w, i) => blur
+        ? <BlurWord key={i} p={scrollYProgress} range={[i / words.length, Math.min(1, (i + 2.5) / words.length)]}>{w}</BlurWord>
+        : <Word key={i} p={scrollYProgress} range={[i / words.length, (i + 1) / words.length]}>{w}</Word>)}
     </p>
   );
 }
 function Word({ children, p, range }: { children: string; p: ReturnType<typeof useScroll>["scrollYProgress"]; range: [number, number] }) {
   const opacity = useTransform(p, range, [0.15, 1]);
   return <motion.span style={{ opacity }}>{children} </motion.span>;
+}
+// Each word starts soft and faint, then sharpens and rises a touch; neighbours overlap so it reads as a wave
+function BlurWord({ children, p, range }: { children: string; p: ReturnType<typeof useScroll>["scrollYProgress"]; range: [number, number] }) {
+  const opacity = useTransform(p, range, [0.12, 1]);
+  const filter = useTransform(p, range, ["blur(10px)", "blur(0px)"]);
+  const y = useTransform(p, range, [10, 0]);
+  return <><motion.span className="inline-block will-change-[filter,opacity]" style={{ opacity, filter, y }}>{children}</motion.span>{" "}</>;
 }
 
 // Number counts up once visible
