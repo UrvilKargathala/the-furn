@@ -6,7 +6,7 @@ Everything needed to make Google Maps, directories and AI assistants describe Th
 
 | Field | Use this |
 |---|---|
-| Business name | The Furn |
+| Business name | The Furn (website, signboard) · **The Furn Modular Furniture** on the Google Business Profile. On directories, use the Google profile name so listings match Google |
 | Legal name (only where asked) | The Furn Projects LLP |
 | Address | 220, 219 Sumerru Business Corner, near Park Inn by Radisson Blue, Pal Gam, Surat, Gujarat 394510 |
 | Phone | +91 99256 18895 |
@@ -26,7 +26,8 @@ The Furn is a design-and-build studio in Pal Gam, Surat. We design, manufacture 
 
 Sign in at business.google.com with the account that owns the profile.
 
-- [ ] **Name** is exactly "The Furn". Don't add keywords like "Modular Kitchen Surat": Google suspends profiles for that.
+- [ ] **Name** stays "The Furn Modular Furniture" (as it is now). Don't add more keywords like "Kitchen Surat": Google suspends profiles for that.
+- [ ] Public profile link: https://maps.app.goo.gl/4Uj64GrYCCQEvjfF9 (already linked from the website).
 - [ ] **Primary category:** Kitchen remodeler, or Interior designer if most work is full homes.
 - [ ] **Extra categories:** Furniture manufacturer, Cabinet maker, Interior designer, Kitchen furniture store, Closet/Wardrobe store (use whichever Google offers).
 - [ ] **Address, phone, website and hours** match section 1 exactly.
