@@ -6,7 +6,7 @@ import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "..
 import { Pic } from "../pic";
 
 import type { Service } from "../content/types";
-import { WhyUs, Options } from "./parts";
+import { WhyUs, Options, Faqs } from "./parts";
 import { StatsRow } from "../stats";
 
 // Card: photo zooms on hover and a scrolling "Explore" strip slides across it (primedecor + lunarch)
@@ -174,6 +174,8 @@ export function ServiceDetailView({ s }: { s: Service }) {
           </Reveal>
         </div>
       </section>
+
+      <Faqs s={s} />
 
       {/* Other services */}
       <section className="px-5 pb-24 md:px-12 md:pb-32">

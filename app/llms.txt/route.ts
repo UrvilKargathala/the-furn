@@ -29,6 +29,9 @@ ${services.map((s) => `- [${s.t}](${url(`/services/${s.slug}`)}): ${s.short} Opt
 ## How we work
 ${processDetail.map((st, i) => `${i + 1}. ${st.t}: ${st.d}`).join("\n")}
 
+## Common questions
+${services.map((s) => `### ${s.t} ([full page](${url(`/services/${s.slug}#faq`)}))\n${s.faqs.map((f) => `- **${f.q}** ${f.a}`).join("\n")}`).join("\n\n")}
+
 ## Projects
 ${projects.map((p) => `- [${p.n}](${url(`/works/${p.slug}`)}): ${p.c}${p.l ? `, ${p.l}` : ""}${p.y ? `, ${p.y}` : ""}. ${p.d}`).join("\n")}
 

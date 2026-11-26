@@ -70,3 +70,32 @@ export function OptionCard({ o, i, active, onActive }: { o: Service["options"][n
     </div>
   );
 }
+
+// Common questions: native <details> so every answer is in the page HTML for search engines and
+// AI assistants, while visitors open one at a time. The first is open so the format is obvious.
+export function Faqs({ s }: { s: Service }) {
+  return (
+    <section id="faq" className="px-5 pb-24 md:px-12 md:pb-32">
+      <div className="grid gap-12 md:grid-cols-[1fr_1.6fr] md:gap-20">
+        <div className="md:sticky md:top-32 md:self-start">
+          <Label>FAQ</Label>
+          <Heading text="Questions about" accent={s.t.toLowerCase()} />
+          <Reveal><p className="mt-6 max-w-sm text-lg text-ink/70">Still unsure? Message us on WhatsApp or book a site visit and we&apos;ll answer for your space.</p></Reveal>
+        </div>
+        <div className="border-t border-ink/15">
+          {s.faqs.map((f, i) => (
+            <Reveal key={f.q} delay={Math.min(i, 4) * 0.05}>
+              <details open={i === 0} className="group border-b border-ink/15">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 text-xl font-semibold tracking-tight md:text-2xl [&::-webkit-details-marker]:hidden">
+                  <h3>{f.q}</h3>
+                  <span aria-hidden className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ink/25 text-lg transition-transform duration-500 group-open:rotate-45 group-open:border-brass group-open:bg-brass group-open:text-ivory">+</span>
+                </summary>
+                <p className="max-w-[62ch] pb-7 text-lg leading-relaxed text-ink/75">{f.a}</p>
+              </details>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

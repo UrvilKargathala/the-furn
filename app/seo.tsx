@@ -104,6 +104,16 @@ export function projectLd(p: Project) {
   };
 }
 
+// Common questions on a page, in the format search engines and AI assistants read
+export function faqLd(faqs: { q: string; a: string }[], path: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${abs(path)}#faq`,
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  };
+}
+
 // Per-page metadata: title, description, canonical URL and social preview.
 // (A page's openGraph replaces the layout's, so the shared fields are repeated here.)
 export function pageMeta({ title, description, path, image }: { title: string; description: string; path: string; image?: string }) {
