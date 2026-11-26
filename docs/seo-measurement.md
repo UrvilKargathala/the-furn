@@ -16,19 +16,21 @@ How we know whether the SEO and AI-visibility work (phases 0–4) is paying off.
 | Google profile | Rating | 5.0 (11 reviews) | Google Maps |
 | | Profile views | 3,882 (as shown on the profile) | Google Maps |
 | Off-site | Third-party listings/mentions found | 0 | Web search for "The Furn" Surat |
-| Search Console | Clicks / impressions / average position (last 3 months) | _to fill_ | Search Console → Performance |
-| | Indexed pages | _to fill_ | Search Console → Pages |
+| Search Console | Data available | 23–24 Nov 2026 only (property newly verified) | Search Console → Performance |
+| | Clicks / impressions | 4 / 65 | Search Console → Performance |
+| | Average CTR / position | 6.2% / 6.1 | Search Console → Performance |
+| | Top queries (impressions) | furn 13 · the furn 8 (1 click) · modular furniture manufacturers in surat 6 · modular furniture 2 · modular furniture surat 2 · furn studio 1 · modular kitchen surat 1 | Queries tab |
+| | Top pages (impressions) | Home 61 (all 4 clicks) · Modular Kitchens 10 · Studio 10 · Services 5 · Works 3 · Complete Interiors 3 · Contact 3 · Bedroom 2 | Pages tab |
+| | Indexed pages | Not reported yet ("processing data") | Search Console → Pages |
+| | Sitemap submitted | **No** (none listed) | Search Console → Sitemaps |
+| | Structured data by type (31 pages) | Business 31 · WebSite 31 · Project 19 · Breadcrumb 25 · Service 6 · FAQ 6 · Collection 2 · About 1 · Contact 1 · WebPage 1 | live check |
 | GA4 | Users / sessions (last 28 days) | _starts 26 Nov_ | GA4 → Reports |
 | | Leads (`generate_lead`) | _starts 26 Nov_ | GA4 → Events |
 | | WhatsApp / call taps | _starts 26 Nov_ | GA4 → Events |
 | | Visits from AI assistants | _starts 26 Nov_ | GA4 → Traffic acquisition → AI assistants channel |
 | AI answers | Test questions where The Furn is named (of 16) | _to fill_ | docs/ai-visibility-plan.md |
 
-Search Console and GA4 belong to the **info.thefurn@gmail.com** account. To let Claude read them in future sessions, add the account Claude's browser uses as a user:
-- **Search Console:** Settings → Users and permissions → Add user → **Restricted** (read-only).
-- **GA4:** Admin → Property access management → **+** → **Viewer**.
-
-Read-only access is enough; nothing needs edit rights.
+Claude's browser can read Search Console (access given 26 Nov 2026). For GA4, add the same account as a **Viewer** (Admin → Property access management → **+**) so Claude can fill in the GA4 rows too.
 
 ## Monthly routine (first week of each month, about 30 minutes)
 
@@ -58,7 +60,7 @@ Read-only access is enough; nothing needs edit rights.
 
 | Month | GSC clicks | GSC impressions | Avg position | Indexed pages | GA4 users | Leads | WhatsApp + call taps | AI visits | Reviews (rating) | AI questions named (/16) | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Nov 2026 (baseline) | | | | | | | | | 11 (5.0) | | SEO phases 0–4 live on 26 Nov |
+| Nov 2026 (baseline) | 4 (2 days) | 65 (2 days) | 6.1 | processing | | | | | 11 (5.0) | | SEO phases 0–4 live on 26 Nov; sitemap not yet submitted |
 | Dec 2026 | | | | | | | | | | | |
 | Jan 2027 | | | | | | | | | | | |
 | Feb 2027 | | | | | | | | | | | |
