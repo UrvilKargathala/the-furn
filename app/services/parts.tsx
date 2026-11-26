@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, useInView, type MotionValue } from "motion/react";
-import { motion, ease, Reveal, useTransform, useSmoothScroll } from "../fx";
+import { AnimatePresence, useInView } from "motion/react";
+import { motion, ease, Reveal } from "../fx";
 import { img } from "../content/site";
 import { Label, Heading } from "../ui";
 import { Pic } from "../pic";
@@ -107,54 +107,4 @@ export function Faqs({ name, faqs, links = [] }: { name: string; faqs: { q: stri
       </div>
     </section>
   );
-}
-
-// Services page: each service is a large card that pins as you scroll, and the next one slides up over it.
-// Cards already passed sink back slightly, so the pile reads as a stack. All content stays in the page.
-export function StackedServices({ list }: { list: Service[] }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end end"] });
-  return (
-    <div ref={ref} className="relative">
-      {list.map((s, i) => <StackCard key={s.slug} s={s} i={i} n={list.length} p={scrollYProgress} />)}
-    </div>
-  );
-}
-
-function StackCard({ s, i, n, p }: { s: Service; i: number; n: number; p: MotionValue<number> }) {
-  // Shrinks a little for every card that lands on top of it
-  const scale = useTransform(p, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035]);
-  const dim = useTransform(p, [i / n, Math.min(1, (i + 1) / n)], [0, i === n - 1 ? 0 : 0.25]);
-  return (
-    <div className="sticky h-[88svh] pt-6 md:h-[86svh]" style={{ top: `calc(5.5rem + ${i * 14}px)` }}>
-      <motion.div style={{ scale }} className="relative h-full origin-top overflow-hidden rounded-2xl bg-ink text-ivory shadow-[0_-20px_60px_-30px_rgba(0,0,0,0.45)]">
-        <Link href={`/services/${s.slug}`} className="group flex h-full flex-col md:grid md:grid-cols-[1.25fr_1fr]">
-          <div className="relative h-[42%] shrink-0 overflow-hidden md:h-full">
-            <Pic src={img(s.i, 1600)} alt={s.t} sizes="(min-width: 768px) 55vw, 100vw" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105" />
-          </div>
-          <div className="flex min-h-0 flex-1 flex-col justify-between gap-6 p-6 md:p-12">
-            <div>
-              <p className="flex items-baseline justify-between text-sm font-semibold tracking-[0.2em] text-ivory/65 uppercase">
-                <span>Service</span><span className="font-mono text-brass">{String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</span>
-              </p>
-              <h2 className="mt-5 text-4xl leading-[1] font-semibold tracking-tight md:mt-8 md:text-6xl">{s.t}</h2>
-              <p className="mt-4 max-w-md text-lg text-ivory/75 md:mt-6">{s.short}</p>
-              <ul className="mt-6 hidden flex-wrap gap-2 sm:flex">
-                {s.options.map((o) => <li key={o.t} className="rounded-full border border-ivory/20 px-4 py-1.5 text-sm">{o.t}</li>)}
-              </ul>
-            </div>
-            <span className="inline-flex items-center gap-3 self-start rounded-full bg-brass py-2 pr-2 pl-6 font-semibold text-ink">
-              Explore {s.t.toLowerCase()}
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-ivory transition-transform duration-500 group-hover:rotate-45"><ArrowGlyph /></span>
-            </span>
-          </div>
-        </Link>
-        <motion.div aria-hidden style={{ opacity: dim }} className="pointer-events-none absolute inset-0 bg-ink" />
-      </motion.div>
-    </div>
-  );
-}
-
-function ArrowGlyph() {
-  return <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden><path d="M2 10L10 2M10 2H3.5M10 2v6.5" stroke="currentColor" strokeWidth="1.6" /></svg>;
 }
