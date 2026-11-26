@@ -13,6 +13,9 @@ How we know whether the SEO and AI-visibility work (phases 0–4) is paying off.
 | | Lighthouse speed (mobile) | 78 Home · 97 Modular Kitchens | Lighthouse 12, mobile |
 | | Lighthouse accessibility | 96 · 96 | Lighthouse 12, mobile |
 | | Largest paint, mobile | 4.0 s Home · 2.3 s Modular Kitchens | Lighthouse 12, mobile |
+| Bing | Site added | Yes, 26 Nov 2026 (imported from Search Console; Claude has access) | Bing Webmaster Tools |
+| | Sitemap | Submitted 26 Nov 2026, status Processing | Bing → Sitemaps |
+| | Copilot / Bing AI citations | _starts after first crawl_ | Bing → AI Performance |
 | Google profile | Rating | 5.0 (11 reviews) | Google Maps |
 | | Profile views | 3,882 (as shown on the profile) | Google Maps |
 | Off-site | Third-party listings/mentions found | 0 | Web search for "The Furn" Surat |
@@ -46,14 +49,19 @@ Claude's browser can read Search Console (access given 26 Nov 2026). For GA4, ad
 - Reports → Acquisition → Traffic acquisition: sessions by channel, including Organic Search and **AI assistants**.
 - Landing pages: which pages lead people to get in touch.
 
-**3. Google profile**
+**3. Bing Webmaster Tools** (bing.com/webmasters, site thefurn.co)
+- Sitemaps: status Success and URLs discovered (should be 31).
+- Search Performance: clicks and impressions on Bing.
+- **AI Performance:** how often Copilot and Bing's AI summaries cite thefurn.co, and which pages. This is the most direct measure of the AI-visibility work.
+
+**4. Google profile**
 - Rating and review count, and replies to any new reviews.
 - Profile performance: searches, calls, website clicks, direction requests.
 
-**4. AI answers**
+**5. AI answers**
 - Ask the 16 test questions in docs/ai-visibility-plan.md and fill in its tracking table.
 
-**5. Site health** (Claude can run this part)
+**6. Site health** (Claude can run this part)
 - Lighthouse on Home and one service page; structured data check on every sitemap page; any broken links.
 
 ## Monthly log
