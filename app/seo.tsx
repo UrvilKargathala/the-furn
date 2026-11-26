@@ -17,6 +17,8 @@ export const businessLd = {
   "@type": ["HomeAndConstructionBusiness", "FurnitureStore"],
   "@id": ORG_ID,
   name: BUSINESS.name,
+  legalName: BUSINESS.legalName,
+  alternateName: BUSINESS.alternateName,
   slogan: BUSINESS.tagline,
   description: BUSINESS.description,
   url: SITE_URL,

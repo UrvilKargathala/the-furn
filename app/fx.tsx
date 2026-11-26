@@ -61,7 +61,8 @@ export function SplitText({ text, className = "", delay = 0, play }: { text: str
     ? { whileInView: "show", viewport: { once: true } }
     : { animate: play ? "show" : "hidden" };
   return (
-    <motion.span className={className} aria-label={text} initial="hidden" {...trigger}>
+    <motion.span className={className} initial="hidden" {...trigger}>
+      <span className="sr-only">{text}</span>
       {text.split(" ").map((w, i) => (
         <span key={i} aria-hidden className="-mb-[0.18em] inline-block overflow-hidden pb-[0.3em] align-bottom">
           <motion.span className="inline-block" variants={word} custom={i}>{w}&nbsp;</motion.span>
@@ -132,7 +133,7 @@ export function WideningImage({ src, alt }: { src: string; alt: string }) {
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   return (
     <div ref={ref} className="h-[85svh] w-full overflow-hidden">
-      <motion.div style={{ scale, y }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} preload className="h-full w-full object-cover" /></motion.div>
+      <motion.div style={{ scale, y }} className="h-full w-full will-change-transform"><Pic src={src} alt={alt} preload fetchPriority="high" className="h-full w-full object-cover" /></motion.div>
     </div>
   );
 }

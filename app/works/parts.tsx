@@ -26,7 +26,7 @@ export function WorkCard({ p, big }: { p: Project; big: boolean }) {
       <h3 className="mt-5 text-2xl font-semibold tracking-tight md:text-3xl">{p.n}</h3>
       <dl className="mt-3 flex gap-10 border-t border-ink/15 pt-3 text-base">
         {(details.length ? details : [["Type", p.c], ["Photos", String(p.gallery.length)]]).map(([k, v]) => (
-          <div key={k}><dt className="text-ink/60">{k}</dt><dd className="mt-0.5 font-medium">{v}</dd></div>
+          <div key={k}><dt className="text-ink/65">{k}</dt><dd className="mt-0.5 font-medium">{v}</dd></div>
         ))}
       </dl>
     </Link>

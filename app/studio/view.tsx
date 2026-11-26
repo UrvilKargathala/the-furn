@@ -61,8 +61,8 @@ export function StudioView() {
           <div className="space-y-6 text-sm">
             
             <Label>Who we are</Label>
-            <Reveal><p className="text-ink/60">Based in</p><p className="font-semibold">Surat, India</p></Reveal>
-            <Reveal delay={0.1}><p className="text-ink/60">Since</p><p className="font-semibold">2021 – Present</p></Reveal>
+            <Reveal><p className="text-ink/65">Based in</p><p className="font-semibold">Surat, India</p></Reveal>
+            <Reveal delay={0.1}><p className="text-ink/65">Since</p><p className="font-semibold">2021 – Present</p></Reveal>
           </div>
           <div>
             <ScrollWords className="text-3xl leading-tight font-semibold tracking-tight md:text-5xl"

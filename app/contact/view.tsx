@@ -29,7 +29,7 @@ function Trust() {
             <p className="text-[2rem] leading-none font-semibold tracking-tight sm:text-5xl">
               {x.n}<span className="text-[0.6em] text-brass sm:text-[1em]">{x.u}</span>
             </p>
-            <p className="mt-3 text-[10px] font-semibold tracking-[0.2em] text-ink/60 uppercase sm:text-xs">{x.t}</p>
+            <p className="mt-3 text-[10px] font-semibold tracking-[0.2em] text-ink/65 uppercase sm:text-xs">{x.t}</p>
             <p className="mt-2 hidden max-w-[16rem] text-sm leading-relaxed text-ink/65 sm:block">{x.d}</p>
           </li>
         ))}
@@ -64,7 +64,7 @@ export function ContactView() {
             <dl className="mt-12">
               {info.map(([k, v, href]) => (
                 <div key={k} className="flex items-center justify-between gap-6 border-t border-ink/15 py-3">
-                  <dt className="text-ink/60">{k}</dt>
+                  <dt className="text-ink/65">{k}</dt>
                   <dd className="max-w-[16rem] text-right font-semibold md:max-w-md lg:max-w-[16rem]">{href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="inline-flex min-h-11 items-center justify-end underline-offset-4 hover:underline">{v}</a> : v}</dd>
                 </div>
               ))}

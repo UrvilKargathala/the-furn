@@ -98,7 +98,7 @@ export function StudioTestimonials() {
                 {q.quote}
               </motion.blockquote>
               <motion.div layout="position" className="mt-8 flex items-end justify-between gap-4">
-                <span><span className="block font-semibold">{q.name}</span><span className={`block text-sm ${on ? "text-ivory/70" : "text-ink/60"}`}>{q.place}</span></span>
+                <span><span className="block font-semibold">{q.name}</span><span className={`block text-sm ${on ? "text-ivory/70" : "text-ink/65"}`}>{q.place}</span></span>
                 {on && qp && <span className="hidden text-sm font-semibold tracking-[0.15em] uppercase sm:block"><RollText>{qp.n}</RollText></span>}
               </motion.div>
               {/* Time until the next story */}

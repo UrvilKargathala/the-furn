@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { preload } from "react-dom";
 import { AnimatePresence, useInView, useMotionValueEvent, type MotionValue } from "motion/react";
 import Link from "next/link";
 import { SplitText, RollText, motion, useTransform, ease, MotionPic, useSmoothScroll } from "./fx";
@@ -61,7 +62,7 @@ function SwitchHeadline({ on, onToggle, compact = false }: { on: boolean; onTogg
   return (
     <div className="flex flex-col items-center text-center">
       <button type="button" onClick={onToggle} aria-pressed={on} aria-label="Made to measure"
-        className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.25em] text-ink/60 uppercase">
+        className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.25em] text-ink/65 uppercase">
         Made to measure
         <span className={`relative h-7 w-12 rounded-full transition-colors duration-500 ${on ? "bg-brass" : "bg-ink/15"}`}>
           <motion.span layout transition={{ type: "spring", stiffness: 500, damping: 32 }}
@@ -283,7 +284,7 @@ export function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; 
   useEffect(() => { if (inView) onActive(); }, [inView, onActive]);
   return (
     <div ref={ref} className={`border-t border-ink/15 py-10 transition-opacity duration-500 md:flex md:min-h-[60vh] md:flex-col md:justify-center ${active ? "opacity-100" : "md:opacity-30"}`}>
-      <p className="flex items-center gap-3 text-sm font-semibold text-ink/60">Step <span className="h-px w-6 bg-brass" /> 0{i + 1}/0{steps.length}</p>
+      <p className="flex items-center gap-3 text-sm font-semibold text-ink/65">Step <span className="h-px w-6 bg-brass" /> 0{i + 1}/0{steps.length}</p>
       <h3 className="mt-4 text-4xl font-semibold tracking-tight md:text-6xl">{st.t}</h3>
       <p className="mt-4 max-w-md text-lg text-ink/70">{st.d}</p>
       <div className="mt-6 flex flex-wrap gap-2">
@@ -295,6 +296,8 @@ export function Step({ st, i, active, onActive }: { st: (typeof steps)[number]; 
 }
 
 export function Hero({ ready }: { ready: boolean }) {
+  // The poster is the first thing people see: fetch it before anything else
+  preload(heroReel[0].p.i, { as: "image", fetchPriority: "high" });
   const ref = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useSmoothScroll({ target: ref, offset: ["start start", "end start"] });

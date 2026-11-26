@@ -18,7 +18,7 @@ export function OurStory() {
       <div className="px-5 md:px-12">
         <div className="flex items-center justify-between">
           <div className="shrink-0 whitespace-nowrap"><Label>Our Story</Label></div>
-          <span className="text-right font-mono text-xs tracking-[0.2em] text-ink/60 uppercase">Surat, Gujarat · Est. 2021</span>
+          <span className="text-right font-mono text-xs tracking-[0.2em] text-ink/65 uppercase">Surat, Gujarat · Est. 2021</span>
         </div>
         <div className="mt-8"><PageHero as="h2" large lines={["Furniture that", "fits your life."]} /></div>
         <div className="mt-16 md:mt-24 md:ml-[30%]">

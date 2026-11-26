@@ -5,18 +5,18 @@ import { motion, useTransform, MotionPic, useSmoothScroll } from "./fx";
 
 // Story chapters: photos swap and copy changes as the section scrolls (pinned, like prismae / pietra)
 export const chapters = [
-  { n: "01", t: "We start on site", d: "Before we draw anything, we understand your requirements, your lifestyle and your preferences, along with the lighting and Vastu of the space. Every module begins with you, not a catalogue.", img: "/works/serene-art/cover.webp" },
-  { n: "02", t: "We design around you", d: "Layouts, finishes and hardware are chosen with you, then shown in 3D so you can walk through the plan before anything is cut.", img: "/works/casa-rivera/01.jpg" },
-  { n: "03", t: "We build it ourselves", d: "Every shutter is cut, edge-banded and assembled on German machines for high precision and a flawless finish, then installed by our own team.", img: "/works/island-axis/cover.webp" },
+  { n: "01", t: "We start on site", d: "Before we draw anything, we understand your requirements, your lifestyle and your preferences, along with the lighting and Vastu of the space. Every module begins with you, not a catalogue.", img: "/works/serene-art/cover.webp", alt: "L-shaped modular kitchen in matte sage and oak by The Furn, Surat" },
+  { n: "02", t: "We design around you", d: "Layouts, finishes and hardware are chosen with you, then shown in 3D so you can walk through the plan before anything is cut.", img: "/works/casa-rivera/01.jpg", alt: "Dark modular kitchen with a timber breakfast counter and glass display units by The Furn" },
+  { n: "03", t: "We build it ourselves", d: "Every shutter is cut, edge-banded and assembled on German machines for high precision and a flawless finish, then installed by our own team.", img: "/works/island-axis/cover.webp", alt: "Island modular kitchen with marble tops built by The Furn" },
 ];
 
-export function ChapterImg({ src, i, n, p }: { src: string; i: number; n: number; p: MotionValue<number> }) {
+export function ChapterImg({ src, alt, i, n, p }: { src: string; alt: string; i: number; n: number; p: MotionValue<number> }) {
   const clip = useTransform(p, i === 0 ? [0, 1] : [Math.max(0, i / n - 0.1), i / n + 0.04],
     i === 0 ? ["inset(0% 0 0 0)", "inset(0% 0 0 0)"] : ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
   const scale = useTransform(p, [i / n - 0.1, (i + 1) / n], [1.3, 1.05]);
   return (
     <motion.div style={{ clipPath: clip }} className="absolute inset-0">
-      <MotionPic src={src} alt="" sizes="(min-width: 768px) 50vw, 100vw" style={{ scale }} className="h-full w-full object-cover" />
+      <MotionPic src={src} alt={alt} sizes="(min-width: 768px) 50vw, 100vw" style={{ scale }} className="h-full w-full object-cover" />
     </motion.div>
   );
 }
@@ -44,7 +44,7 @@ export function Chapters() {
     <div ref={ref} className="relative h-[240svh] md:h-[240vh]">
       <div className="sticky top-0 flex h-svh flex-col justify-center gap-5 px-5 pt-16 md:grid md:grid-cols-[1.1fr_1fr] md:items-center md:gap-16 md:px-12 md:pt-0">
         <div className="relative h-[34svh] shrink-0 overflow-hidden bg-ink md:h-[78svh]">
-          {chapters.map((c, i) => <ChapterImg key={c.n} src={c.img} i={i} n={n} p={p} />)}
+          {chapters.map((c, i) => <ChapterImg key={c.n} src={c.img} alt={c.alt} i={i} n={n} p={p} />)}
         </div>
         <div className="flex flex-col gap-6 md:gap-10">
           <div className="relative h-[42svh] md:h-[52svh]">

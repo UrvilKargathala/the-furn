@@ -4,7 +4,7 @@ import { ServicesView } from "./view";
 
 export const metadata: Metadata = pageMeta({
   title: "Modular Kitchens, Wardrobes & Interior Services in Surat",
-  description: "Modular kitchens, wardrobes, TV units, bedroom and dining furniture and complete interiors in Surat. Designed in-house, precision-built on German machinery, installed by our own team.",
+  description: "Modular kitchens, wardrobes, TV units, bedroom and dining furniture and complete interiors in Surat, designed in-house and installed by our own team.",
   path: "/services",
 });
 

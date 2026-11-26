@@ -18,7 +18,7 @@ export function WorksView() {
         <PageHero label="Our Works" lines={["Homes we've", "brought to life"]} />
         <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
           <BlurIn delay={0.45}><p className="max-w-lg text-lg text-ink/70">Kitchens, wardrobes and complete homes across India, each one designed around the family that lives in it.</p></BlurIn>
-          <BlurIn delay={0.6}><p className="text-sm font-semibold tracking-[0.2em] text-ink/60 uppercase">{String(projects.length).padStart(2, "0")} projects</p></BlurIn>
+          <BlurIn delay={0.6}><p className="text-sm font-semibold tracking-[0.2em] text-ink/65 uppercase">{String(projects.length).padStart(2, "0")} projects</p></BlurIn>
         </div>
       </section>
 
@@ -51,7 +51,7 @@ export function WorkDetailView({ p }: { p: Project }) {
       {/* Title + tagline (primedecor) and spec table (homespaceid) */}
       <section className="px-5 pt-36 pb-16 md:px-12 md:pt-44">
         <BlurIn>
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/60">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink/65">
             <Link href="/works" className="inline-flex min-h-11 items-center hover:text-ink">Works</Link><span>/</span><span className="text-ink">{p.n}</span>
           </nav>
         </BlurIn>
@@ -62,7 +62,7 @@ export function WorkDetailView({ p }: { p: Project }) {
         <dl className="mt-16 grid grid-cols-2 md:grid-cols-6">
           {meta.map(([k, v], i) => (
             <Reveal key={k} delay={i * 0.06} className="border-t border-ink/15 py-5 pr-4">
-              <dt className="text-sm text-ink/60">{k}</dt>
+              <dt className="text-sm text-ink/65">{k}</dt>
               <dd className="mt-1 text-lg font-semibold">{v}</dd>
             </Reveal>
           ))}
@@ -115,11 +115,11 @@ export function WorkDetailView({ p }: { p: Project }) {
             <dl className="mt-8">
               {p.credits.map((c) => (
                 <div key={c.r} className="flex justify-between gap-6 border-t border-ink/15 py-5">
-                  <dt className="text-ink/60">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
+                  <dt className="text-ink/65">{c.r}</dt><dd className="text-lg font-semibold">{c.n}</dd>
                 </div>
               ))}
               {p.insta && <div className="flex justify-between gap-6 border-t border-ink/15 py-5">
-                <dt className="text-ink/60">See more</dt>
+                <dt className="text-ink/65">See more</dt>
                 <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex min-h-11 items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText><ArrowIcon /></a></dd>
               </div>}
             </dl>
@@ -130,7 +130,7 @@ export function WorkDetailView({ p }: { p: Project }) {
               <blockquote className=" bg-sand p-8 md:p-10">
                 <span className="text-5xl leading-none text-brass">“</span>
                 <p className="mt-2 text-2xl leading-snug font-medium">{p.quote.t}</p>
-                <footer className="mt-6 text-sm text-ink/60">{p.quote.by}</footer>
+                <footer className="mt-6 text-sm text-ink/65">{p.quote.by}</footer>
               </blockquote>
             </Reveal>
           )}

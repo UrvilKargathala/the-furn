@@ -12,7 +12,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const s = getService((await params).slug);
-  return s ? pageMeta({ title: `${s.t} in Surat`, description: `${s.short} Designed and built to measure by The Furn in Surat, with a site visit and fixed quote.`, path: `/services/${s.slug}`, image: s.i.startsWith("/") ? s.i : undefined }) : {};
+  return s ? pageMeta({ title: s.seo.title, description: s.seo.description, path: `/services/${s.slug}`, image: s.i.startsWith("/") ? s.i : undefined }) : {};
 }
 
 // The slug is read inside Suspense so the page shell (and the streamed metadata) never blocks navigation
