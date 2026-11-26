@@ -21,6 +21,8 @@ export const BUSINESS = {
   region: "Gujarat",
   postalCode: "394510",
   country: "IN",
+  // Exact studio pin, from the owner's Google Maps link
+  geo: { lat: 21.187098, lng: 72.785846 },
   social: ["https://www.instagram.com/thefurn.co/", "https://in.pinterest.com/thefurnprojects/", "https://www.linkedin.com/company/the-furn-projects/", "https://business.google.com/n/4210206919015963812/searchprofile?hl=en-GB"],
 };
 
@@ -32,7 +34,7 @@ export const CONTACT = {
   whatsapp: "https://wa.me/919925618895?text=" + encodeURIComponent("Hi THE FURN, I'd like to book a site visit."),
   email: "info@thefurn.co",
   address: ADDRESS,
-  maps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`,
+  maps: `https://www.google.com/maps/search/?api=1&query=${BUSINESS.geo.lat},${BUSINESS.geo.lng}`,
   instagram: { label: "@thefurn.co", href: "https://www.instagram.com/thefurn.co/" },
   hours: "Monday to Saturday, 10 am to 7 pm",
 };

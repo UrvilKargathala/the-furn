@@ -36,6 +36,7 @@ export const businessLd = {
     postalCode: BUSINESS.postalCode,
     addressCountry: BUSINESS.country,
   },
+  geo: { "@type": "GeoCoordinates", latitude: BUSINESS.geo.lat, longitude: BUSINESS.geo.lng },
   hasMap: CONTACT.maps,
   areaServed: STATS.cities.map((name) => ({ "@type": "City", name })),
   openingHoursSpecification: [{
