@@ -109,8 +109,7 @@ export function WorkDetailView({ p }: { p: Project }) {
 
       <section className="px-5 pb-24 md:px-12 md:pb-32">
         <div className="grid gap-12 md:grid-cols-2">
-          <Reveal>
-            
+          {(p.credits.length > 0 || p.insta) && <Reveal>
             <Label>Credits</Label>
             <dl className="mt-8">
               {p.credits.map((c) => (
@@ -123,15 +122,16 @@ export function WorkDetailView({ p }: { p: Project }) {
                 <dd><a href={p.insta} target="_blank" rel="noreferrer" className="group inline-flex min-h-11 items-center gap-2 text-lg font-semibold"><RollText>Instagram</RollText><ArrowIcon /></a></dd>
               </div>}
             </dl>
-          </Reveal>
-          {p.quote.t && (
+          </Reveal>}
+          {/* The outcome, with the client's words when we have them */}
+          {(p.result || p.quote.t) && (
             <Reveal delay={0.15}>
-              {p.result && <p className="mb-8 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{p.result}</p>}
-              <blockquote className=" bg-sand p-8 md:p-10">
+              {p.result && <><Label>The result</Label><p className="mt-8 mb-8 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{p.result}</p></>}
+              {p.quote.t && <blockquote className="bg-sand p-8 md:p-10">
                 <span className="text-5xl leading-none text-brass">“</span>
                 <p className="mt-2 text-2xl leading-snug font-medium">{p.quote.t}</p>
                 <footer className="mt-6 text-sm text-ink/65">{p.quote.by}</footer>
-              </blockquote>
+              </blockquote>}
             </Reveal>
           )}
         </div>
