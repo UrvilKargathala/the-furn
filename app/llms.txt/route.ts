@@ -10,6 +10,8 @@ export function GET() {
 
 > ${BUSINESS.description}
 
+Full content of every page in one file: ${url("/llms-full.txt")}
+
 ## Key facts
 - Business: design-and-build studio for modular furniture and home interiors
 - Location: ${CONTACT.address}, India
