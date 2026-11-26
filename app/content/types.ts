@@ -13,6 +13,8 @@ export type Service = {
   process: { t: string; d: string }[];
   // Search result title (before " | The Furn", keep under ~50 characters) and description (140-160 characters)
   seo: { title: string; description: string };
+  // Common questions, shown on the page and sent to search engines and AI assistants as FAQ data
+  faqs: { q: string; a: string }[];
 };
 
 export type Project = {

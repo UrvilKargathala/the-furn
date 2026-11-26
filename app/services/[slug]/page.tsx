@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageLoading } from "../../page-loading";
-import { JsonLd, breadcrumbLd, pageMeta, serviceLd } from "../../seo";
+import { JsonLd, breadcrumbLd, faqLd, pageMeta, serviceLd } from "../../seo";
 import { services, getService } from "../../content/services";
 import { ServiceDetailView } from "../view";
 
@@ -30,6 +30,7 @@ async function Detail({ params }: { params: Promise<{ slug: string }> }) {
   return (
     <>
       <JsonLd data={serviceLd(s)} />
+      <JsonLd data={faqLd(s.faqs, `/services/${s.slug}`)} />
       <JsonLd data={breadcrumbLd([["Services", "/services"], [s.t, `/services/${s.slug}`]])} />
       <ServiceDetailView s={s} />
     </>

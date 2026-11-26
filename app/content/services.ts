@@ -22,6 +22,14 @@ export const processDetail = processSteps.map((st, i) => ({ ...st, ...[
 export const services: Service[] = [
   {
     slug: "modular-kitchens",
+    faqs: [
+      { q: "How much does a modular kitchen cost in Surat?", a: "It depends mainly on the size and layout of the kitchen, the shutter finish (laminate, acrylic, PU or veneer), the countertop and the hardware. After a site visit and measurement we give you an itemised, fixed quote, so you see the cost of every module before production starts and the price does not change later." },
+      { q: "How long does it take to make and install a modular kitchen?", a: "Most kitchens take about five to six weeks from design sign-off to handover. Two of our recent kitchens, of 180 and 260 sq ft, took 35 and 42 days. Modules are made in our factory while the site is prepared, then our own team installs them in a few days." },
+      { q: "Which kitchen layout is right for my home?", a: "An L-shape suits most medium kitchens and keeps movement easy. A U-shape gives the most counter and storage for people who cook a lot. A parallel kitchen makes the best use of long, narrow apartment kitchens. An island works in open-plan homes with enough clear floor space around it. We recommend a layout after measuring your space and mapping the hob, sink and fridge." },
+      { q: "What materials and hardware do you use?", a: "Carcasses are BWP plywood, with moisture-resistant boards near the sink. Shutters come in acrylic, PU, laminate or veneer, and tops in quartz or granite. Soft-close hinges and branded channels from makers such as Hettich and Blum are standard, not upgrades, and every module is cut and edge-banded on German machinery." },
+      { q: "Is there a warranty on the kitchen?", a: "Yes. Hardware carries a 15-year warranty, and our own team installs, aligns and hands over every kitchen with a care walkthrough." },
+      { q: "Can I see the design before you build it?", a: "Yes. You get a scaled 2D layout and 3D views of your kitchen, and you choose shutters, finishes and hardware from real samples before signing off. Nothing is cut until you approve the design." },
+    ],
     seo: { title: "Modular Kitchens in Surat: L, U, Parallel & Island", description: "L-shape, U-shape, parallel and island modular kitchens in Surat, designed in-house and built on German machinery with Hettich and Blum hardware. Fixed quote." },
     t: "Modular Kitchens",
     short: "Parallel, L-shape, island and U-shape kitchens built around how you cook.",
@@ -46,6 +54,14 @@ export const services: Service[] = [
   },
   {
     slug: "wardrobes",
+    faqs: [
+      { q: "How much does a custom wardrobe cost?", a: "The price depends on the wardrobe's width and height, the shutter type (sliding, hinged or walk-in), the finish, lofts and the internal fittings you choose. After measuring your room we give an itemised, fixed quote, so you know the exact cost before production." },
+      { q: "Sliding or hinged wardrobe: which should I choose?", a: "Sliding shutters save floor space, so they suit compact bedrooms or rooms where a door swing would hit the bed. Hinged doors open fully and give complete access to every shelf, which works well in larger rooms. We suggest the best fit after seeing the room." },
+      { q: "How do you plan the inside of the wardrobe?", a: "We start with a storage audit of what you own: long and short hanging, folded clothes, trousers, shoes, jewellery and accessories. Then we plan pull-out trays, drawers and racks around it, and use lofts above for luggage and seasonal items." },
+      { q: "What finishes are available for wardrobe shutters?", a: "Laminate, acrylic, fluted glass, mirror and veneer, with profile or concealed handles. You choose from real samples, and we show the options in 3D before production." },
+      { q: "How long does a wardrobe take to make and install?", a: "Modules are made in our factory after you approve the design, then installed and aligned by our own team. Timing depends on the size of the order, and we confirm a schedule with your quote." },
+      { q: "Is there a warranty on wardrobes?", a: "Yes. Wardrobe hardware, including soft-close hinges and channels, carries a 15-year warranty." },
+    ],
     seo: { title: "Custom Wardrobes in Surat: Sliding, Hinged & Walk-in", description: "Sliding, hinged and walk-in wardrobes in Surat with lofts and fittings sized to what you own. Designed in-house, built on German machinery, fixed quote." },
     t: "Wardrobes",
     short: "Sliding, hinged and walk-in storage with fittings sized to your wardrobe.",
@@ -70,6 +86,13 @@ export const services: Service[] = [
   },
   {
     slug: "living-tv-units",
+    faqs: [
+      { q: "How much does a custom TV unit cost?", a: "It depends on the size of the wall, the panelling or stone finish, the console and storage, and the display lighting. We measure the wall and give an itemised, fixed quote before anything is made." },
+      { q: "How do you hide the TV wires?", a: "Wiring is planned from day one. We design concealed channels inside the panelling and ventilated cabinets for set-top boxes, routers and speakers, so the finished wall looks clean and the electronics stay cool." },
+      { q: "How big should the TV unit be?", a: "We size the unit to your sofa position and viewing distance, and to the full wall rather than just the TV. You see the proportions in a 3D design before production." },
+      { q: "What finishes can I choose for a TV wall?", a: "Fluted, slatted or upholstered panels, stone finishes, veneer and laminate, with floating consoles, open niches and lit display shelves. You choose from real samples." },
+      { q: "Is there a warranty on living room furniture?", a: "Yes. Hardware carries a 15-year warranty, and our own team installs every unit." },
+    ],
     seo: { title: "TV Units & Living Room Furniture in Surat", description: "Custom TV units, wall panelling, consoles and display units for living rooms in Surat. Designed in-house, built to measure and installed by our own team." },
     t: "Living & TV Units",
     short: "Panelling, consoles and display units that anchor the room.",
@@ -94,6 +117,13 @@ export const services: Service[] = [
   },
   {
     slug: "bedroom-furniture",
+    faqs: [
+      { q: "How much does bedroom furniture cost?", a: "It depends on what the room needs (bed, headboard, dresser, study unit, side tables), the sizes and the finishes. After measuring the room we give an itemised, fixed quote." },
+      { q: "Do you make storage beds?", a: "Yes. We make hydraulic-lift beds and drawer-storage beds that keep bedding and luggage out of sight, with upholstered or panelled headboards." },
+      { q: "Can you fit a study unit into a bedroom?", a: "Yes. We design compact desks with shelves and cable management, often wall-mounted to save floor space, alongside bedside tables with charging points and dressers with mirrors and lighting." },
+      { q: "Do you design kids' rooms?", a: "Yes. Kids' rooms use durable, modular desks, bunks and storage that can change as the child grows." },
+      { q: "Is there a warranty on bedroom furniture?", a: "Yes. Hardware carries a 15-year warranty, and every piece is installed by our own team." },
+    ],
     seo: { title: "Bedroom Furniture in Surat: Beds, Dressers & Study", description: "Storage beds, side tables, dressers and study units made to measure for bedrooms in Surat. Designed in-house, built on German machinery, with a fixed quote." },
     t: "Bedroom Furniture",
     short: "Storage beds, side tables, dressers and study units for restful rooms.",
@@ -118,6 +148,13 @@ export const services: Service[] = [
   },
   {
     slug: "dining-crockery",
+    faqs: [
+      { q: "How much does a crockery unit or pooja unit cost?", a: "The price depends on size, glass and stone choices, finish and lighting. After seeing the space we give an itemised, fixed quote before production." },
+      { q: "Do you make custom pooja units?", a: "Yes. Our pooja units have jaali shutters, bell hooks and dedicated storage for essentials, and are designed to suit your room and your Vastu preferences." },
+      { q: "What sizes of dining table do you make?", a: "Tables are sized to your room and family, from four-seater nooks to large family tables, in solid wood, stone tops or glass, with matching benches or chairs." },
+      { q: "Can a crockery unit have lighting?", a: "Yes. Crockery and bar units can have glass shutters with built-in display lighting, planned with the electrical points before installation." },
+      { q: "Is there a warranty on dining and crockery furniture?", a: "Yes. Hardware carries a 15-year warranty." },
+    ],
     seo: { title: "Dining, Crockery & Pooja Units in Surat", description: "Made-to-measure dining tables, crockery units, bar cabinets and pooja units in Surat. Designed in-house, precision-built and installed by our own team." },
     t: "Dining & Crockery",
     short: "Dining tables, crockery units, bar and pooja units made to measure.",
@@ -142,6 +179,13 @@ export const services: Service[] = [
   },
   {
     slug: "complete-interiors",
+    faqs: [
+      { q: "How much do complete home interiors cost?", a: "It depends on the size of the home (2BHK, 3BHK or villa), how many rooms you furnish, and the materials and finishes you choose. We plan the whole home, then give one itemised, fixed quote covering every room." },
+      { q: "How long do complete home interiors take?", a: "Timelines depend on the size of the home and any civil, electrical or plumbing work. We schedule everything together to avoid rework, and you get weekly site updates. As an example, a 6,000 sq ft weekend home was completed in 21 days, and other projects have taken between 35 and 90 days." },
+      { q: "What is included in your complete interiors service?", a: "A whole-home layout and mood board, 3D views of every room, a material and finish palette, electrical, ceiling and lighting plans, all modular furniture and wardrobes, project management with site updates, and a handover with a care guide and warranty." },
+      { q: "Do I deal with one team for everything?", a: "Yes. You get a single point of contact, a single timeline and a single warranty. We design, manufacture on our own German machinery and install with our own team." },
+      { q: "Which cities do you work in?", a: "Our studio is in Pal Gam, Surat, and our own teams have delivered homes in Surat, Mumbai, Navi Mumbai, Ahmedabad, Hyderabad and Pune." },
+    ],
     seo: { title: "Complete Home Interiors in Surat", description: "End-to-end home interiors in Surat: kitchens, wardrobes, TV units and bedrooms, designed, manufactured and installed by one team on one fixed quote." },
     t: "Modular Furniture Solution",
     short: "End-to-end modular furniture for your home: selection, sourcing, manufacture and installation.",
