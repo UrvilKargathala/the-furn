@@ -5,6 +5,7 @@ import { HoverCursor } from "./fx";
 import { WhatsAppFab } from "./ui";
 import { BUSINESS, SITE_URL } from "./content/site";
 import { JsonLd, businessLd, websiteLd } from "./seo";
+import { Analytics } from "./analytics";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-body" });
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={businessLd} />
         <JsonLd data={websiteLd} />
         {children}<HoverCursor /><WhatsAppFab />
+        <Analytics />
       </body>
     </html>
   );

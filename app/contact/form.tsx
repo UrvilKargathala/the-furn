@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import { RollText, motion, ease } from "../fx";
 import { budgets, enquiryTypes, CONTACT } from "../content/site";
 import { Arrow } from "../ui";
+import { track } from "../analytics";
 
 type Option = { v: string; t: string; hint?: string };
 
@@ -147,7 +148,7 @@ export function Form() {
     try {
       const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...f, state: states.find((s) => s.v === f.state)?.t ?? "", city: f.city === OTHER ? f.cityOther : f.city, pageUrl: window.location.href }) });
       const data = await res.json().catch(() => ({}));
-      if (res.ok) { setState("done"); return; }
+      if (res.ok) { setState("done"); track("generate_lead", { form: "contact", service: f.type, budget: f.budget, city: f.city === OTHER ? f.cityOther : f.city }); return; }
       if (res.status === 422 && data.errors) { setErrors(data.errors); setState("idle"); return; }
       setState("fail");
     } catch { setState("fail"); }
