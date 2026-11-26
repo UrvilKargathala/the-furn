@@ -22,7 +22,7 @@ export function OurStory() {
         </div>
         <div className="mt-8"><PageHero as="h2" large lines={["Furniture that", "fits your life."]} /></div>
         <div className="mt-16 md:mt-24 md:ml-[30%]">
-          <ScrollWords className="text-3xl leading-[1.12] font-medium tracking-tight md:text-5xl"
+          <ScrollWords blur className="text-3xl leading-[1.12] font-medium tracking-tight md:text-5xl"
             text="A home works best when its furniture is made for it. We design modular kitchens, wardrobes, beds, vanities, dressing tables and loose modular furniture around your space, your routine and the way you live." />
         </div>
       </div>

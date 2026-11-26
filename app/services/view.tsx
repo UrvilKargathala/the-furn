@@ -7,7 +7,7 @@ import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "..
 import { Pic } from "../pic";
 
 import type { Service } from "../content/types";
-import { WhyUs, Options, Faqs } from "./parts";
+import { WhyUs, Options, Faqs, StackedServices } from "./parts";
 import { StatsRow } from "../stats";
 
 // Card: photo zooms on hover and a scrolling "Explore" strip slides across it (primedecor + lunarch)
@@ -60,15 +60,9 @@ export function ServicesView() {
         </div>
       </section>
 
-      {/* Services grid */}
-      <section className="px-5 pb-24 md:px-12 md:pb-32">
-        <div className="grid gap-x-8 gap-y-16 md:grid-cols-2">
-          {services.map((s, i) => (
-            <Reveal key={s.slug} delay={(i % 2) * 0.15} className={i % 2 ? "md:mt-28" : ""}>
-              <ServiceCard s={s} i={i} />
-            </Reveal>
-          ))}
-        </div>
+      {/* Services: stacked cards that pin and slide over each other as you scroll */}
+      <section className="px-3 pb-24 md:px-8 md:pb-32">
+        <StackedServices list={services} />
       </section>
 
       <WhyUs />
