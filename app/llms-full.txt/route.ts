@@ -1,6 +1,7 @@
 import { BUSINESS, CONTACT, SITE_URL, STATS } from "../content/site";
 import { services, processDetail } from "../content/services";
 import { projects, testimonials } from "../content/projects";
+import { guides } from "../content/guides";
 
 // /llms-full.txt: the whole site as one plain Markdown document, so AI assistants can read every
 // service, FAQ, project and client quote in a single request. /llms.txt is the short index.
@@ -37,6 +38,17 @@ ${p.d}
 ${[p.overview, p.challenge && `Challenge: ${p.challenge}`, p.solution && `Solution: ${p.solution}`, p.result && `Result: ${p.result}`].filter(Boolean).join("\n\n")}
 ${p.features?.length ? `\nFeatures:\n${p.features.map((f) => `- ${f}`).join("\n")}` : ""}`).join("\n\n");
 
+  const guideDocs = guides.map((g) => `## ${g.t}
+
+Page: ${url(`/guides/${g.slug}`)} · Updated ${g.updated}
+
+**Short answer:** ${g.answer}
+
+${g.sections.map((sec) => `### ${sec.h}\n\n${sec.p.join("\n\n")}${sec.list ? `\n\n${sec.list.map((l) => `- ${l}`).join("\n")}` : ""}`).join("\n\n")}
+
+### Common questions
+${g.faqs.map((f) => `**${f.q}**\n${f.a}`).join("\n\n")}`).join("\n\n---\n\n");
+
   const quotes = testimonials.filter((t) => !t.sample).map((t) => `> ${t.quote}\n>\n> — ${t.name}, ${t.role}, ${t.place}`).join("\n\n");
 
   const body = `# ${BUSINESS.name}: full site content
@@ -65,6 +77,10 @@ ${processDetail.map((st, i) => `${i + 1}. **${st.t}:** ${st.d} You leave with: $
 # Services
 
 ${serviceDocs}
+
+# Guides
+
+${guideDocs}
 
 # Projects
 

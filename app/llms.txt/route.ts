@@ -1,6 +1,7 @@
 import { BUSINESS, CONTACT, SITE_URL, STATS } from "../content/site";
 import { services, processDetail } from "../content/services";
 import { projects } from "../content/projects";
+import { guides } from "../content/guides";
 
 // /llms.txt: a plain-text summary of the business for AI assistants (ChatGPT, Claude, Perplexity...).
 // Built from the same content as the pages, so it never goes out of date.
@@ -34,6 +35,9 @@ ${processDetail.map((st, i) => `${i + 1}. ${st.t}: ${st.d}`).join("\n")}
 ## Common questions
 ${services.map((s) => `### ${s.t} ([full page](${url(`/services/${s.slug}#faq`)}))\n${s.faqs.map((f) => `- **${f.q}** ${f.a}`).join("\n")}`).join("\n\n")}
 
+## Guides
+${guides.map((g) => `- [${g.t}](${url(`/guides/${g.slug}`)}): ${g.answer}`).join("\n")}
+
 ## Projects
 ${projects.map((p) => `- [${p.n}](${url(`/works/${p.slug}`)}): ${p.c}${p.l ? `, ${p.l}` : ""}${p.y ? `, ${p.y}` : ""}. ${p.d}`).join("\n")}
 
@@ -42,6 +46,7 @@ ${projects.map((p) => `- [${p.n}](${url(`/works/${p.slug}`)}): ${p.c}${p.l ? `, 
 - [Services](${url("/services")})
 - [Our work](${url("/works")})
 - [Our process](${url("/process")})
+- [Guides](${url("/guides")})
 - [Studio / about](${url("/studio")})
 - [Contact and site visits](${url("/contact")})
 `;

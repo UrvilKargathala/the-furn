@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SmoothScroll, Reveal, SplitText, ScrollWords, RollText, WideningImage, BlurIn } from "../fx";
 import { img, STATS } from "../content/site";
 import { services } from "../content/services";
+import { guidesFor } from "../content/guides";
 import { Label, Heading, Arrow, Nav, Cta, Footer, ArrowIcon, PageHero } from "../ui";
 import { Pic } from "../pic";
 
@@ -175,7 +176,7 @@ export function ServiceDetailView({ s }: { s: Service }) {
         </div>
       </section>
 
-      <Faqs s={s} />
+      <Faqs name={s.t} faqs={s.faqs} links={guidesFor(s.slug).map((g) => ({ t: g.t, href: `/guides/${g.slug}` }))} />
 
       {/* Other services */}
       <section className="px-5 pb-24 md:px-12 md:pb-32">
