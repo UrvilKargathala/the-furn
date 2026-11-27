@@ -1,108 +1,136 @@
-# WhatsApp agent: final plan (menu + AI)
+# The Furn WhatsApp Agent: Final Plan
 
-Replaces the CodeWords "THE FURN WhatsApp Agent" on **+91 99256 18895**.
-Decided: **official WhatsApp Cloud API (Meta, direct)** + **menu with AI for typed questions**, built into the thefurn.co website.
-Status: plan only, nothing built or changed yet (26 Nov 2026).
+- **Number:** +91 99256 18895
+- **Replaces:** the CodeWords "THE FURN WhatsApp Agent"
+- **Status:** final plan, approved direction. Nothing has been built or changed yet (27 Nov 2026).
+
+| Decision | Choice |
+|---|---|
+| WhatsApp connection | **Official Meta WhatsApp Cloud API, direct** (no provider, no unofficial linked device) |
+| Bot style | **Menu + AI**: buttons for booking, Claude AI only when a customer types a question |
+| Where it runs | **The Furn's own office server** (Coolify), new project "The Furn WhatsApp" |
+| Public address | **wa.thefurn.co** through a Cloudflare tunnel (no ports opened) |
+| Storage | Database on the same office server (chats, bookings, opt-outs) |
+| Knowledge | Read from the website (`thefurn.co/llms-full.txt`), so WhatsApp always matches the site |
 
 ---
 
-## 1. What customers get
+## 1. What customers experience
 
-1. Customer messages +91 99256 18895 (from the website's WhatsApp buttons or directly).
-2. **Menu first** (free, instant):
-   `[ Book site visit ] [ Visit our studio ] [ Talk to our team ]`, then a list of services, then name + area, day, time slot.
-3. **Typed question?** ("do you make pooja units?", "kal aavi shako?") → **AI answers** from the website's own content (services, FAQs, guides, hours, address) in English, Hindi or Gujarati, then offers the buttons again. The AI can also take a booking in free text.
-4. **Booking saved** → confirmation to the customer + alert to the team.
-5. **Automatic:** day-before reminder, follow-up 2 days after a site visit, Monday summary.
-6. **Team stays in control:** a team member replying by hand pauses the bot in that chat for 12 h; saved contacts and groups are ignored; STOP opts out.
-
-Facts come from the website's content files, so WhatsApp and the website always say the same thing.
+1. A customer messages **+91 99256 18895**, from the website's WhatsApp buttons or directly.
+2. **Menu first** (free and instant):
+   `[ Book site visit ]` `[ Visit our studio ]` `[ Talk to our team ]`
+   then a list of services, then name and area, then the day and a time slot.
+3. **If they type a question** ("do you make pooja units?", "kal aavi shako?"), the **AI answers** in English, Hindi or Gujarati using the website's content, then shows the buttons again. The AI can also take a booking from free text.
+4. **When a visit is booked**, the customer gets a confirmation and the team gets an alert.
+5. **Automatically:** a reminder the day before the visit, a follow-up 2 days after a site visit, and a summary for the owner every Monday.
+6. **The team stays in control:**
+   - a team member replying by hand pauses the bot in that chat for 12 hours
+   - saved contacts and group chats are ignored
+   - customers can reply STOP to stop reminders and follow-ups
 
 ## 2. How it is built
 
 ```
-Customer → WhatsApp → Meta Cloud API ──webhook──► thefurn.co /api/whatsapp
-                                                   ├─ menu engine (buttons, lists) ......... free
-                                                   ├─ Claude (only for typed questions) .... AI cost
-                                                   ├─ bookings + chat memory (Redis) ....... free tier
-                                                   └─ alerts (WhatsApp / Slack)
-Vercel Cron, daily 7 PM IST ──► reminders, follow-ups, Monday summary (approved templates)
+Customer → WhatsApp → Meta Cloud API ──webhook──► wa.thefurn.co
+                                                     │  (Cloudflare tunnel, no open ports)
+                                                     ▼
+                        Office server · Coolify project "The Furn WhatsApp"
+                          ├─ agent ........ menu engine + Claude for typed questions
+                          ├─ database ..... chats, bookings, opt-outs, team pauses
+                          ├─ scheduler .... daily 7 PM: reminders, follow-ups, Monday summary
+                          └─ backups ...... daily database backup
+                                                     │
+                     knowledge ◄── thefurn.co/llms-full.txt (website content)
+                     alerts ─────► team (Slack and/or WhatsApp)
 ```
 
-| Part | Choice |
+| Part | Details |
 |---|---|
-| WhatsApp connection | Meta WhatsApp Cloud API, direct (no provider) |
-| Agent code | Inside the existing Next.js site (`app/api/whatsapp`), hosted on Vercel |
-| AI | Claude via Anthropic API, used only when a customer types instead of tapping |
-| Knowledge | Built from `app/content/*` (site, services + FAQs, guides, projects) |
-| Memory and bookings | Upstash Redis (Vercel Marketplace), free tier |
-| Daily jobs | Vercel Cron, once a day |
-| Secrets (Meta token, Anthropic key) | Vercel environment variables, never in code |
+| Server | The office Coolify server that already runs media.thefurn.co |
+| Coolify project | New, separate project **"The Furn WhatsApp"** (next to "The Furn Media"). Modusys is never touched |
+| Address | **wa.thefurn.co**, a new Cloudflare tunnel route; inbound ports 80/443 stay closed |
+| Agent | Small web service: receives Meta webhooks, runs the menu, calls Claude when needed, replies through Meta |
+| Database | Runs in the same Coolify project; data never leaves The Furn's server except for the message being answered (sent to Meta and, for typed questions, to Claude) |
+| Scheduler | Built into the agent, runs daily at 7 PM IST |
+| Secrets | Meta access token, Meta app secret and Anthropic key are stored only as Coolify environment variables, never in code or documents |
+| Security | Every incoming request is checked against Meta's signature; fake or tampered requests are rejected |
+| Backups | Daily database backup using Coolify's scheduled backups |
 
-## 3. Costs
+## 3. What the database stores
 
-Assumptions: ₹88 = $1. "Enquiry" = one new customer chat. Each enquiry ≈ 8 bot replies; ~40% of replies need AI (typed questions); half of enquiries book a visit.
+| Data | Why |
+|---|---|
+| Menu step per customer | Knows what to ask next during a booking |
+| Last ~20 messages per chat | Lets the AI understand replies in context |
+| Bookings | Confirmations, reminders, follow-ups, Monday summary |
+| Team pauses | Bot stays quiet for 12 hours after a team member replies |
+| Opt-outs (STOP) | Never sends reminders to people who opted out |
+| Handled message IDs | Meta can send the same message twice; prevents double replies |
+| 24-hour window start | Knows when a free reply is allowed and when a template is needed |
 
-### 3a. Monthly running cost
+## 4. Costs
 
-| Item | Quiet month (60 enquiries) | Busy month (200 enquiries) | Notes |
-|---|---|---|---|
-| **Meta: customer → you** | ₹0 | ₹0 | Always free |
-| **Meta: bot replies in 24 h window** | ₹0 (≈480 replies) | ≈₹70 (≈1,600 replies, 600 over the free 1,000) | First 1,000/month free per number, then the India service rate (≈₹0.1–0.2 each; confirm on Meta's INR rate card) |
-| **Meta: reminder + follow-up templates** | ≈₹10 (≈60) | ≈₹25 (≈200) | India utility rate, ≈₹0.1–0.2 each (confirm on rate card) |
-| **Meta: team alerts by WhatsApp** | ≈₹5 | ≈₹15 | Only if alerts go by WhatsApp template; **₹0 if alerts go to Slack** |
-| **AI: Claude Opus 5.5** (recommended) | ≈₹300–450 | ≈₹1,000–1,500 | ≈₹1.5–2.5 per AI reply incl. caching |
-| AI: Claude Sonnet 5.5 (alternative) | ≈₹150–250 | ≈₹500–800 | ≈₹0.8–1.2 per AI reply |
-| AI: Claude Haiku 5.5 (cheapest) | ≈₹15–25 | ≈₹50–80 | ≈₹0.1 per AI reply; weaker in Gujarati/Hindi nuance |
-| **Redis (chat memory, bookings)** | ₹0 | ₹0 | Free tier is far above this volume |
-| **Hosting: Vercel** | ₹0 now / ≈₹1,760 on Pro | same | See 3c |
-| **Total with Opus 5.5, Vercel as now** | **≈₹320–480** | **≈₹1,100–1,600** | |
-| **Total with Opus 5.5 + Vercel Pro** | ≈₹2,080–2,240 | ≈₹2,860–3,360 | |
+Assumptions: ₹88 = $1; each enquiry ≈ 8 bot replies; ≈40% of replies need AI; half of enquiries book a visit. Meta's India rates are listed only in its INR rate card, so Meta figures are estimates to confirm at setup.
 
-Meta's India rates are listed only in its INR rate card (not on the pricing page); the figures above are estimates to confirm at setup. AI costs scale with how often customers type rather than tap.
+### Monthly running cost
 
-### 3b. One-time costs
+| Item | Quiet month (60 enquiries) | Busy month (200 enquiries) |
+|---|---|---|
+| Meta: customer messages to you | ₹0 | ₹0 |
+| Meta: bot replies (first 1,000 a month free) | ₹0 | ≈ ₹70 |
+| Meta: reminder and follow-up templates | ≈ ₹10 | ≈ ₹25 |
+| Team alerts | ₹0 via Slack (≈ ₹5–15 via WhatsApp templates) | ₹0 via Slack |
+| AI: Claude Opus 5.5 (typed questions only) | ≈ ₹300–450 | ≈ ₹1,000–1,500 |
+| Office server, database, tunnel, backups | ₹0 (own server) | ₹0 |
+| **Total** | **≈ ₹310–460** | **≈ ₹1,100–1,600** |
+
+Cheaper AI options: Claude Sonnet 5.5 (about half), Claude Haiku 5.5 (≈ ₹15–80 a month, weaker in Gujarati and Hindi).
+
+### One-time costs
 
 | Item | Cost |
 |---|---|
 | Meta Business account, verification, display name, templates | ₹0 |
-| Anthropic API account | ₹0 to open; prepaid credits (minimum ≈$5 ≈ ₹440) |
-| Upstash Redis | ₹0 |
-| Building, testing and switching over | Done in these sessions |
+| Anthropic API account | ₹0 to open; prepaid credits (minimum ≈ $5 ≈ ₹440) |
+| Coolify project, tunnel route, database | ₹0 |
+| Build, testing, switch-over | Done in these sessions |
 
-### 3c. Hosting note (Vercel)
+### Savings
 
-The site runs on Vercel's **Hobby (free) plan**, which Vercel's terms limit to **non-commercial** use, and thefurn.co is a business site already. Hobby technically handles the agent (webhook + one daily cron), but moving to **Vercel Pro ($20 ≈ ₹1,760/month)** puts the business site and the agent on the right plan, with higher limits and support. Recommended, and your call.
+- The CodeWords plan and its OpenAI usage, once the new agent is live.
 
-### 3d. What you stop paying
+The Vercel plan (Hobby or Pro) is now a separate decision about the **website only**; the agent does not run on Vercel.
 
-- **CodeWords** plan/credits for the current agent (and its OpenAI usage), once the new agent is live.
-
-## 4. Build plan and timeline
+## 5. Build plan
 
 | Phase | What | Who | Time |
 |---|---|---|---|
-| **1. Meta setup** | Meta Business account → **business verification** (The Furn Projects LLP documents) → WhatsApp app in Meta's developer dashboard → display name "The Furn" | You (with step-by-step guide) | Verification: a few days |
-| **2. Build on Meta's free test number** | Webhook, menu flows, AI for typed questions, booking store, alerts, human handover, opt-out, daily jobs, knowledge from website content | Me | 2–3 sessions, during phase 1 review |
-| **3. Templates** | Booking confirmation, day-before reminder (site / studio), post-visit follow-up, team alert, Monday summary; written by me, submitted by you | Both | Approval minutes to a day |
-| **4. Test together** | English, Hindi, Gujarati; booking end to end; handover; reminders | Both | 1 session |
-| **5. Switch the real number** | Connect +91 99256 18895 to the Cloud API, **unlink the CodeWords device**, pause the CodeWords agent at the same moment (no double replies) | Both | 1 hour |
-| **6. First week** | Watch every chat, fix wording; keep CodeWords paused (not deleted) as fallback; then add WhatsApp numbers to the monthly report | Me | 1 week |
+| **1. Meta setup** | Meta Business account → business verification (The Furn Projects LLP documents) → WhatsApp app in Meta's developer dashboard → display name "The Furn". Check **coexistence** (keeping the WhatsApp Business app on the phone) | You, with a step-by-step guide | Verification: a few days |
+| **2. Server setup** | New Coolify project "The Furn WhatsApp", database, daily backups, Cloudflare tunnel route **wa.thefurn.co** | Me, with you saving in Coolify (Coolify saves need a manual click) | 1 session |
+| **3. Build the agent** | Webhook + signature check, menu flows, AI for typed questions, bookings, alerts, team pause, STOP, scheduler, knowledge from the website. Tested on **Meta's free test number** | Me | 2–3 sessions, during phase 1 review |
+| **4. Templates** | Booking confirmation, day-before reminder (site and studio), follow-up, team alert, Monday summary. I write them, you submit them in Meta | Both | Approval minutes to a day |
+| **5. Test together** | English, Hindi, Gujarati; full booking; team takeover; reminders | Both | 1 session |
+| **6. Switch the real number** | Connect +91 99256 18895 to the Cloud API, **unlink the CodeWords device and pause the CodeWords agent at the same moment** (no double replies) | Both | 1 hour |
+| **7. First week** | Watch every chat and fix wording; keep CodeWords paused (not deleted) as a fallback; add WhatsApp numbers to the monthly report | Me | 1 week |
 
-## 5. Risks and how we handle them
+## 6. Risks and how they are handled
 
 | Risk | Handling |
 |---|---|
-| **Coexistence** (keeping the WhatsApp Business app on the phone for the same number) may need specific onboarding or be unavailable for this number | Check in phase 1 **before** switching. If unavailable, decide: move fully to API (team replies via a simple inbox page) or keep a second number for the team |
+| **Coexistence** may need specific onboarding or not be available for this number | Checked in phase 1 **before** switching. If unavailable: move fully to the API with a simple team inbox page, or keep a second number for the team |
+| **Office internet or power goes down** | Meta retries webhook delivery for a while; the team still sees messages in the WhatsApp Business app (with coexistence). UPS and stable internet recommended; the server restarts the agent automatically |
+| **Shared server with Modusys** | Separate Coolify project, light resource use, Modusys never touched |
 | Customers get two replies during switch-over | CodeWords device unlinked and agent paused in the same step |
-| AI says something wrong | Knowledge only from website content; no prices, warranty terms or timelines beyond what the site states; unsure → "our team will confirm" |
+| AI says something wrong | Knowledge only from the website; no prices, warranty terms or timelines beyond what the site says; when unsure: "our team will confirm" |
 | Number quality rating drops | No promotions or broadcasts; replies only; easy STOP |
-| Costs higher than expected | Spend limit on the Anthropic account; monthly cost line in the report; model can be switched in one setting |
+| Costs higher than expected | Spend limit on the Anthropic account; monthly cost line in the report; model can be changed in one setting |
+| Data loss | Daily database backups on the server |
 
-## 6. Decisions still needed
+## 7. Decisions still needed
 
-1. **Business facts for the agent:** hours (10 AM–7 PM like the site?), pincode (394510 like the site?), founded (2021 like the site?), "free site visit" wording on WhatsApp (yes/no), area served (6 cities like the site, or Surat + South Gujarat).
-2. **Booking alerts go to:** Slack channel (free, recommended) and/or WhatsApp number (+91 99256 18889 or another).
-3. **AI model:** Opus 5.5 (recommended) / Sonnet 5.5 / Haiku 5.5.
-4. **Vercel:** stay on Hobby or move to Pro.
-5. **Studio visit hours and site-visit slots** the bot may offer (e.g. Mon–Sat, 10–1 and 2–7).
+1. **Business facts for the agent:** hours (10 AM–7 PM like the site?), pincode (394510 like the site?), founded (2021 like the site?), "free site visit" wording on WhatsApp (yes or no), area served (6 cities like the site, or Surat and South Gujarat).
+2. **Booking alerts go to:** Slack (free, recommended) and/or a WhatsApp number (+91 99256 18889 or another).
+3. **AI model:** Claude Opus 5.5 (recommended), Sonnet 5.5 or Haiku 5.5.
+4. **Visit slots the bot may offer:** for example Monday–Saturday, 10 AM–1 PM and 2–7 PM.
+5. **Website hosting (separate):** Vercel Hobby or Pro.
