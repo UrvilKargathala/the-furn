@@ -80,12 +80,12 @@ Assumptions: ₹88 = $1; each enquiry ≈ 8 bot replies; ≈40% of replies need 
 | Meta: customer messages to you | ₹0 | ₹0 |
 | Meta: bot replies (first 1,000 a month free) | ₹0 | ≈ ₹70 |
 | Meta: reminder and follow-up templates | ≈ ₹10 | ≈ ₹25 |
-| Team alerts | ₹0 via Slack (≈ ₹5–15 via WhatsApp templates) | ₹0 via Slack |
-| AI: Claude Opus 5.5 (typed questions only) | ≈ ₹300–450 | ≈ ₹1,000–1,500 |
+| Team alerts (WhatsApp templates to +91 99256 18889) | ≈ ₹5 | ≈ ₹15 |
+| AI: Sonnet 5.5, with Opus 5.5 for harder chats (typed questions only) | ≈ ₹180–300 | ≈ ₹600–1,000 |
 | Office server, database, tunnel, backups | ₹0 (own server) | ₹0 |
-| **Total** | **≈ ₹310–460** | **≈ ₹1,100–1,600** |
+| **Total** | **≈ ₹190–310** | **≈ ₹700–1,100** |
 
-Cheaper AI options: Claude Sonnet 5.5 (about half), Claude Haiku 5.5 (≈ ₹15–80 a month, weaker in Gujarati and Hindi).
+Model split: Sonnet 5.5 answers most typed questions; Opus 5.5 (about 2x the cost per reply) is used only for harder chats. Either model can be changed in one setting.
 
 ### One-time costs
 
@@ -127,10 +127,16 @@ The Vercel plan (Hobby or Pro) is now a separate decision about the **website on
 | Costs higher than expected | Spend limit on the Anthropic account; monthly cost line in the report; model can be changed in one setting |
 | Data loss | Daily database backups on the server |
 
-## 7. Decisions still needed
+## 7. Decisions (confirmed 27 Nov 2026)
 
-1. **Business facts for the agent:** hours (10 AM–7 PM like the site?), pincode (394510 like the site?), founded (2021 like the site?), "free site visit" wording on WhatsApp (yes or no), area served (6 cities like the site, or Surat and South Gujarat).
-2. **Booking alerts go to:** Slack (free, recommended) and/or a WhatsApp number (+91 99256 18889 or another).
-3. **AI model:** Claude Opus 5.5 (recommended), Sonnet 5.5 or Haiku 5.5.
-4. **Visit slots the bot may offer:** for example Monday–Saturday, 10 AM–1 PM and 2–7 PM.
-5. **Website hosting (separate):** Vercel Hobby or Pro.
+| Topic | Decision |
+|---|---|
+| Hours | Monday to Saturday, 10 AM to 7 PM; Sunday closed |
+| Pincode | 394510 |
+| Founded | 2021 |
+| Site visit wording | "Site visit" only; never "free site visit" |
+| Area served | Surat, Mumbai, Navi Mumbai, Ahmedabad, Hyderabad, Pune |
+| Booking alerts | WhatsApp to +91 99256 18889 (template message) |
+| AI models | Claude **Sonnet 5.5** for everyday typed questions; **Opus 5.5** takes over for harder chats (complex Gujarati/Hindi, unhappy customers, free-text bookings) |
+| Visit slots | Monday to Saturday; 10 AM–1 PM, 2–5 PM, 5–7 PM; same for site and studio visits; bookable up to 14 days ahead; the team confirms each booking |
+| Website hosting | Vercel Hobby (separate from the agent) |
