@@ -1,0 +1,44 @@
+# Coolify project "The Furn WhatsApp". Reached only through the Cloudflare tunnel (wa.thefurn.co);
+# no ports are published to the host. Secrets come from Coolify environment variables.
+services:
+  agent:
+    build: .
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://furn:${DB_PASSWORD}@db:5432/furn_whatsapp
+      META_GRAPH_VERSION: ${META_GRAPH_VERSION:-v23.0}
+      META_PHONE_NUMBER_ID: ${META_PHONE_NUMBER_ID}
+      META_ACCESS_TOKEN: ${META_ACCESS_TOKEN}
+      META_APP_SECRET: ${META_APP_SECRET}
+      META_VERIFY_TOKEN: ${META_VERIFY_TOKEN}
+      OWNER_PHONE: ${OWNER_PHONE:-919925618889}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      KNOWLEDGE_URL: ${KNOWLEDGE_URL:-https://www.thefurn.co/llms-full.txt}
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: furn
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: furn_whatsapp
+    volumes:
+      - wa-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U furn -d furn_whatsapp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  cloudflared:
+    image: cloudflare/cloudflared:2026.9.3
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CF_TUNNEL_TOKEN}
+    depends_on:
+      - agent
+volumes:
+  wa-db:
